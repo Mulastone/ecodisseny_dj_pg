@@ -1,0 +1,133 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ca">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}" />
+    <title>{% block title %}Ecodisseny{% endblock %}</title>
+
+    <!-- Bootstrap + Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- ✅ Flatpickr: calendari català -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/cat.js"></script>
+
+    <meta name="description" content="Aplicació de gestió de clients per Ecodisseny" />
+    <meta name="keywords" content="Ecodisseny, gestió, clients, arquitectura" />
+    <meta name="author" content="Axel Rasmussen" />
+
+    <style>
+      html, body { height: 100%; margin: 0; display: flex; flex-direction: column; overflow-x: hidden; }
+      .navbar { height: 70px; padding: 0 15px; display: flex; align-items: center; background-color: #343a40 !important;}
+      .logo { width: 100px; height: auto; }
+      .navbar-nav .nav-link { font-size: 1rem; }
+      .container { flex: 1; margin-top: 30px; }
+      .alert-container {
+        position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+        z-index: 1050; width: 90%; max-width: 600px;
+      }
+      .btn { padding: 0.375rem 0.75rem; }
+      footer {
+        background-color: #343a40; color: white; text-align: center;
+        padding: 5px 0; max-height: 50px; width: 100%; margin-top: auto;
+        position: relative; font-size: 0.9rem; overflow: hidden;
+        display: flex; align-items: center; justify-content: center;
+      }
+      footer .container { padding: 0 !important; }
+      footer a { color: white; text-decoration: none; padding: 0 10px; }
+      footer a:hover { text-decoration: underline; }
+      .button-back { margin-bottom: 20px; text-align: right; }
+    </style>
+
+    {% block extra_head %}{% endblock %}
+  </head>
+  <body>
+    {% with request.path as path %}
+      {% if path != '/accounts/login/' and '/accounts/password' not in path and '/accounts/reset' not in path %}
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          <div class="d-flex align-items-center">
+            <img src="{% static 'logo_ecodisseny_negatiu.png' %}" alt="Logo" class="logo" />
+            <ul class="navbar-nav ml-3">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
+              </li>
+            </ul>
+          </div>
+          {% if request.user.is_authenticated %}
+            <div class="ms-auto text-white" style="font-size: 0.95rem;">
+              Usuari: {{ request.user.get_full_name|default:request.user.username }}
+              {% if request.user.is_superuser %} | Rol: admin {% else %} | Rol: usuari {% endif %}
+              | <a href="{% url 'logout' %}" class="text-white" style="text-decoration: underline;">Logout</a>
+            </div>
+          {% endif %}
+        </nav>
+      {% endif %}
+    {% endwith %}
+
+    {% if messages %}
+      <div class="alert-container">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="container-fluid px-4 mt-4">
+      {% block content %}{% endblock %}
+    </div>
+
+    {% with request.path as path %}
+      {% if path != '/accounts/login/' and '/accounts/password' not in path and '/accounts/reset' not in path %}
+        <footer>
+          <div class="container">
+            <p>&copy; {% now "Y" %} Axel Rasmussen. Tots els drets reservats.</p>
+          </div>
+        </footer>
+      {% endif %}
+    {% endwith %}
+
+    {% block scripts %}
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const alerts = document.querySelectorAll(".alert");
+          alerts.forEach((alert) => {
+            setTimeout(() => {
+              const bsAlert = new bootstrap.Alert(alert);
+              bsAlert.close();
+            }, 1500);
+          });
+
+          // ✅ Inicialitza Flatpickr en català
+          flatpickr(".datepicker", {
+            dateFormat: "d/m/Y",
+            locale: "cat",
+            allowInput: true
+          });
+        });
+      </script>
+
+      <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1055">
+        <div id="toast-eliminat" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="d-flex">
+            <div class="toast-body">
+              Pressupost eliminat correctament ✅
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+        </div>
+      </div>
+    {% endblock %}
+
+    {% block extra_scripts %}{% endblock %}
+  </body>
+</html>

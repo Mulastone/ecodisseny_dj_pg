@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+    <h2 class="mb-0">Pressupostos</h2>
+    <a href="{% url 'pressupostos:create' %}" class="btn btn-dark text-white">
+      <i class="bi bi-plus-circle"></i> Nou pressupost
+    </a>
+  </div>
+
+  {% if pressupostos %}
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover align-middle bg-white table-dark-header">
+        <thead class="table-dark text-white">
+          <tr>
+            <th>Nom</th>
+            <th>Data</th>
+            <th>Client</th>
+            <th>Projecte</th>
+            <th>Parròquia</th>
+            <th>Ubicació</th>
+            <th class="text-center">Tancat</th>
+            <th class="text-center">Accions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for pressupost in pressupostos %}
+            <tr id="row-{{ pressupost.pk }}">
+              <td>{{ pressupost.nom }}</td>
+              <td>{{ pressupost.data|date:"d/m/Y" }}</td>
+              <td>{{ pressupost.client }}</td>
+              <td>{{ pressupost.projecte }}</td>
+              <td>{{ pressupost.parroquia }}</td>
+              <td>{{ pressupost.ubicacio }}</td>
+              <td class="text-center">
+                {% if pressupost.tancat %}
+                  <span class="badge bg-success">Sí</span>
+                {% else %}
+                  <span class="badge bg-secondary">No</span>
+                {% endif %}
+              </td>
+              <td class="text-center">
+                <div class="d-flex justify-content-center flex-wrap gap-1">
+                  <a href="{% url 'pressupostos:edit' pressupost.pk %}" class="btn btn-sm btn-outline-primary" title="Editar">
+                    <i class="bi bi-pencil-square"></i>
+                  </a>
+                  <button type="button"
+                          class="btn btn-sm btn-outline-danger btn-delete-pressupost"
+                          data-id="{{ pressupost.pk }}"
+                          title="Eliminar">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                  <a href="{% url 'pressupostos:pdf' pressupost.pk %}" class="btn btn-sm btn-outline-secondary" title="Veure PDF" target="_blank">
+                    <i class="bi bi-eye"></i>
+                  </a>
+                  <a href="{% url 'pressupostos:generar_pdf' pressupost.pk %}" 
+                     class="btn btn-sm btn-outline-success" title="Generar nova versió PDF">
+                    <i class="bi bi-file-earmark-plus"></i>
+                  </a>
+                  <a href="{% url 'pressupostos:detall' pressupost.pk %}" 
+                     class="btn btn-sm btn-outline-dark" title="Veure versions PDF">
+                    <i class="bi bi-files"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-info">No hi ha pressupostos disponibles.</div>
+  {% endif %}
+</div>
+
+<!-- 🔒 Modal confirmació -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmar eliminació</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tancar"></button>
+      </div>
+      <div class="modal-body">
+        Segur que vols eliminar aquest pressupost?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel·lar</button>
+        <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ Toast d'èxit -->
+<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1080;">
+  <div id="successToast" class="toast text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      ✅ Eliminat
+      <button type="button" class="btn-close ms-auto" data-bs-dismiss="toast" aria-label="Tancar"></button>
+    </div>
+    <div class="toast-body">
+      Pressupost eliminat correctament.
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    let idToDelete = null;
+
+    document.querySelectorAll(".btn-delete-pressupost").forEach(btn => {
+      btn.addEventListener("click", () => {
+        idToDelete = btn.dataset.id;
+        const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+        modal.show();
+      });
+    });
+
+    document.getElementById("confirmDeleteBtn").addEventListener("click", () => {
+      if (!idToDelete) return;
+
+      fetch(`/pressupostos/delete_ajax/${idToDelete}/`, {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": getCookie("csrftoken"),
+        }
+      })
+      .then(res => res.json())
+      .then(data => {
+        const row = document.getElementById(`row-${idToDelete}`);
+        if (data.success && row) {
+          row.classList.add("fade");
+          row.style.transition = "opacity 0.5s ease-out";
+          row.style.opacity = "0";
+          setTimeout(() => row.remove(), 500);
+          new bootstrap.Toast(document.getElementById('successToast')).show();
+        } else {
+          alert("❌ Error: " + (data.error || "No s'ha pogut eliminar."));
+        }
+        bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal')).hide();
+      });
+    });
+
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === name + "=") {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+  });
+</script>
+{% endblock %}

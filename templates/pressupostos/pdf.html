@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    @page {
+      size: A4;
+      margin: 2cm;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      font-size: 11.2px;
+      color: #222;
+      line-height: 1.45;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #333;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+
+    .logo {
+      height: 80px;
+    }
+
+    .header-info {
+      text-align: right;
+    }
+
+    .header-info h1 {
+      font-size: 19px;
+      margin: 0;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .header-info div {
+      font-size: 11.5px;
+      color: #555;
+    }
+
+    .info {
+      margin-bottom: 15px;
+    }
+
+    .info p {
+      margin: 4px 0;
+    }
+
+    .info strong {
+      display: inline-block;
+      width: 100px;
+      font-weight: 600;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 11px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 5px 7px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+      color: #222;
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) {
+      background-color: #fafafa;
+    }
+
+    .footer-total {
+      margin-top: 20px;
+      text-align: right;
+      font-weight: bold;
+      font-size: 12.5px;
+      color: #111;
+    }
+
+    .generated {
+      margin-top: 10px;
+      text-align: right;
+      font-size: 9.8px;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="{{ logo_url }}" alt="Ecodisseny" class="logo" />
+    <div class="header-info">
+      <h1>Pressupost núm. {{ pressupost.pk }}</h1>
+      <div>Data: {{ pressupost.data|date:"d/m/Y" }}</div>
+    </div>
+  </header>
+
+  <div class="info">
+    <p><strong>Nom:</strong> {{ pressupost.nom }}</p>
+    <p><strong>Client:</strong> {{ pressupost.client }}</p>
+    <p><strong>Projecte:</strong> {{ pressupost.projecte }}</p>
+    <p><strong>Parròquia:</strong> {{ pressupost.parroquia }}</p>
+    <p><strong>Ubicació:</strong> {{ pressupost.ubicacio }}</p>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Treball</th>
+        <th>Tasca</th>
+        <th>Recurs</th>
+        <th>Quantitat</th>
+        <th>Total línia</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for linia in linies %}
+      <tr>
+        <td>{{ linia.treball }}</td>
+        <td>{{ linia.tasca }}</td>
+        <td>{{ linia.recurs }}</td>
+        <td>{{ linia.quantitat|floatformat:2 }}</td>
+        <td>{{ linia.total|floatformat:2 }} €</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="footer-total">
+    Total pressupost: {{ total_pressupost|floatformat:2 }} €
+  </div>
+
+  <div class="generated">
+    Generat el {{ now|date:"d/m/Y H:i" }} per {{ generat_per }}
+  </div>
+</body>
+</html>

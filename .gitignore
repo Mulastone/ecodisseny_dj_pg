@@ -1,0 +1,66 @@
+# Entorno virtual (ajustá si usás otro nombre)
+ecodisseny_dj/
+venv/
+venv_postgres/
+env/
+*.pyc
+__pycache__/
+
+# Archivos de base de datos local (si alguna vez se creó)
+db.sqlite3
+
+# Archivos de configuración local
+*.env
+*.local
+*.DS_Store
+
+# Archivos de sistema
+Thumbs.db
+ehthumbs.db
+
+# Archivos de logs y caché
+*.log
+*.pot~
+*.py[cod]
+*.so
+*.swp
+*.bak
+*.tmp
+
+# Archivos de test
+.coverage
+.tox/
+.nox/
+.pytest_cache/
+
+# Archivos de configuración de IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Archivos de compilación
+build/
+dist/
+*.egg-info/
+
+# Archivos estáticos y media si los generás dinámicamente
+staticfiles/
+media/
+
+# Migraciones si querés ignorarlas (opcional)
+# **/migrations/
+# !*/migrations/__init__.py
+
+# Archivos relacionados a Django/Jazzmin cache
+*.mo
+*.pot
+__pycache__/
+
+# Archivos de backups o temporales
+*.orig
+*.bak
+
+# Archivos de exportación de datos (opcional)
+*.json
+*.sql

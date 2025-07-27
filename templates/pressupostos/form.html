@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="container-fluid mt-4" id="pressupost-form">
+  <h2 class="mb-4">
+    {% if pressupost %}
+      <i class="bi bi-pencil-square"></i> Editar Pressupost
+    {% else %}
+      <i class="bi bi-file-earmark-plus"></i> Nou Pressupost
+    {% endif %}
+  </h2>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+
+    {{ form.non_field_errors }}
+    {{ form.errors }}
+    {{ formset.non_form_errors }}
+    {% for linea_form in formset %}{{ linea_form.errors }}{% endfor %}
+
+    <div class="table-responsive mb-4">
+      <table class="table table-bordered bg-white">
+        {% if pressupost and pressupost.pk %}
+        <tr>
+          <td class="fw-bold" style="width:18%;">Núm. Pressupost:</td>
+          <td style="width:32%;">{{ pressupost.pk }}</td>
+          <td colspan="2"></td>
+        </tr>
+        {% endif %}
+        <tr>
+          <td>{{ form.nom.label_tag }}</td>
+          <td>{{ form.nom|add_class:"form-control" }}</td>
+          <td>{{ form.data.label_tag }}</td>
+          <td>
+            <div class="input-group">
+              {{ form.data|add_class:"form-control datepicker" }}
+              <span class="input-group-text"><i class="bi bi-calendar3"></i></span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>{{ form.client.label_tag }}</td>
+          <td>{{ form.client|add_class:"form-control" }}</td>
+          <td>{{ form.projecte.label_tag }}</td>
+          <td>{{ form.projecte|add_class:"form-control" }}</td>
+        </tr>
+        <tr>
+          <td>{{ form.parroquia.label_tag }}</td>
+          <td>{{ form.parroquia|add_class:"form-control" }}</td>
+          <td>{{ form.ubicacio.label_tag }}</td>
+          <td>{{ form.ubicacio|add_class:"form-control" }}</td>
+        </tr>
+        <tr>
+          <td>{{ form.observacions.label_tag }}</td>
+          <td colspan="3">{{ form.observacions|add_class:"form-control" }}</td>
+        </tr>
+        <tr>
+          <td>{{ form.tancat.label_tag }}</td>
+          <td>{{ form.tancat }}</td>
+          <td colspan="2"></td>
+        </tr>
+      </table>
+    </div>
+
+    {% include "pressupostos/_linies_formset.html" %}
+
+    <div class="text-end mt-4">
+      <h5>Total Pressupost: <span id="total-pressupost">0.00</span> €</h5>
+    </div>
+
+    <div class="d-flex justify-content-between mt-4">
+      <a href="{% url 'pressupostos:list' %}" class="btn btn-secondary">
+        <i class="bi bi-arrow-left-circle"></i> Tornar
+      </a>
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-save2"></i> Guardar
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- 🔒 Modal Confirmació Eliminació -->
+<div class="modal fade" id="confirmEliminarModal" tabindex="-1" aria-labelledby="confirmEliminarLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-danger">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="confirmEliminarLabel">Confirmar eliminació</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tancar"></button>
+      </div>
+      <div class="modal-body">
+        Estàs segur que vols eliminar aquesta línia?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel·lar</button>
+        <button type="button" id="confirmEliminarBtn" class="btn btn-danger">Sí, eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ Modal Eliminació Correcta -->
+<div class="modal fade" id="eliminatCorrecteModal" tabindex="-1" aria-labelledby="eliminatCorrecteLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content text-bg-success">
+      <div class="modal-body text-center">
+        <i class="bi bi-check-circle fs-2"></i>
+        <p class="mt-2 mb-0">Línia eliminada correctament</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/pressupostos.js' %}"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    flatpickr(".datepicker", {
+      dateFormat: "d/m/Y",
+      locale: "cat",
+      defaultDate: new Date()
+    });
+
+    let lineaAEliminar = null;
+
+    document.querySelectorAll(".eliminar-linea").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        lineaAEliminar = btn.closest("tr");
+        const modal = new bootstrap.Modal(document.getElementById("confirmEliminarModal"));
+        modal.show();
+      });
+    });
+
+    document.getElementById("confirmEliminarBtn").addEventListener("click", () => {
+      const idField = lineaAEliminar.querySelector(`[name$="-id"]`);
+      const deleteField = lineaAEliminar.querySelector(`[name$="-DELETE"]`);
+      if (!idField?.value) {
+        lineaAEliminar.remove();
+      } else if (deleteField) {
+        deleteField.checked = true;
+        lineaAEliminar.style.display = "none";
+      }
+      const modal = bootstrap.Modal.getInstance(document.getElementById("confirmEliminarModal"));
+      modal.hide();
+
+      const eliminatModal = new bootstrap.Modal(document.getElementById("eliminatCorrecteModal"));
+      eliminatModal.show();
+      setTimeout(() => eliminatModal.hide(), 2000);
+      if (typeof calcularTotalPressupost === "function") calcularTotalPressupost();
+    });
+  });
+</script>
+{% endblock %}

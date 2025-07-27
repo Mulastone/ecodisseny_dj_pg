@@ -1,0 +1,176 @@
+/* ------------------------------
+   🎯 Botones personalizados
+------------------------------- */
+.btn,
+input[type="submit"] {
+    background-color: #495057 !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 5px !important;
+    font-size: 0.95rem !important;
+    padding: 6px 12px !important;
+    text-decoration: none !important;
+    box-shadow: none !important;
+    cursor: pointer;
+}
+
+.btn:hover,
+input[type="submit"]:hover {
+    background-color: #6c757d !important;
+}
+
+.btn:active,
+input[type="submit"]:active {
+    background-color: #6c757d !important;
+    box-shadow: none !important;
+}
+
+/* ------------------------------
+   📄 Formulario principal
+------------------------------- */
+#pressupost-form {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* ------------------------------
+   📄 Tabla de datos generales
+------------------------------- */
+#pressupost-form > form > table {
+    width: 100%;
+    background: #fff;
+    margin-bottom: 1.5rem;
+}
+
+#pressupost-form > form > table td {
+    padding: 1rem;
+    font-size: 1.08rem;
+    vertical-align: middle;
+}
+
+#pressupost-form > form > table input,
+#pressupost-form > form > table select,
+#pressupost-form > form > table textarea {
+    width: 100%;
+    min-width: 180px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+#pressupost-form textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+/* ------------------------------
+   🧾 Presupuestos - Tabla de líneas
+------------------------------- */
+#pressupost-form .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+#pressupost-form .table {
+    width: 100%;
+    background-color: #f8f9fa;
+    border-radius: 0.75rem;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.05);
+    margin-bottom: 0;
+}
+
+#pressupost-form th,
+#pressupost-form td {
+    vertical-align: middle !important;
+    text-align: center;
+    padding: 0.4rem 0.5rem;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+#pressupost-form .table-linia td input,
+#pressupost-form .table-linia td select {
+    font-size: 0.85rem;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    width: 100%;
+    max-width: none;
+    margin: 0 auto;
+    display: block;
+}
+
+#pressupost-form > form > table input,
+#pressupost-form > form > table select,
+#pressupost-form > form > table textarea {
+    width: 100%;
+    min-width: 120px;
+    max-width: none;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+#pressupost-form input[readonly] {
+    background-color: #e9ecef;
+}
+
+#pressupost-form .eliminar-linea {
+    min-width: auto;
+    padding: 4px 8px;
+}
+
+/* ------------------------------
+   📊 Ancho por columna (por clase)
+------------------------------- */
+.table-linia th.col-treball, .table-linia td.col-treball { width: 10%; }
+.table-linia th.col-tasca, .table-linia td.col-tasca { width: 10%; }
+.table-linia th.col-recurs, .table-linia td.col-recurs { width: 10%; }
+.table-linia th.col-hores, .table-linia td.col-hores { width: 5%; }
+.table-linia th.col-quantitat, .table-linia td.col-quantitat { width: 5%; }
+.table-linia th.col-preu-tancat, .table-linia td.col-preu-tancat { width: 2%; }
+.table-linia th.col-cost-tancat, .table-linia td.col-cost-tancat { width: 7%; }
+.table-linia th.col-increment-hores, .table-linia td.col-increment-hores { width: 2%; }
+.table-linia th.col-hores-totals, .table-linia td.col-hores-totals { width: 3%; }
+.table-linia th.col-cost-hores, .table-linia td.col-cost-hores { width: 5%; }
+.table-linia th.col-cost-hores-totals, .table-linia td.col-cost-hores-totals { width: 10%; }
+.table-linia th.col-subtotal, .table-linia td.col-subtotal { width: 10%; }
+.table-linia th.col-benefici, .table-linia td.col-benefici { width: 3%; }
+.table-linia th.col-total-linia, .table-linia td.col-total-linia { width: 10%; }
+.table-linia th.col-eliminar, .table-linia td.col-eliminar { width: 10%; }
+
+.table-linia th {
+    white-space: normal !important;
+    text-align: center;
+}
+.table-linia td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* ------------------------------
+   📱 Adaptación móvil
+------------------------------- */
+@media (max-width: 992px) {
+    #pressupost-form th,
+    #pressupost-form td {
+        font-size: 0.85rem;
+        padding: 0.3rem 0.3rem;
+    }
+
+    #pressupost-form > form > table td {
+        padding: 0.5rem;
+        font-size: 0.98rem;
+    }
+
+    #pressupost-form > form > table input,
+    #pressupost-form > form > table select,
+    #pressupost-form > form > table textarea {
+        min-width: 100px;
+        font-size: 0.95rem;
+    }
+}
+
+.table-dark-header thead th {
+  background-color: #343a40 !important;
+  color: white !important;
+  border-color: #454d55;
+}

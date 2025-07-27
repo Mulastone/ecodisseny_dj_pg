@@ -1,0 +1,6 @@
+{% extends "admin/base.html" %} {% block branding %}
+<h1 id="site-name">
+  <a href="{% url 'admin:index' %}">Ecodisseny Admin</a>
+  | <a href="{% url 'list' %}" style="font-size: 1rem">Pressupostos</a>
+</h1>
+{% endblock %}

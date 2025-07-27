@@ -1,0 +1,91 @@
+{% load widget_tweaks %}
+{{ formset.management_form }}
+
+<div class="table-responsive">
+  <table class="table table-bordered table-sm w-100 align-middle table-linia table-dark-header">
+    <thead>
+      <tr>
+        <th class="col-treball">Treball</th>
+        <th class="col-tasca">Tasca</th>
+        <th class="col-recurs">Recurs</th>
+        <th class="col-hores">Hores</th>
+        <th class="col-quantitat">Quantitat</th>
+        <th class="col-preu-tancat">Preu<br>Tancat</th>
+        <th class="col-cost-tancat">Cost<br>Tancat</th>
+        <th class="col-increment-hores">Increment<br>Hores</th>
+        <th class="col-hores-totals">Hores<br>Totals</th>
+        <th class="col-cost-hores">Cost<br>Hores</th>
+        <th class="col-cost-hores-totals">Cost<br>Hores Totals</th>
+        <th class="col-subtotal">Subtotal</th>
+        <th class="col-benefici">Benefici (%)</th>
+        <th class="col-total-linia">Total<br>Línia</th>
+        <th class="col-eliminar">Eliminar</th>
+      </tr>
+    </thead>
+    <tbody id="lineas-container">
+      {% for form in formset %}
+        <tr class="pressupost-linea">
+          {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+          <td class="col-treball">{{ form.treball|add_class:"form-select form-select-sm" }}</td>
+          <td class="col-tasca">{{ form.tasca|add_class:"form-select form-select-sm" }}</td>
+          <td class="col-recurs">{{ form.recurs|add_class:"form-select form-select-sm" }}</td>
+          <td class="col-hores">
+            {{ form.hora|add_class:"form-select form-select-sm" }}
+            <input type="hidden" class="hores-value"
+                   value="{% for hora in hores_list %}{% if form.hora.value|stringformat:'s' == hora.id|stringformat:'s' %}{{ hora.hores|floatformat:'2' }}{% endif %}{% endfor %}">
+          </td>
+          <td class="col-quantitat">{{ form.quantitat|add_class:"form-control form-control-sm text-end" }}</td>
+          <td class="col-preu-tancat text-center">{{ form.preu_tancat|add_class:"form-check-input" }}</td>
+          <td class="col-cost-tancat">{{ form.cost_tancat|add_class:"form-control form-control-sm text-end" }}</td>
+          <td class="col-increment-hores">{{ form.increment_hores|add_class:"form-control form-control-sm text-end" }}</td>
+          <td class="col-hores-totals">{{ form.hores_totals|add_class:"form-control form-control-sm text-end" }}</td>
+          <td class="col-cost-hores">{{ form.cost_hores|add_class:"form-control form-control-sm text-end" }}</td>
+          <td class="col-cost-hores-totals">{{ form.cost_hores_totals|add_class:"form-control form-control-sm text-end" }}</td>
+          <td class="col-subtotal">{{ form.subtotal|add_class:"form-control form-control-sm text-end" }}</td>
+          <td class="col-benefici">{{ form.benefici|add_class:"form-control form-control-sm text-end" }}</td>
+          <td class="col-total-linia">{{ form.total|add_class:"form-control form-control-sm text-end" }}</td>
+           <td class="col-eliminar">
+            {{ form.DELETE|add_class:"d-none" }}
+            <button type="button" class="btn btn-outline-danger btn-sm eliminar-linea">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+
+        </tr>
+      {% endfor %}
+
+      <tr id="empty-form" style="display: none;">
+        {% for hidden in formset.empty_form.hidden_fields %}{{ hidden }}{% endfor %}
+        <td class="col-treball">{{ formset.empty_form.treball|add_class:"form-select form-select-sm" }}</td>
+        <td class="col-tasca">{{ formset.empty_form.tasca|add_class:"form-select form-select-sm" }}</td>
+        <td class="col-recurs">{{ formset.empty_form.recurs|add_class:"form-select form-select-sm" }}</td>
+        <td class="col-hores">
+          {{ formset.empty_form.hora|add_class:"form-select form-select-sm" }}
+          <input type="hidden" class="hores-value" value="">
+        </td>
+        <td class="col-quantitat">{{ formset.empty_form.quantitat|add_class:"form-control form-control-sm text-end" }}</td>
+        <td class="col-preu-tancat text-center">{{ formset.empty_form.preu_tancat|add_class:"form-check-input" }}</td>
+        <td class="col-cost-tancat">{{ formset.empty_form.cost_tancat|add_class:"form-control form-control-sm text-end" }}</td>
+        <td class="col-increment-hores">{{ formset.empty_form.increment_hores|add_class:"form-control form-control-sm text-end" }}</td>
+        <td class="col-hores-totals">{{ formset.empty_form.hores_totals|add_class:"form-control form-control-sm text-end" }}</td>
+        <td class="col-cost-hores">{{ formset.empty_form.cost_hores|add_class:"form-control form-control-sm text-end" }}</td>
+        <td class="col-cost-hores-totals">{{ formset.empty_form.cost_hores_totals|add_class:"form-control form-control-sm text-end" }}</td>
+        <td class="col-subtotal">{{ formset.empty_form.subtotal|add_class:"form-control form-control-sm text-end" }}</td>
+        <td class="col-benefici">{{ formset.empty_form.benefici|add_class:"form-control form-control-sm text-end" }}</td>
+        <td class="col-total-linia">{{ formset.empty_form.total|add_class:"form-control form-control-sm text-end" }}</td>
+        <td class="col-eliminar">
+          {{ formset.empty_form.DELETE|add_class:"d-none" }}
+          <button type="button" class="btn btn-outline-danger btn-sm eliminar-linea">
+            <i class="bi bi-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="my-3">
+  <button type="button" id="add-linea" class="btn btn-outline-primary">
+    <i class="bi bi-plus-circle"></i> Afegir línia
+  </button>
+</div>
