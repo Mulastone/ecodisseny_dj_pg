@@ -1,6 +1,20 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block extra_head %}
+<style>
+/* Usar el mismo color del navbar para las cabeceras y elementos principales */
+.navbar-color {
+  background-color: #343a40 !important;
+  color: white !important;
+}
+.badge-navbar-color {
+  background-color: #343a40 !important;
+  color: white !important;
+}
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container mt-4">
   <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
@@ -20,7 +34,7 @@
   <!-- Resum general -->
   <div class="row mb-4">
     <div class="col-12">
-      <div class="card bg-dark text-white">
+      <div class="card navbar-color text-white">
         <div class="card-body text-center">
           <h3><i class="bi bi-clock-fill"></i> {{ total_general }} hores totals</h3>
           <p class="mb-0">Registrades en tot el sistema</p>
@@ -33,7 +47,7 @@
     <!-- Estadístiques per usuari -->
     <div class="col-md-6 mb-4">
       <div class="card">
-        <div class="card-header bg-dark text-white">
+        <div class="card-header navbar-color text-white">
           <h5 class="mb-0"><i class="bi bi-people"></i> Per Usuari</h5>
         </div>
         <div class="card-body">
@@ -60,7 +74,7 @@
                         </strong>
                       </td>
                       <td class="text-center">
-                        <span class="badge bg-dark">{{ stat.total_hores|default:0 }} h</span>
+                        <span class="badge badge-navbar-color">{{ stat.total_hores|default:0 }} h</span>
                       </td>
                       <td class="text-center">
                         <span class="badge bg-secondary">{{ stat.total_registres }}</span>
@@ -80,7 +94,7 @@
     <!-- Estadístiques per recurs -->
     <div class="col-md-6 mb-4">
       <div class="card">
-        <div class="card-header bg-dark text-white">
+        <div class="card-header navbar-color text-white">
           <h5 class="mb-0"><i class="bi bi-gear"></i> Per Recurs</h5>
         </div>
         <div class="card-body">
@@ -99,7 +113,7 @@
                     <tr>
                       <td><strong>{{ stat.recurso__nom }}</strong></td>
                       <td class="text-center">
-                        <span class="badge bg-dark">{{ stat.total_hores|default:0 }} h</span>
+                        <span class="badge badge-navbar-color">{{ stat.total_hores|default:0 }} h</span>
                       </td>
                       <td class="text-center">
                         <span class="badge bg-secondary">{{ stat.total_registres }}</span>
@@ -121,7 +135,7 @@
   <div class="row">
     <div class="col-12">
       <div class="card">
-        <div class="card-header bg-dark text-white">
+        <div class="card-header navbar-color text-white">
           <h5 class="mb-0"><i class="bi bi-calendar-month"></i> Per Mes</h5>
         </div>
         <div class="card-body">
@@ -143,14 +157,14 @@
                         <strong>{{ stat.mes|date:"F Y" }}</strong>
                       </td>
                       <td class="text-center">
-                        <span class="badge bg-dark fs-6">{{ stat.total_hores|default:0 }} h</span>
+                        <span class="badge badge-navbar-color fs-6">{{ stat.total_hores|default:0 }} h</span>
                       </td>
                       <td class="text-center">
                         <span class="badge bg-secondary fs-6">{{ stat.total_registres }}</span>
                       </td>
                       <td class="text-center">
                         {% if stat.total_registres > 0 %}
-                          <span class="badge bg-dark fs-6">
+                          <span class="badge badge-navbar-color fs-6">
                             {% widthratio stat.total_hores stat.total_registres 1 %} h
                           </span>
                         {% else %}
