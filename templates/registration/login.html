@@ -11,49 +11,69 @@
         background: white;
         min-height: 100vh;
     }
-    .login-container {
-        background: white;
-        border-radius: 20px;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-        border: 1px solid #e1e5e9;
-        overflow: hidden;
-        animation: slideIn 0.5s ease-out;
-        max-width: 450px;
-        margin: 2rem auto;
-    }
+            .login-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 560px;
+            width: 56%;
+            margin: 2rem auto;
     @keyframes slideIn {
         from { opacity: 0; transform: translateY(-20px); }
         to { opacity: 1; transform: translateY(0); }
     }
     .login-header {
-        background: white;
-        color: #2c3e50;
+        background: #343a40;
+        color: white;
         text-align: center;
-        padding: 2rem 1.5rem;
-        border-bottom: 1px solid #e1e5e9;
+        padding: 1rem 1.5rem;
+        border-bottom: none;
+        position: relative;
+    }
+    .login-header::before {
+        display: none;
     }
     .logo {
-        max-width: 150px;
+        max-width: 100px;
         margin-bottom: 1rem;
-        filter: brightness(0);
+        filter: none;
+    }
+    .login-header h4 {
+        color: white;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        font-size: 1.5rem;
+    }
+    .login-header small {
+        color: rgba(255,255,255,0.85);
+        font-size: 0.95rem;
     }
     .login-body {
-        padding: 2rem;
+        padding: 2.5rem 3rem;
+    }
+    .form-group {
+        margin-bottom: 2rem;
+    }
+    .form-group:last-of-type {
+        margin-bottom: 2.5rem;
     }
     .form-control {
         border: 2px solid #e1e5e9;
         border-radius: 10px;
-        padding: 0.75rem 1rem;
-        padding-right: 3rem;
+        padding: 0.6rem 1rem;
+        padding-right: 3.5rem;
         font-size: 1rem;
         transition: all 0.3s ease;
+        width: 100%;
+        min-height: 42px;
     }
     .form-control:focus {
-        border-color: #2c3e50;
-        box-shadow: 0 0 0 0.2rem rgba(44, 62, 80, 0.25);
+        border-color: #343a40;
+        box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.25);
     }
     .btn-login {
-        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        background: #343a40;
         border: none;
         border-radius: 10px;
         padding: 0.75rem 2rem;
@@ -63,30 +83,50 @@
         transition: all 0.3s ease;
         width: 100%;
         color: white;
+        margin-bottom: 1.5rem;
     }
     .btn-login:hover {
+        background: #495057;
         transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(44, 62, 80, 0.3);
+        box-shadow: 0 10px 20px rgba(52, 58, 64, 0.3);
         color: white;
-        background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+    }
+    .btn-login:active,
+    .btn-login:focus {
+        color: white;
+        background: #495057;
     }
     .password-toggle {
         position: absolute;
-        right: 15px;
-        top: 50%;
+        right: 12px;
+        top: calc(50% + 18px);
         transform: translateY(-50%);
         cursor: pointer;
         color: #6c757d;
         z-index: 10;
+        transition: color 0.3s ease;
+        font-size: 1.2rem;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        margin-top: 2px;
+    }
+    .password-toggle:hover {
+        color: #343a40;
     }
     .form-group {
         position: relative;
         margin-bottom: 1.5rem;
     }
-    .form-label {
+        .form-label {
         font-weight: 600;
-        color: #2c3e50;
-        margin-bottom: 0.5rem;
+        color: #495057;
+        margin-bottom: 0.75rem;
+        font-size: 0.95rem;
     }
     .alert {
         border-radius: 10px;
@@ -150,6 +190,8 @@
                 {% endfor %}
             {% endif %}
 
+            <!-- DESARROLLO: Información de usuarios disponibles (comentar en producción) -->
+            <!--
             <div class="user-info">
                 <i class="fas fa-users me-2"></i>
                 <strong>Usuaris disponibles:</strong><br>
@@ -157,6 +199,7 @@
                 <small>👤 Usuaris: <code>sarah</code>, <code>pilar</code>, <code>santiago</code>, <code>roger</code></small><br>
                 <small>🔑 Contrasenya: <code>ecodisseny2024</code></small>
             </div>
+            -->
 
             <form method="post" action="{% url 'login' %}" autocomplete="off">
                 {% csrf_token %}

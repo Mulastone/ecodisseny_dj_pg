@@ -170,9 +170,26 @@ input[type="submit"]:active {
 }
 
 .table-dark-header thead th {
-  background-color: #343a40 !important;
+  background-color: #3c434a !important;
   color: white !important;
-  border-color: #454d55;
+  border-color: #5a6169;
+  font-weight: 600;
+  padding: 1rem;
+  text-align: center;
+}
+
+/* Encabezado especial para formularios */
+.table-dark-header thead th i {
+  margin-right: 0.5rem;
+  font-size: 1.1em;
+}
+
+/* Mejor contraste para formularios */
+.table-dark-header tbody td.fw-bold {
+  background-color: #f8f9fa;
+  border-right: 2px solid #343a40;
+  color: #343a40;
+  font-weight: 600;
 }
 
 /* ------------------------------
