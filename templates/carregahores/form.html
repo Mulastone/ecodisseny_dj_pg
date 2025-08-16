@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+    <h2 class="mb-0">
+      <i class="bi bi-clock-history"></i> Carregar Hores
+    </h2>
+    <a href="{% url 'carregahores:meves' %}" class="btn btn-outline-dark">
+      <i class="bi bi-list-ul"></i> Les Meves Hores
+    </a>
+  </div>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
+    <div class="table-responsive mb-4">
+      <table class="table table-bordered bg-white">
+        <tr>
+          <td class="fw-bold" style="width:20%;">{{ form.pressupost.label_tag }}</td>
+          <td style="width:30%;">
+            {{ form.pressupost|add_class:"form-control" }}
+            {% if form.pressupost.errors %}
+              <div class="text-danger small">{{ form.pressupost.errors }}</div>
+            {% endif %}
+          </td>
+          <td class="fw-bold" style="width:20%;">{{ form.linia.label_tag }}</td>
+          <td style="width:30%;">
+            {{ form.linia|add_class:"form-control" }}
+            {% if form.linia.errors %}
+              <div class="text-danger small">{{ form.linia.errors }}</div>
+            {% endif %}
+          </td>
+        </tr>
+        <tr>
+          <td class="fw-bold">{{ form.treball.label_tag }}</td>
+          <td>
+            {{ form.treball|add_class:"form-control" }}
+            {% if form.treball.errors %}
+              <div class="text-danger small">{{ form.treball.errors }}</div>
+            {% endif %}
+          </td>
+          <td class="fw-bold">{{ form.tasca.label_tag }}</td>
+          <td>
+            {{ form.tasca|add_class:"form-control" }}
+            {% if form.tasca.errors %}
+              <div class="text-danger small">{{ form.tasca.errors }}</div>
+            {% endif %}
+          </td>
+        </tr>
+        <tr>
+          <td class="fw-bold">{{ form.recurso.label_tag }}</td>
+          <td>
+            {{ form.recurso|add_class:"form-control" }}
+            {% if form.recurso.errors %}
+              <div class="text-danger small">{{ form.recurso.errors }}</div>
+            {% endif %}
+          </td>
+          <td class="fw-bold">{{ form.data.label_tag }}</td>
+          <td>
+            <div class="input-group">
+              {{ form.data|add_class:"form-control datepicker" }}
+              <span class="input-group-text"><i class="bi bi-calendar3"></i></span>
+            </div>
+            {% if form.data.errors %}
+              <div class="text-danger small">{{ form.data.errors }}</div>
+            {% endif %}
+          </td>
+        </tr>
+        <tr>
+          <td class="fw-bold">{{ form.hores.label_tag }}</td>
+          <td>
+            <div class="input-group">
+              {{ form.hores|add_class:"form-control" }}
+              <span class="input-group-text">h</span>
+            </div>
+            {% if form.hores.errors %}
+              <div class="text-danger small">{{ form.hores.errors }}</div>
+            {% endif %}
+          </td>
+          <td class="fw-bold">{{ form.observacions.label_tag }}</td>
+          <td>
+            {{ form.observacions|add_class:"form-control" }}
+            {% if form.observacions.errors %}
+              <div class="text-danger small">{{ form.observacions.errors }}</div>
+            {% endif %}
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="d-flex gap-2">
+      <a href="{% url 'carregahores:meves' %}" class="btn btn-outline-dark">
+        <i class="bi bi-arrow-left-circle"></i> Tornar
+      </a>
+      <button type="submit" class="btn btn-dark">
+        <i class="bi bi-save2"></i> Guardar
+      </button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ block.super }}
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const pressupostSel = document.getElementById("id_pressupost");
+  const liniaSel = document.getElementById("id_linia");
+  const treballInput = document.getElementById("id_treball");
+  const tascaInput   = document.getElementById("id_tasca");
+
+  function loadLineas() {
+    const pid = pressupostSel.value;
+    liniaSel.innerHTML = "<option value=''>---------</option>";
+    if (!pid) return;
+    fetch(`/carrega-hores/ajax/lineas/?pressupost=${pid}`)
+      .then(r => r.json())
+      .then(items => {
+        items.forEach(it => {
+          const opt = document.createElement("option");
+          opt.value = it.id;
+          opt.textContent = it.label;
+          liniaSel.appendChild(opt);
+        });
+      });
+  }
+
+  pressupostSel?.addEventListener("change", loadLineas);
+
+  // Cuando el usuario elige una línea, bloqueamos treball/tasca con lo de la línea
+  liniaSel?.addEventListener("change", () => {
+    // el form en el servidor ya validará y fijará treball/tasca,
+    // aquí sólo limpiamos para que el usuario no tenga que tocar nada
+    treballInput.value = "";
+    tascaInput.value = "";
+  });
+
+  // Inicializar datepicker
+  flatpickr(".datepicker", {
+    locale: "cat",
+    dateFormat: "Y-m-d",
+    defaultDate: "today"
+  });
+});
+</script>
+{% endblock %}

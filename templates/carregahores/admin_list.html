@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+    <h2 class="mb-0">
+      <i class="bi bi-shield-check"></i> Totes les Càrregues d'Hores - Admin
+    </h2>
+    <div class="d-flex gap-2">
+      <a href="{% url 'carregahores:admin_stats' %}" class="btn btn-outline-dark">
+        <i class="bi bi-graph-up"></i> Estadístiques
+      </a>
+      <a href="{% url 'carregahores:nova' %}" class="btn btn-dark text-white">
+        <i class="bi bi-plus-circle"></i> Nova Càrrega
+      </a>
+    </div>
+  </div>
+
+  {% if items %}
+    <div class="alert alert-light border">
+      <i class="bi bi-info-circle"></i> 
+      <strong>Vista d'administrador:</strong> Pots veure totes les càrregues de tots els usuaris.
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover align-middle bg-white table-dark-header">
+        <thead class="table-dark text-white">
+          <tr>
+            <th><i class="bi bi-person"></i> Usuari</th>
+            <th><i class="bi bi-calendar3"></i> Data</th>
+            <th><i class="bi bi-briefcase"></i> Projecte</th>
+            <th><i class="bi bi-tools"></i> Treball / Tasca</th>
+            <th><i class="bi bi-person-gear"></i> Recurs</th>
+            <th class="text-center"><i class="bi bi-clock"></i> Hores</th>
+            <th><i class="bi bi-chat-text"></i> Observacions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in items %}
+            <tr>
+              <td>
+                <div>
+                  <strong>{{ item.usuari.get_full_name|default:item.usuari.username }}</strong>
+                  <br><small class="text-muted">{{ item.usuari.username }}</small>
+                </div>
+              </td>
+              <td>
+                <span class="badge bg-dark">{{ item.data|date:"d/m/Y" }}</span>
+              </td>
+              <td>
+                <strong>{{ item.pressupost.nom|default:"—" }}</strong>
+                {% if item.pressupost.client %}
+                  <br><small class="text-muted">{{ item.pressupost.client }}</small>
+                {% endif %}
+              </td>
+              <td>
+                <div>
+                  <strong>{{ item.treball.descripcio }}</strong>
+                  <br><small class="text-muted">{{ item.tasca.tasca }}</small>
+                </div>
+              </td>
+              <td>
+                <span class="badge bg-secondary">{{ item.recurso.nom }}</span>
+              </td>
+              <td class="text-center">
+                <span class="badge bg-dark fs-6">{{ item.hores }} h</span>
+              </td>
+              <td>
+                <small>{{ item.observacions|default:"—"|truncatechars:40 }}</small>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Resumen total -->
+    <div class="row mt-4">
+      <div class="col-md-4">
+        <div class="card bg-light">
+          <div class="card-body text-center">
+            <h5 class="card-title"><i class="bi bi-list-ol"></i> Total Registres</h5>
+            <h3 class="text-dark">{{ total_registres }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card bg-light">
+          <div class="card-body text-center">
+            <h5 class="card-title"><i class="bi bi-clock"></i> Total Hores</h5>
+            <h3 class="text-dark">{{ total_hores }} h</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card bg-light">
+          <div class="card-body text-center">
+            <h5 class="card-title"><i class="bi bi-calculator"></i> Mitjana per Registre</h5>
+            <h3 class="text-dark">
+              {% if total_registres > 0 %}
+                {% widthratio total_hores total_registres 1 %} h
+              {% else %}
+                0 h
+              {% endif %}
+            </h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  {% else %}
+    <div class="text-center py-5">
+      <div class="mb-4">
+        <i class="bi bi-clock-history" style="font-size: 4rem; color: #6c757d;"></i>
+      </div>
+      <h4 class="text-muted">No hi ha registres</h4>
+      <p class="text-muted">Encara no s'han creat càrregues d'hores.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

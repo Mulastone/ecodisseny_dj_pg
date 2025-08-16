@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.http import require_http_methods, require_POST
 from django.db import transaction
 from django.utils.timezone import now
@@ -19,8 +20,13 @@ from .forms import (
 from projectes.models import Projecte
 from maestros.models import Tasca, Recurso, Desplacament, Treball, Hores
 
+# Helper function para verificar si es admin
+def is_admin(user):
+    return user.is_authenticated and user.is_superuser
+
 
 # --- GENERAR PDF I GUARDAR ---
+@user_passes_test(is_admin, login_url='/admin/login/')
 def generar_pdf_y_guardar(request, pressupost_id):
     pressupost = get_object_or_404(Pressupost, pk=pressupost_id)
     linies = pressupost.linies.all()
@@ -55,6 +61,7 @@ def generar_pdf_y_guardar(request, pressupost_id):
 
 
 # --- PDF VIEW ---
+@user_passes_test(is_admin, login_url='/admin/login/')
 def veure_pdf_pressupost(request, id):
     pressupost = get_object_or_404(Pressupost, pk=id)
     linies = pressupost.linies.all()
@@ -83,6 +90,7 @@ def veure_pdf_pressupost(request, id):
 
 
 # --- DETALL ---
+@user_passes_test(is_admin, login_url='/admin/login/')
 def detail_view(request, pk):
     pressupost = get_object_or_404(Pressupost, pk=pk)
     versions = pressupost.pdf_versions.order_by('-version')
@@ -93,11 +101,13 @@ def detail_view(request, pk):
 
 
 # --- LLISTAT ---
+@user_passes_test(is_admin, login_url='/admin/login/')
 def list_pressuposts(request):
     pressupostos = Pressupost.objects.all()
     return render(request, 'pressupostos/list.html', {'pressupostos': pressupostos})
 
 
+@user_passes_test(is_admin, login_url='/admin/login/')
 @require_POST
 def delete_version_ajax(request, version_id):
     try:
@@ -110,6 +120,7 @@ def delete_version_ajax(request, version_id):
 
 
 # --- FORMULARI ---
+@user_passes_test(is_admin, login_url='/admin/login/')
 def form_pressupost(request, id=None):
     pressupost = get_object_or_404(Pressupost, pk=id) if id else None
 
@@ -144,6 +155,7 @@ def form_pressupost(request, id=None):
 
 
 # --- ELIMINACIÓ ---
+@user_passes_test(is_admin, login_url='/admin/login/')
 @require_http_methods(["POST"])
 def delete_pressupost(request, id):
     pressupost = get_object_or_404(Pressupost, pk=id)
@@ -200,6 +212,7 @@ def get_recurso_by_id(request, recurs_id):
 
 
 @require_POST
+@user_passes_test(is_admin, login_url='/admin/login/')
 def eliminar_pressupost_ajax(request, pk):
     try:
         pressupost = Pressupost.objects.get(pk=pk)

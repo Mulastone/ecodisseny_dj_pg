@@ -25,6 +25,8 @@ INSTALLED_APPS = [
     "dal_select2",  # O el widget que prefieras
     'phonenumber_field',
     'accounts',
+    "carregahores.apps.CarregahoresConfig",
+
 
 ]
 
@@ -196,7 +198,7 @@ JAZZMIN_UI_TWEAKS = {}
 
 
 
-LOGIN_REDIRECT_URL = '/admin/'  # o '/maestros/' o la vista principal de tu sistema
+LOGIN_REDIRECT_URL = '/'  # Redirección directa a la página de inicio
 LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

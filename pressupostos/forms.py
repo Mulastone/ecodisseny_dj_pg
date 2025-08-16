@@ -10,13 +10,22 @@ class HoresSelectWidget(Select):
     def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
         option = super().create_option(name, value, label, selected, index, subindex=subindex, attrs=attrs)
         try:
-            if value and isinstance(value, (int, str)):
-                hores_obj = Hores.objects.get(pk=value)
-                option['attrs']['data-hores'] = hores_obj.hores
+            # Convert ModelChoiceIteratorValue to its actual value
+            if hasattr(value, 'value'):
+                actual_value = value.value
             else:
-                option['attrs']['data-hores'] = 0
-        except Exception:
-            option['attrs']['data-hores'] = 0
+                actual_value = value
+                
+            if actual_value and str(actual_value).strip():
+                hores_obj = Hores.objects.get(pk=actual_value)
+                print(f"✅ DEBUG Widget - Value: {actual_value}, Hores obj: {hores_obj}, Hores value: {hores_obj.hores}")
+                option['attrs']['data-hores'] = str(hores_obj.hores)
+            else:
+                print(f"⚠️ DEBUG Widget - Empty value: {actual_value}")
+                option['attrs']['data-hores'] = "0"
+        except Exception as e:
+            print(f"❌ DEBUG Widget - Exception: {e}")
+            option['attrs']['data-hores'] = "0"
         return option
 
 

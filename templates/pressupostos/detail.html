@@ -5,10 +5,10 @@
   <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
     <h2 class="mb-0">Versions del Pressupost</h2>
     <div class="d-flex gap-2">
-      <a href="{% url 'pressupostos:generar_pdf' pressupost.pk %}" class="btn btn-success">
+      <a href="{% url 'pressupostos:generar_pdf' pressupost.pk %}" class="btn btn-dark">
         <i class="bi bi-file-earmark-plus"></i> Generar nova versió PDF
       </a>
-      <a href="{% url 'pressupostos:list' %}" class="btn btn-secondary">
+      <a href="{% url 'pressupostos:list' %}" class="btn btn-outline-dark">
         <i class="bi bi-arrow-left-circle"></i> Tornar a la llista
       </a>
     </div>
@@ -40,7 +40,7 @@
               <td class="text-center">
                 <div class="d-flex justify-content-center gap-2 flex-wrap">
                   <a href="{{ version.arxiu.url }}" target="_blank" class="btn btn-sm btn-outline-secondary" title="Veure PDF">
-                    <i class="bi bi-download"></i>
+                    <i class="bi bi-eye"></i> 
                   </a>
                   <button type="button"
                           class="btn btn-sm btn-outline-danger btn-delete-version"
@@ -56,7 +56,7 @@
       </table>
     </div>
   {% else %}
-    <div class="alert alert-info">
+    <div class="alert alert-light border">
       Encara no hi ha cap versió PDF registrada per aquest pressupost.
     </div>
   {% endif %}
@@ -74,8 +74,8 @@
         Segur que vols eliminar aquesta versió PDF?
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel·lar</button>
-        <button type="button" id="confirmDeleteVersionBtn" class="btn btn-danger">Eliminar</button>
+        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancel·lar</button>
+        <button type="button" id="confirmDeleteVersionBtn" class="btn btn-dark">Eliminar</button>
       </div>
     </div>
   </div>
@@ -83,10 +83,10 @@
 
 <!-- ✅ Toast d'èxit -->
 <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1080;">
-  <div id="successVersionToast" class="toast text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header">
+  <div id="successVersionToast" class="toast bg-light border-dark" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header bg-dark text-white">
       ✅ Versió eliminada
-      <button type="button" class="btn-close ms-auto" data-bs-dismiss="toast" aria-label="Tancar"></button>
+      <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="toast" aria-label="Tancar"></button>
     </div>
     <div class="toast-body">
       Versió PDF eliminada correctament.

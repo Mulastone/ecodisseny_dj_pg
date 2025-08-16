@@ -43,7 +43,12 @@ if (window.__pressupostos_js_loaded__) {
         return;
       }
       fetch(`/pressupostos/get_projectes/${clientId}/`)
-        .then((response) => response.json())
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
         .then((data) => {
           console.log("📦 Projectes rebuts:", data);
           projectSelect.innerHTML = '<option value="">Seleccioni Projecte</option>';
@@ -53,6 +58,10 @@ if (window.__pressupostos_js_loaded__) {
             option.textContent = item.nom;
             projectSelect.appendChild(option);
           });
+        })
+        .catch((error) => {
+          console.error("❌ Error carregant projectes:", error);
+          projectSelect.innerHTML = '<option value="">Error carregant projectes</option>';
         });
     });
 
@@ -116,7 +125,7 @@ if (window.__pressupostos_js_loaded__) {
       const tascaSelect = linea.querySelector(`[id$="-tasca"]`);
       const recursSelect = linea.querySelector(`[id$="-recurs"]`);
       const preuTancatCheck = linea.querySelector(`[id$="-preu_tancat"]`);
-      const horaField = linea.querySelector(`[id$="-hora"]`);
+      const horaField = linea.querySelector(`[id$="-hora"]`); // Campo correcto: hora (sin 's')
       const horesHidden = linea.querySelector(".hores-value");
       const incrementField = linea.querySelector(`[id$="-increment_hores"]`);
       const horesTotalsField = linea.querySelector(`[id$="-hores_totals"]`);
@@ -128,6 +137,15 @@ if (window.__pressupostos_js_loaded__) {
       const beneficiField = linea.querySelector(`[id$="-benefici"]`);
       const totalLineaField = linea.querySelector(`[id$="-total"]`);
       const deleteBtn = linea.querySelector(".eliminar-linea");
+
+      console.log(`📋 Camps trobats a la línia [${index}]:`, {
+        treballSelect: !!treballSelect,
+        tascaSelect: !!tascaSelect,
+        recursSelect: !!recursSelect,
+        horaField: !!horaField,
+        horesHidden: !!horesHidden,
+        quantitatField: !!quantitatField
+      });
 
       // 🔒 Bloquejar select hora si preu_tancat activat
       if (preuTancatCheck && horaField) {
@@ -162,7 +180,12 @@ if (window.__pressupostos_js_loaded__) {
         tascaSelect.innerHTML = '<option value="">Seleccioni Tasca</option>';
         if (idTreball) {
           fetch(`/pressupostos/get_tasques/${idTreball}/`)
-            .then((res) => res.json())
+            .then((res) => {
+              if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+              }
+              return res.json();
+            })
             .then((data) => {
               console.log("📦 Tasques rebudes:", data);
               const tasques = data.tasques || [];
@@ -172,6 +195,9 @@ if (window.__pressupostos_js_loaded__) {
                 option.textContent = item.tasca;
                 tascaSelect.appendChild(option);
               });
+            })
+            .catch((error) => {
+              console.error("❌ Error carregant tasques:", error);
             });
         }
       });
@@ -181,7 +207,12 @@ if (window.__pressupostos_js_loaded__) {
         console.log("📦 Recurs seleccionat:", idRecurs);
         if (!idRecurs) return;
         fetch(`/pressupostos/get_recurso/${idRecurs}/`)
-          .then((res) => res.json())
+          .then((res) => {
+            if (!res.ok) {
+              throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            return res.json();
+          })
           .then((data) => {
             console.log("📦 Dades del recurs:", data);
             if (data.PreuTancat) {
@@ -202,6 +233,9 @@ if (window.__pressupostos_js_loaded__) {
               costHoresField.value = data.PreuHora || "0";
             }
             calcularSubtotal();
+          })
+          .catch((error) => {
+            console.error("❌ Error carregant dades del recurs:", error);
           });
       });
 
@@ -225,55 +259,124 @@ if (window.__pressupostos_js_loaded__) {
         });
       });
 
-      if (horaField && horesHidden) {
-        horaField.addEventListener("change", () => {
-          const selectedOption = horaField.options[horaField.selectedIndex];
-          const hores = selectedOption?.dataset.hores || 0;
-          console.log("⏱️ Hores seleccionades:", hores);
-          horesHidden.value = hores;
+      // Event listeners simplificats
+      [horaField, incrementField, costHoresField, quantitatField, costTancatField, beneficiField].forEach((el) =>
+        el?.addEventListener("input", () => {
+          console.log("🔄 Input canviat, recalculant...");
           calcularSubtotal();
-        });
-      }
-
-      [horaField, incrementField, costHoresField, quantitatField, costTancatField].forEach((el) =>
-        el?.addEventListener("input", calcularSubtotal)
+        })
       );
-      beneficiField?.addEventListener("input", calcularSubtotal);
+      
+      [horaField, incrementField, costHoresField, quantitatField, costTancatField, beneficiField].forEach((el) =>
+        el?.addEventListener("change", () => {
+          console.log("🔄 Change canviat, recalculant...");
+          calcularSubtotal();
+        })
+      );
+      
+      preuTancatCheck?.addEventListener("change", () => {
+        console.log("🔄 Preu tancat canviat, recalculant...");
+        calcularSubtotal();
+      });
 
       function calcularSubtotal() {
-        const q = parseFloat(quantitatField.value) || 0;
-        const h = parseFloat(horesHidden.value) || 0;
+        console.log('=== CALCULANT SUBTOTAL SIMPLIFICAT ===');
+        
+        const q = parseFloat(quantitatField?.value) || 1;
+        const preuTancat = preuTancatCheck?.checked;
+        
+        console.log('Quantitat:', q);
+        console.log('Preu tancat:', preuTancat);
+        
+        let h = 0;
+        
+        if (!preuTancat && horaField && horaField.selectedIndex > 0) {
+          const selectedOption = horaField.options[horaField.selectedIndex];
+          const dataHores = selectedOption?.getAttribute('data-hores');
+          
+          console.log('=== DEBUG PARSEINT ===');
+          console.log('dataHores (raw):', dataHores);
+          console.log('typeof dataHores:', typeof dataHores);
+          console.log('dataHores === null:', dataHores === null);
+          console.log('dataHores === undefined:', dataHores === undefined);
+          console.log('dataHores === "":', dataHores === '');
+          console.log('parseFloat(dataHores):', parseFloat(dataHores));
+          console.log('Number(dataHores):', Number(dataHores));
+          console.log('dataHores * 1:', dataHores * 1);
+          
+          // Intentar diferentes métodos de conversión
+          h = Number(dataHores) || 0;
+          
+          console.log('Opció seleccionada:', selectedOption);
+          console.log('data-hores atribut:', dataHores);
+          console.log('horaField.value (ID per BD):', horaField.value);
+          console.log('Hores seleccionades (per càlcul):', h);
+          
+          // Verificar que el camp hora tingui el valor correcte per guardar a BD
+          if (horaField.value) {
+            console.log('✅ Camp hora té ID:', horaField.value, 'per guardar a BD');
+          } else {
+            console.warn('⚠️ PROBLEMA: Camp hora no té ID per guardar a BD');
+          }
+        } else {
+          console.log('No es calculen hores perquè:');
+          console.log('- preuTancat:', preuTancat);
+          console.log('- horaField exists:', !!horaField);
+          console.log('- horaField.selectedIndex:', horaField?.selectedIndex);
+          console.log('- horaField.value:', horaField?.value);
+          
+          // Si es preu tancat, el camp hora hauria d'estar buit o disabled
+          if (preuTancat && horaField) {
+            console.log('💰 Preu tancat: netejant camp hora');
+            horaField.value = '';
+          }
+        }
+        
         const inc = parseFloat(incrementField?.value) || 0;
         const cost = parseFloat(costHoresField?.value) || 0;
         const costTancat = parseFloat(costTancatField?.value) || 0;
-        const preuTancat = preuTancatCheck?.checked;
-
+        
+        console.log('Increment:', inc);
+        console.log('Cost per hora:', cost);
+        console.log('Cost tancat:', costTancat);
+        
         const totalHores = (h + inc) * q;
         const totalCostHores = totalHores * cost;
         const subtotal = preuTancat ? q * costTancat : totalCostHores;
+        
+        console.log('Total hores:', totalHores);
+        console.log('Total cost hores:', totalCostHores);
+        console.log('Subtotal:', subtotal);
+        
+        // Actualitzar camps
+        if (horesTotalsField) {
+          horesTotalsField.value = totalHores.toFixed(2);
+          console.log('✅ Hores totals actualitzat:', horesTotalsField.value);
+        }
+        
+        if (costTotalsField) {
+          costTotalsField.value = totalCostHores.toFixed(4);
+          console.log('✅ Cost totals actualitzat:', costTotalsField.value);
+        }
+        
+        if (subtotalField) {
+          subtotalField.value = subtotal.toFixed(4);
+          console.log('✅ Subtotal actualitzat:', subtotalField.value);
+        }
 
-        console.log("🧮 Subtotal línia", {
-          quantitat: q,
-          hores: h,
-          increment: inc,
-          costHora: cost,
-          costTancat,
-          totalHores,
-          totalCostHores,
-          subtotal
-        });
-
-        horesTotalsField.value = totalHores.toFixed(2);
-        costTotalsField.value = totalCostHores.toFixed(4);
-        subtotalField.value = subtotal.toFixed(4);
-
-        const beneficiPercent = parseFloat(beneficiField.value) || 0;
+        const beneficiPercent = parseFloat(beneficiField?.value) || 0;
         const benefici = subtotal * (beneficiPercent / 100);
         const total = subtotal + benefici;
 
-        totalLineaField.value = total.toFixed(2);
+        if (totalLineaField) {
+          totalLineaField.value = total.toFixed(2);
+          console.log('✅ Total línia actualitzat:', totalLineaField.value);
+        }
+        
         calcularTotalPressupost();
-      }
+      }      // Calcular valores iniciales al cargar la línea
+      console.log("🚀 Executant calcularSubtotal inicial per línia", index);
+      calcularSubtotal();
     }
 
     function calcularTotalPressupost() {
@@ -299,6 +402,4 @@ if (window.__pressupostos_js_loaded__) {
       allowInput: true,
     });
   });
-     
-
 }

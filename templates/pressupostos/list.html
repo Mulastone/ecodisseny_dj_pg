@@ -35,7 +35,7 @@
               <td>{{ pressupost.ubicacio }}</td>
               <td class="text-center">
                 {% if pressupost.tancat %}
-                  <span class="badge bg-success">Sí</span>
+                  <span class="badge bg-dark">Sí</span>
                 {% else %}
                   <span class="badge bg-secondary">No</span>
                 {% endif %}
@@ -70,7 +70,7 @@
       </table>
     </div>
   {% else %}
-    <div class="alert alert-info">No hi ha pressupostos disponibles.</div>
+    <div class="alert alert-light border">No hi ha pressupostos disponibles.</div>
   {% endif %}
 </div>
 
@@ -86,8 +86,8 @@
         Segur que vols eliminar aquest pressupost?
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel·lar</button>
-        <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Eliminar</button>
+        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancel·lar</button>
+        <button type="button" id="confirmDeleteBtn" class="btn btn-dark">Eliminar</button>
       </div>
     </div>
   </div>
@@ -95,10 +95,10 @@
 
 <!-- ✅ Toast d'èxit -->
 <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1080;">
-  <div id="successToast" class="toast text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header">
+  <div id="successToast" class="toast bg-light border-dark" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header bg-dark text-white">
       ✅ Eliminat
-      <button type="button" class="btn-close ms-auto" data-bs-dismiss="toast" aria-label="Tancar"></button>
+      <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="toast" aria-label="Tancar"></button>
     </div>
     <div class="toast-body">
       Pressupost eliminat correctament.

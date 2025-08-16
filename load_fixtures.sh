@@ -26,3 +26,14 @@ for fixture in "${FIXTURES[@]}"; do
 done
 
 echo "✅ Càrrega de fixtures completada."
+
+echo ""
+echo "🔑 Creando usuarios y perfiles..."
+python create_users_profiles.py
+
+echo ""
+echo "🎉 ¡Inicialización completa!"
+echo "   • Fixtures cargados"
+echo "   • Usuarios creados"  
+echo "   • Perfiles configurados"
+echo "   • Contraseña para todos: ecodisseny2024"

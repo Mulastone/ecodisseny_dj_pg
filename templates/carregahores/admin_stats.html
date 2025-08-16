@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
+    <h2 class="mb-0">
+      <i class="bi bi-graph-up"></i> Estadístiques - Admin
+    </h2>
+    <div class="d-flex gap-2">
+      <a href="{% url 'carregahores:admin_totes' %}" class="btn btn-outline-secondary">
+        <i class="bi bi-list"></i> Totes les Càrregues
+      </a>
+      <a href="{% url 'carregahores:meves' %}" class="btn btn-outline-primary">
+        <i class="bi bi-person"></i> Les Meves
+      </a>
+    </div>
+  </div>
+
+  <!-- Resum general -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card bg-dark text-white">
+        <div class="card-body text-center">
+          <h3><i class="bi bi-clock-fill"></i> {{ total_general }} hores totals</h3>
+          <p class="mb-0">Registrades en tot el sistema</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Estadístiques per usuari -->
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0"><i class="bi bi-people"></i> Per Usuari</h5>
+        </div>
+        <div class="card-body">
+          {% if stats_per_user %}
+            <div class="table-responsive">
+              <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th>Usuari</th>
+                    <th class="text-center">Hores</th>
+                    <th class="text-center">Registres</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for stat in stats_per_user %}
+                    <tr>
+                      <td>
+                        <strong>
+                          {% if stat.usuari__first_name %}
+                            {{ stat.usuari__first_name }} {{ stat.usuari__last_name }}
+                          {% else %}
+                            {{ stat.usuari__username }}
+                          {% endif %}
+                        </strong>
+                      </td>
+                      <td class="text-center">
+                        <span class="badge bg-dark">{{ stat.total_hores|default:0 }} h</span>
+                      </td>
+                      <td class="text-center">
+                        <span class="badge bg-secondary">{{ stat.total_registres }}</span>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <p class="text-muted">No hi ha dades disponibles</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Estadístiques per recurs -->
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0"><i class="bi bi-gear"></i> Per Recurs</h5>
+        </div>
+        <div class="card-body">
+          {% if stats_per_recurso %}
+            <div class="table-responsive">
+              <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th>Recurs</th>
+                    <th class="text-center">Hores</th>
+                    <th class="text-center">Registres</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for stat in stats_per_recurso %}
+                    <tr>
+                      <td><strong>{{ stat.recurso__nom }}</strong></td>
+                      <td class="text-center">
+                        <span class="badge bg-dark">{{ stat.total_hores|default:0 }} h</span>
+                      </td>
+                      <td class="text-center">
+                        <span class="badge bg-secondary">{{ stat.total_registres }}</span>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <p class="text-muted">No hi ha dades disponibles</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estadístiques per mes -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0"><i class="bi bi-calendar-month"></i> Per Mes</h5>
+        </div>
+        <div class="card-body">
+          {% if stats_per_month %}
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Mes</th>
+                    <th class="text-center">Hores</th>
+                    <th class="text-center">Registres</th>
+                    <th class="text-center">Mitjana per Registre</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for stat in stats_per_month %}
+                    <tr>
+                      <td>
+                        <strong>{{ stat.mes|date:"F Y" }}</strong>
+                      </td>
+                      <td class="text-center">
+                        <span class="badge bg-dark fs-6">{{ stat.total_hores|default:0 }} h</span>
+                      </td>
+                      <td class="text-center">
+                        <span class="badge bg-secondary fs-6">{{ stat.total_registres }}</span>
+                      </td>
+                      <td class="text-center">
+                        {% if stat.total_registres > 0 %}
+                          <span class="badge bg-dark fs-6">
+                            {% widthratio stat.total_hores stat.total_registres 1 %} h
+                          </span>
+                        {% else %}
+                          <span class="badge bg-secondary fs-6">0 h</span>
+                        {% endif %}
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <p class="text-muted">No hi ha dades disponibles</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

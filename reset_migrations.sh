@@ -33,6 +33,9 @@ find ./pressupostos -path "*/migrations/*.pyc" -delete
 find ./projectes -path "*/migrations/*.py" -not -name "__init__.py" -delete
 find ./projectes -path "*/migrations/*.pyc" -delete
 
+find ./carregahores -path "*/migrations/*.py" -not -name "__init__.py" -delete
+find ./carregahores -path "*/migrations/*.pyc" -delete
+
 echo "🧹 Borrando __pycache__..."
 find . -type d -name "__pycache__" -exec rm -r {} + 2>/dev/null
 
@@ -65,4 +68,14 @@ echo "✅ Migraciones reiniciadas y base de datos limpia."
 
 if [[ -s reset_errors.log ]]; then
   echo "⚠️ Se encontraron errores. Consultá reset_errors.log para más detalles."
+fi
+
+echo ""
+read -p "¿Querés cargar los fixtures y crear usuarios ahora? (s/n): " loadconfirm
+if [[ $loadconfirm == "s" ]]; then
+  echo "📥 Cargando fixtures y creando usuarios..."
+  ./load_fixtures.sh
+  echo "🎉 ¡Proyecto reiniciado completamente!"
+else
+  echo "ℹ️ Para cargar fixtures y usuarios después, ejecutá: ./load_fixtures.sh"
 fi

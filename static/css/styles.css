@@ -174,3 +174,24 @@ input[type="submit"]:active {
   color: white !important;
   border-color: #454d55;
 }
+
+/* ------------------------------
+   ✅ Checkbox personalizado (negro)
+------------------------------- */
+input[type="checkbox"] {
+    accent-color: #343a40 !important;
+    width: 18px;
+    height: 18px;
+}
+
+/* Fallback para navegadores que no soportan accent-color */
+input[type="checkbox"]:checked {
+    background-color: #343a40 !important;
+    border-color: #343a40 !important;
+}
+
+/* Estilo específico para el checkbox de preu_tancat */
+input[name*="preu_tancat"] {
+    accent-color: #343a40 !important;
+    transform: scale(1.2);
+}
