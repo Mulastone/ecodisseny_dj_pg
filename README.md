@@ -21,7 +21,8 @@
 - [📂 Estructura del Proyecto](#-estructura-del-proyecto)
 - [👥 Usuarios por Defecto](#-usuarios-por-defecto)
 - [🔧 Configuración](#-configuración)
-- [📖 API y Endpoints](#-api-y-endpoints)
+- [� Documentación de Uso](#-documentación-de-uso)
+- [�📖 API y Endpoints](#-api-y-endpoints)
 - [🤝 Contribución](#-contribución)
 - [📄 Licencia](#-licencia)
 
@@ -369,7 +370,45 @@ El sistema incluye datos iniciales (fixtures) que se cargan automáticamente:
 - **Tareas y Trabajos**: Catálogo predefinido
 - **Desplazamientos**: Matriz de distancias
 
-## 📖 API y Endpoints
+## � Documentación de Uso
+
+### **📖 Guías Completas por Tipo de Usuario**
+
+La documentación completa está disponible en la carpeta [`docs/`](docs/):
+
+#### **👤 Para Usuarios**
+- **[🚀 Guía de Inicio Rápido](docs/usuario/inicio-rapido.md)** - Primeros pasos en el sistema
+- **[🏗️ Gestión de Proyectos](docs/usuario/proyectos.md)** - Crear y administrar proyectos
+- **[💰 Presupuestos](docs/usuario/presupuestos.md)** - Cotizaciones y documentos PDF
+- **[⏱️ Carga de Horas](docs/usuario/carga-horas.md)** - Registro de tiempo trabajado
+- **[📈 Reportes](docs/usuario/reportes.md)** - Informes y estadísticas
+
+#### **🔧 Para Administradores**
+- **[⚙️ Configuración Inicial](docs/admin/configuracion.md)** - Setup completo del sistema
+- **[👥 Gestión de Usuarios](docs/admin/usuarios.md)** - Usuarios, roles y permisos
+- **[🏗️ Datos Maestros](docs/admin/datos-maestros.md)** - Recursos, ubicaciones, tareas
+- **[🔐 Seguridad](docs/admin/seguridad.md)** - Configuración de seguridad
+- **[📊 Mantenimiento](docs/admin/mantenimiento.md)** - Backups y monitoreo
+
+#### **🛠️ Para Desarrolladores**
+- **[🏗️ Arquitectura](docs/dev/arquitectura.md)** - Estructura técnica
+- **[🔌 API Reference](docs/dev/api.md)** - Endpoints disponibles
+- **[🎨 Personalización](docs/dev/personalizacion.md)** - Modificar interface
+- **[🐛 Debugging](docs/dev/debugging.md)** - Solución de problemas
+
+#### **🆘 Soporte**
+- **[🚨 Troubleshooting](docs/troubleshooting.md)** - Resolución de problemas comunes
+
+### **🎯 Inicio Rápido por Rol**
+
+| Tu Rol | Empezar Aquí | Objetivo |
+|--------|--------------|----------|
+| **👤 Usuario Nuevo** | [Inicio Rápido](docs/usuario/inicio-rapido.md) | Aprender lo básico en 15 minutos |
+| **🏗️ Jefe de Proyecto** | [Gestión de Proyectos](docs/usuario/proyectos.md) | Dominar la gestión completa |
+| **🔧 Administrador** | [Configuración Inicial](docs/admin/configuracion.md) | Setup completo del sistema |
+| **🛠️ Desarrollador** | [Arquitectura](docs/dev/arquitectura.md) | Entender la estructura técnica |
+
+## �📖 API y Endpoints
 
 ### **🔗 URLs Principales**
 
