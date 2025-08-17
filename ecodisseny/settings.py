@@ -1,12 +1,21 @@
 from pathlib import Path
 from decouple import config
+import os
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = []
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-docker-dev-key-change-in-production')
+DEBUG = config('DEBUG', default=True, cast=bool)
+
+# Configuración para Docker
+ALLOWED_HOSTS = [
+    'localhost', 
+    '127.0.0.1', 
+    '0.0.0.0',
+    'web',  # nombre del servicio en docker-compose
+    '*'     # Para desarrollo - cambiar en producción
+]
 
 # Apps instaladas
 INSTALLED_APPS = [
@@ -75,15 +84,15 @@ WSGI_APPLICATION = 'ecodisseny.wsgi.application'
 #     }
 # }
 
-# Base de datos (PostgreSQL)
+# Base de datos (PostgreSQL) - Configuración para Docker
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT', cast=int),
+        'NAME': os.environ.get('DB_NAME', config('DB_NAME', default='ecodisseny_db')),
+        'USER': os.environ.get('DB_USER', config('DB_USER', default='ecodisseny')),
+        'PASSWORD': os.environ.get('DB_PASSWORD', config('DB_PASSWORD', default='ecodisseny2024')),
+        'HOST': os.environ.get('DB_HOST', config('DB_HOST', default='localhost')),
+        'PORT': os.environ.get('DB_PORT', config('DB_PORT', default=5432, cast=int)),
     }
 }
 
