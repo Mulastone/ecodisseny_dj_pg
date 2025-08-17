@@ -58,6 +58,11 @@ Dockerfile*
 docker-compose*
 .dockerignore
 
+# Variables de entorno (importantes para seguridad)
+.env
+.env.local
+.env.example
+
 # Archivos de desarrollo
 *.sql
 *.backup

@@ -1,0 +1,98 @@
+version: '3.8'
+
+services:
+  # Base de datos PostgreSQL
+  db:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ecodisseny_db
+      POSTGRES_USER: ecodisseny
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - ecodisseny_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ecodisseny -d ecodisseny_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Aplicación Django
+  web:
+    build: .
+    restart: unless-stopped
+    command: >
+      sh -c "
+        echo '🔄 Esperando PostgreSQL...' &&
+        while ! pg_isready -h db -p 5432 -U ecodisseny; do
+          echo 'PostgreSQL no está listo - esperando...'
+          sleep 2
+        done &&
+        echo '✅ PostgreSQL está listo!' &&
+        echo '🔄 Ejecutando migraciones...' &&
+        python manage.py makemigrations &&
+        python manage.py migrate &&
+        echo '📥 Cargando fixtures...' &&
+        ./docker-load-fixtures.sh &&
+        echo '🔄 Recolectando archivos estáticos...' &&
+        python manage.py collectstatic --noinput &&
+        echo '🚀 Iniciando servidor Gunicorn...' &&
+        gunicorn ecodisseny.wsgi:application --bind 0.0.0.0:8000 --workers 3
+      "
+    volumes:
+      - media_files:/app/media
+      - static_files:/app/staticfiles
+    environment:
+      - DEBUG=False
+      - ALLOWED_HOSTS=${DOMAIN_NAME},${SERVER_IP}
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=ecodisseny_db
+      - DB_USER=ecodisseny
+      - DB_PASSWORD=${DB_PASSWORD}
+      - SECRET_KEY=${SECRET_KEY}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - ecodisseny_network
+
+  # Servidor web Nginx
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - static_files:/var/www/static:ro
+      - media_files:/var/www/media:ro
+      - certbot_certs:/etc/letsencrypt:ro
+      - certbot_webroot:/var/www/certbot:ro
+    depends_on:
+      - web
+    networks:
+      - ecodisseny_network
+
+  # Certificados SSL
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - certbot_certs:/etc/letsencrypt
+      - certbot_webroot:/var/www/certbot
+    command: certonly --webroot --webroot-path=/var/www/certbot --email ${EMAIL} --agree-tos --no-eff-email -d ${DOMAIN_NAME}
+
+volumes:
+  postgres_data:
+  media_files:
+  static_files:
+  certbot_certs:
+  certbot_webroot:
+
+networks:
+  ecodisseny_network:
+    driver: bridge

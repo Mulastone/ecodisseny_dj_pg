@@ -21,3 +21,4 @@ tinyhtml5==2.0.0
 weasyprint==65.1
 webencodings==0.5.1
 zopfli==0.2.3.post1
+gunicorn==22.0.0
