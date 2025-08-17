@@ -78,8 +78,15 @@ class Command(BaseCommand):
     def cargar_documentos(self, update=False):
         """Cargar los documentos markdown existentes"""
         
-        # Obtener el usuario admin para asignar como autor
-        admin_user = User.objects.filter(is_superuser=True).first()
+        # Obtener el usuario Axel o el admin para asignar como autor
+        admin_user = User.objects.filter(first_name__icontains='axel').first()
+        if not admin_user:
+            admin_user = User.objects.filter(is_superuser=True).first()
+            if admin_user:
+                admin_user.first_name = 'Axel'
+                admin_user.last_name = 'Rasmussen'
+                admin_user.save()
+                self.stdout.write(f"✅ Usuario actualizado: {admin_user.username} -> Axel Rasmussen")
         
         # Mapeo de archivos a documentos
         documentos = [

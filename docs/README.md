@@ -6,56 +6,54 @@ Bienvenido a la documentación completa del sistema Ecodisseny. Aquí encontrar�
 
 ### 👤 **Para Usuarios**
 
-- [🚀 Guía de Inicio Rápido](usuario/inicio-rapido.md) - Primeros pasos en el sistema
-- [📊 Gestión de Proyectos](usuario/proyectos.md) - Crear y gestionar proyectos
-- [💰 Presupuestos](usuario/presupuestos.md) - Crear cotizaciones y presupuestos
-- [⏱️ Carga de Horas](usuario/carga-horas.md) - Registrar tiempo trabajado
-- [📈 Reportes](usuario/reportes.md) - Generar informes y estadísticas
+- [🚀 Guía de Inicio Rápido](/documentacion/usuario/inicio-rapido/) - Primeros pasos en el sistema
+- [⏱️ Carga de Horas](/documentacion/usuario/carga-horas/) - Registrar tiempo trabajado (próximamente)
 
 ### 🔧 **Para Administradores**
 
-- [⚙️ Configuración Inicial](admin/configuracion.md) - Setup básico del sistema
-- [👥 Gestión de Usuarios](admin/usuarios.md) - Crear y administrar usuarios
-- [🏗️ Datos Maestros](admin/datos-maestros.md) - Recursos, ubicaciones, tareas
-- [🔐 Seguridad](admin/seguridad.md) - Permisos y configuración de seguridad
-- [📊 Mantenimiento](admin/mantenimiento.md) - Backups, logs y monitoreo
+- [⚙️ Configuración del Sistema](/documentacion/admin/configuracion-del-sistema/) - Setup básico del sistema
+- [👥 Gestión de Usuarios](/documentacion/admin/gestion-de-usuarios/) - Crear y administrar usuarios
+- [📊 Gestión de Proyectos](/documentacion/admin/proyectos/) - Crear y gestionar proyectos
+- [💰 Gestión de Presupuestos](/documentacion/admin/presupuestos/) - Crear cotizaciones y presupuestos
+- [🏗️ Gestión de Maestros](/documentacion/admin/gestion-de-maestros/) - Datos maestros del sistema
+- [🔐 Seguridad](/documentacion/admin/seguridad/) - Permisos y configuración de seguridad
+- [🔧 Mantenimiento](/documentacion/admin/mantenimiento/) - Backups, logs y monitoreo### 🛠️ **Para Desarrolladores**
 
-### 🛠️ **Para Desarrolladores**
-
-- [🏗️ Arquitectura](dev/arquitectura.md) - Estructura técnica del sistema
-- [🔌 API Reference](dev/api.md) - Endpoints y métodos disponibles
-- [🎨 Personalización](dev/personalizacion.md) - Modificar templates y estilos
-- [🐛 Debugging](dev/debugging.md) - Solución de problemas técnicos
+- [🏗️ Guía de Desarrollo y Despliegue](/documentacion/dev/despliegue-vps/) - Deploy detallado en VPS y desarrollo
+- [📖 Arquitectura del Sistema](/documentacion/dev/arquitectura/) - Estructura técnica (próximamente)
+- [🔌 API Reference](/documentacion/dev/api/) - Endpoints y métodos (próximamente)
 
 ## 🎯 **¿Qué tipo de usuario eres?**
 
 ### 👤 **Usuario Final**
 
-Si trabajas creando proyectos, presupuestos o registrando horas:
+Si trabajas registrando horas de trabajo:
 
-- Empieza con la [Guía de Inicio Rápido](usuario/inicio-rapido.md)
-- Consulta las guías específicas según tus necesidades
+- Empieza con la [Guía de Inicio Rápido](/documentacion/usuario/inicio-rapido/)
+- Aprende a registrar tus horas trabajadas
 
 ### 🔧 **Administrador**
 
-Si eres responsable de configurar y mantener el sistema:
+Si eres responsable de configurar y gestionar el sistema:
 
-- Revisa la [Configuración Inicial](admin/configuracion.md)
-- Configura usuarios y permisos
-- Establece los datos maestros
+- Revisa la [Configuración del Sistema](/documentacion/admin/configuracion-del-sistema/)
+- Configura usuarios y permisos según la [Guía de Usuarios](/documentacion/admin/gestion-de-usuarios/)
+- Gestiona [Proyectos](/documentacion/admin/proyectos/) y [Presupuestos](/documentacion/admin/presupuestos/)
+- Administra [Datos Maestros](/documentacion/admin/gestion-de-maestros/) y [Seguridad](/documentacion/admin/seguridad/)
+- Realiza tareas de [Mantenimiento](/documentacion/admin/mantenimiento/) del sistema
 
 ### 🛠️ **Desarrollador**
 
-Si necesitas modificar o extender el sistema:
+Si necesitas modificar, extender o desplegar el sistema:
 
-- Consulta la [Arquitectura](dev/arquitectura.md)
-- Revisa la [API Reference](dev/api.md)
-- Sigue las guías de personalización
+- Consulta la [Guía de Desarrollo y Despliegue](/documentacion/dev/despliegue-vps/) para deploy en VPS
+- Revisa la arquitectura técnica del sistema
+- Sigue las mejores prácticas de desarrollo
 
 ## 🆘 **Necesitas Ayuda?**
 
-- **📖 Busca** en esta documentación por palabras clave
-- **🐛 Revisa** la sección de [Troubleshooting](troubleshooting.md)
+- **📖 Busca** en esta documentación por palabras clave usando el [buscador](/documentacion/buscar/)
+- **🐛 Revisa** la sección de [Solución de Problemas](/documentacion/general/solucion-de-problemas/)
 - **💬 Contacta** al soporte técnico
 - **📝 Reporta** bugs o sugerencias en el repositorio
 
@@ -65,4 +63,4 @@ Esta documentación se actualiza regularmente. Última revisión: **Agosto 2025*
 
 ---
 
-_💡 **Tip**: Usa Ctrl+F para buscar términos específicos en cualquier página de documentación._
+_💡 **Tip**: Usa el buscador integrado para encontrar información específica rápidamente._
