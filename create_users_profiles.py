@@ -14,8 +14,39 @@ from django.contrib.auth.models import User
 from maestros.models import Recurso
 from carregahores.models import PerfilUsuario
 
+def crear_superusuario_mulastone():
+    """Crear el superusuario mulastone si no existe"""
+    try:
+        user, created = User.objects.get_or_create(
+            username='mulastone',
+            defaults={
+                'email': 'mulastone@ecodisseny.com',
+                'first_name': 'Mulastone',
+                'last_name': 'Admin',
+                'is_active': True,
+                'is_staff': True,
+                'is_superuser': True
+            }
+        )
+        
+        if created:
+            user.set_password('Santom@E14')
+            user.save()
+            print("   ✓ Superusuario 'mulastone' creado con contraseña personalizada")
+        else:
+            # Actualizar contraseña si ya existe
+            user.set_password('Santom@E14')
+            user.save()
+            print("   - Superusuario 'mulastone' ya existía, contraseña actualizada")
+            
+    except Exception as e:
+        print(f"   ✗ Error creando superusuario mulastone: {e}")
+
 def crear_usuarios_y_perfiles():
     print("🔑 Creando usuarios y perfiles...")
+    
+    # Crear superusuario mulastone primero
+    crear_superusuario_mulastone()
     
     # Definir usuarios y sus recursos
     usuarios_recursos = [
@@ -77,12 +108,14 @@ def crear_usuarios_y_perfiles():
     print(f"   • Total usuarios: {total_users}")
     print(f"   • Administradores: {total_admins}")
     print(f"   • Perfiles creados: {total_profiles}")
-    print(f"   • Contraseña para todos: ecodisseny2024")
+    print(f"   • Contraseña usuarios normales: ecodisseny2024")
+    print(f"   • Contraseña mulastone: Santom@E14")
     
     print("\n👥 Usuarios creados:")
     for user in User.objects.all().order_by('username'):
         admin_status = '🔑 ADMIN' if user.is_superuser else '👤 USER'
-        print(f"   {admin_status} {user.username}")
+        special_note = ' (Superusuario principal)' if user.username == 'mulastone' else ''
+        print(f"   {admin_status} {user.username}{special_note}")
 
 if __name__ == '__main__':
     crear_usuarios_y_perfiles()

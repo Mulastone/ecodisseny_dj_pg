@@ -1,0 +1,80 @@
+# Git
+.git
+.gitignore
+README.md
+recomendaciones.md
+esquema.md
+SCRIPTS_README.md
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env
+pip-log.txt
+pip-delete-this-directory.txt
+.tox
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git
+.mypy_cache
+.pytest_cache
+.hypothesis
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Entornos virtuales
+venv/
+venv_postgres/
+.venv
+ENV/
+env/
+.env
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Archivos de desarrollo
+*.sql
+*.backup
+*.dump
+reset_*.log
+reset_*.sh
+
+# Node modules (si los hay)
+node_modules/
+
+# Media files (se crean en runtime)
+media/*
+
+# Scripts de desarrollo
+rengenerar_venv.py
+crear_perfiles.py
+generate_fixtures.sh
+load_fixtures.sh
+setup_complete.sh
+docker-load-fixtures.sh
