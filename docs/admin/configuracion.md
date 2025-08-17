@@ -5,6 +5,7 @@ Como administrador de Ecodisseny, esta guía te ayudará a configurar el sistema
 ## 🎯 Objetivos de la Configuración
 
 Al completar esta guía tendrás:
+
 - ✅ **Sistema base configurado** correctamente
 - ✅ **Datos maestros** establecidos (recursos, ubicaciones, tareas)
 - ✅ **Usuarios y permisos** configurados
@@ -24,6 +25,7 @@ Contraseña: Santom@E14
 ### **2. Dashboard de Administración**
 
 El panel de Django Admin te proporciona:
+
 - 📊 **Vista general** del sistema
 - 👥 **Gestión de usuarios** y grupos
 - 🔧 **Configuración** de aplicaciones
@@ -37,19 +39,21 @@ El panel de Django Admin te proporciona:
 Los recursos representan las personas que trabajarán en proyectos.
 
 #### **Acceder a Recursos**
+
 1. **Admin Panel** → **Maestros** → **Recursos**
 2. **"Añadir Recurso"**
 
 #### **Campos Obligatorios**
 
-| Campo | Descripción | Ejemplo |
-|-------|-------------|---------|
-| **Nombre** | Nombre completo | "María García López" |
+| Campo               | Descripción           | Ejemplo                               |
+| ------------------- | --------------------- | ------------------------------------- |
+| **Nombre**          | Nombre completo       | "María García López"                  |
 | **Tipo de Recurso** | Categoría profesional | "Arquitecto", "Ingeniero", "Operario" |
-| **Código** | Identificador único | "MAR001" |
-| **Activo** | Si está disponible | ✅ Sí |
+| **Código**          | Identificador único   | "MAR001"                              |
+| **Activo**          | Si está disponible    | ✅ Sí                                 |
 
 #### **Campos Opcionales**
+
 - **Email**: Contacto directo
 - **Teléfono**: Número de contacto
 - **Especialidad**: Área específica de trabajo
@@ -74,7 +78,9 @@ Tipos de recurso estándar:
 ### **📍 2. Configurar Ubicaciones**
 
 #### **Parroquias de Andorra**
+
 El sistema viene preconfigurado con:
+
 - Andorra la Vella
 - Escaldes-Engordany
 - Encamp
@@ -84,6 +90,7 @@ El sistema viene preconfigurado con:
 - Canillo
 
 #### **Añadir Nuevas Ubicaciones**
+
 1. **Admin Panel** → **Maestros** → **Ubicaciones**
 2. **"Añadir Ubicación"**
 3. **Completar datos**:
@@ -95,14 +102,18 @@ El sistema viene preconfigurado con:
 ### **🎯 3. Configurar Tareas y Trabajos**
 
 #### **Tipos de Trabajo**
+
 Configura las categorías principales:
+
 - **Arquitectura**: Diseño, planos, supervisión
 - **Obra Civil**: Construcción, reformas
 - **Instalaciones**: Electricidad, fontanería, climatización
 - **Acabados**: Pintura, pavimentos, carpintería
 
 #### **Tareas Específicas**
+
 Para cada tipo de trabajo, define tareas:
+
 ```
 Arquitectura:
 - Levantamiento topográfico
@@ -120,6 +131,7 @@ Obra Civil:
 ### **🚗 4. Configurar Desplazamientos**
 
 #### **Matriz de Distancias**
+
 El sistema calcula automáticamente los costes de desplazamiento:
 
 1. **Admin Panel** → **Maestros** → **Desplazamientos**
@@ -132,6 +144,7 @@ El sistema calcula automáticamente los costes de desplazamiento:
 ### **🔐 1. Crear Usuarios del Sistema**
 
 #### **Proceso de Creación**
+
 1. **Admin Panel** → **Autenticación** → **Usuarios**
 2. **"Añadir Usuario"**
 3. **Datos básicos**:
@@ -144,14 +157,15 @@ El sistema calcula automáticamente los costes de desplazamiento:
 
 **Niveles de acceso**:
 
-| Nivel | Descripción | Permisos |
-|-------|-------------|----------|
-| **Superusuario** | Acceso total | Todo el sistema |
-| **Staff** | Administrador | Panel admin + aplicación |
+| Nivel              | Descripción     | Permisos                         |
+| ------------------ | --------------- | -------------------------------- |
+| **Superusuario**   | Acceso total    | Todo el sistema                  |
+| **Staff**          | Administrador   | Panel admin + aplicación         |
 | **Usuario Normal** | Solo aplicación | Crear proyectos, registrar horas |
-| **Solo Lectura** | Consultar datos | Ver reportes únicamente |
+| **Solo Lectura**   | Consultar datos | Ver reportes únicamente          |
 
 #### **Configurar Permisos Específicos**
+
 ```
 Permisos por módulo:
 ✅ Proyectos: Crear, editar, eliminar, ver
@@ -177,6 +191,7 @@ Permisos por módulo:
 ### **🛡️ 1. Configuración Django**
 
 #### **Variables de Entorno Críticas**
+
 ```bash
 # .env (NUNCA subir a Git)
 SECRET_KEY=clave_super_secreta_y_larga_aqui
@@ -185,6 +200,7 @@ ALLOWED_HOSTS=tudominio.com,www.tudominio.com
 ```
 
 #### **Generar SECRET_KEY Segura**
+
 ```python
 # En el VPS, ejecutar:
 docker-compose exec web python manage.py shell
@@ -195,6 +211,7 @@ docker-compose exec web python manage.py shell
 ### **🔐 2. Políticas de Contraseñas**
 
 #### **Configuración Recomendada**
+
 ```python
 # En settings.py (ya configurado)
 AUTH_PASSWORD_VALIDATORS = [
@@ -206,6 +223,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ```
 
 #### **Forzar Cambio de Contraseña**
+
 ```python
 # Para usuarios nuevos
 user.set_password('contraseña_temporal')
@@ -216,6 +234,7 @@ user.save()
 ### **🔄 3. Backup y Recuperación**
 
 #### **Configurar Backups Automáticos**
+
 ```bash
 # Crear script de backup
 nano /home/ecodisseny/backup.sh
@@ -239,6 +258,7 @@ echo "Backup completado: $DATE"
 ```
 
 #### **Programar en Cron**
+
 ```bash
 # Añadir a crontab (ejecutar cada día a las 2:00 AM)
 crontab -e
@@ -250,6 +270,7 @@ crontab -e
 ### **⚙️ 1. Configuración General**
 
 #### **Parámetros del Sistema**
+
 1. **Admin Panel** → **Sitios** → **Sitios**
 2. **Configurar**:
    - Nombre del sitio: "Ecodisseny - Gestión de Proyectos"
@@ -258,6 +279,7 @@ crontab -e
 ### **📧 2. Configuración de Email**
 
 #### **SMTP Configuration**
+
 ```python
 # En .env
 EMAIL_HOST=smtp.gmail.com
@@ -269,6 +291,7 @@ DEFAULT_FROM_EMAIL=noreply@tudominio.com
 ```
 
 #### **Verificar Configuración**
+
 ```python
 # Test desde Django shell
 docker-compose exec web python manage.py shell
@@ -279,6 +302,7 @@ docker-compose exec web python manage.py shell
 ### **📱 3. Configuración de Notificaciones**
 
 #### **Tipos de Notificaciones**
+
 - ✅ **Proyectos próximos a vencer**
 - ✅ **Presupuestos sin respuesta**
 - ✅ **Usuarios inactivos**
@@ -289,6 +313,7 @@ docker-compose exec web python manage.py shell
 ### **📊 1. Dashboard de Administración**
 
 #### **Métricas Clave a Monitorear**
+
 - 👥 **Usuarios activos** diarios/semanales
 - 🏗️ **Proyectos creados** por período
 - ⏱️ **Horas registradas** por recurso
@@ -298,6 +323,7 @@ docker-compose exec web python manage.py shell
 ### **📋 2. Logs del Sistema**
 
 #### **Ubicaciones de Logs**
+
 ```bash
 # Logs de Django
 docker-compose logs web
@@ -315,12 +341,14 @@ tail -f /var/log/syslog
 ### **🔧 3. Mantenimiento Preventivo**
 
 #### **Tareas Semanales**
+
 - ✅ **Revisar logs** de errores
 - ✅ **Verificar backups** funcionando
 - ✅ **Comprobar espacio** en disco
 - ✅ **Actualizar estadísticas** de BD
 
 #### **Tareas Mensuales**
+
 - ✅ **Limpiar archivos** temporales
 - ✅ **Optimizar base de datos**
 - ✅ **Revisar usuarios** inactivos
@@ -331,6 +359,7 @@ tail -f /var/log/syslog
 ### **❓ "Los usuarios no pueden acceder"**
 
 **Diagnóstico**:
+
 ```bash
 # Verificar servicios
 docker-compose ps
@@ -345,6 +374,7 @@ docker-compose exec web python manage.py check
 ### **❓ "La aplicación va lenta"**
 
 **Optimizaciones**:
+
 ```bash
 # Verificar uso de recursos
 docker stats
@@ -359,6 +389,7 @@ docker-compose exec web python manage.py dbshell
 ### **❓ "Error al generar PDFs"**
 
 **Soluciones**:
+
 ```bash
 # Verificar dependencias WeasyPrint
 docker-compose exec web python -c "import weasyprint; print('OK')"
@@ -373,11 +404,13 @@ docker-compose build --no-cache web
 ## 📞 Soporte Técnico
 
 ### **🆘 Contacto de Emergencia**
+
 - **Email**: admin@ecodisseny.com
 - **Telegram**: @ecodisseny_support
 - **Teléfono**: +376 XXX XXX (24/7 para emergencias)
 
 ### **📚 Documentación Avanzada**
+
 - [👥 Gestión de Usuarios](usuarios.md) - Permisos y roles detallados
 - [🏗️ Datos Maestros](datos-maestros.md) - Configuración avanzada
 - [🔐 Seguridad](seguridad.md) - Hardening y mejores prácticas
@@ -385,4 +418,4 @@ docker-compose build --no-cache web
 
 ---
 
-*⚡ **Siguiente paso**: Configurar [usuarios y permisos](usuarios.md) en detalle.*
+_⚡ **Siguiente paso**: Configurar [usuarios y permisos](usuarios.md) en detalle._

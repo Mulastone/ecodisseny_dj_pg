@@ -1,0 +1,265 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ titulo_pagina }} - Ecodisseny{% endblock %}
+
+{% block extra_head %}
+<style>
+    .search-header {
+        background: #343a40;
+        color: white;
+        padding: 40px 0;
+        margin-bottom: 30px;
+    }
+    .search-result-card {
+        transition: transform 0.2s, box-shadow 0.2s;
+        border-left: 4px solid #007bff;
+    }
+    .search-result-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .search-stats {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    .highlight {
+        background-color: #fff3cd;
+        padding: 2px 4px;
+        border-radius: 3px;
+    }
+    .search-tips {
+        background: #e7f3ff;
+        border-radius: 10px;
+        padding: 20px;
+        border-left: 4px solid #007bff;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Header de Búsqueda -->
+    <div class="search-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb text-white-50">
+                            <li class="breadcrumb-item">
+                                <a href="{% url 'documentacion:index' %}" class="text-white">
+                                    <i class="bi bi-house"></i> Documentación
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item active text-white">Búsqueda</li>
+                        </ol>
+                    </nav>
+                    <h1 class="display-5 mb-2">
+                        <i class="bi bi-search"></i> Búsqueda en Documentación
+                    </h1>
+                    <p class="lead mb-0">Encuentra la información que necesitas</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="d-inline-block bg-white bg-opacity-25 rounded p-3">
+                        <i class="bi bi-file-earmark-text fs-1"></i>
+                        <div class="fw-bold">{{ total_resultados }} Resultado{{ total_resultados|pluralize }}</div>
+                        {% if query %}<small>para "{{ query }}"</small>{% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Formulario de Búsqueda Principal -->
+        <div class="row mb-4">
+            <div class="col-md-8 mx-auto">
+                <form method="get" class="card p-4">
+                    <div class="input-group input-group-lg">
+                        <input type="text" name="q" class="form-control" 
+                               placeholder="Buscar documentos, títulos, contenido..." 
+                               value="{{ query }}" autofocus required>
+                        <button class="btn btn-primary" type="submit">
+                            <i class="bi bi-search"></i> Buscar
+                        </button>
+                    </div>
+                    <small class="text-muted mt-2">
+                        <i class="bi bi-info-circle"></i>
+                        Tip: Usa palabras clave específicas para mejores resultados. Mínimo 3 caracteres.
+                    </small>
+                </form>
+            </div>
+        </div>
+
+        {% if query %}
+            <!-- Estadísticas de Búsqueda -->
+            <div class="search-stats">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h5 class="mb-1">
+                            <i class="bi bi-graph-up"></i> Resultados de búsqueda
+                        </h5>
+                        <p class="mb-0">
+                            Se encontraron <strong>{{ total_resultados }}</strong> resultado{{ total_resultados|pluralize }} 
+                            para "<strong>{{ query }}</strong>"
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <a href="{% url 'documentacion:busqueda' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-clockwise"></i> Nueva búsqueda
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resultados de Búsqueda -->
+            {% if resultados %}
+                <div class="row">
+                    {% for documento in resultados %}
+                    <div class="col-12 mb-4">
+                        <div class="card search-result-card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <h5 class="card-title">
+                                            <a href="{% url 'documentacion:documento' documento.categoria.slug documento.slug %}" 
+                                               class="text-decoration-none">
+                                                {{ documento.titulo }}
+                                            </a>
+                                            {% if documento.destacado %}
+                                                <i class="bi bi-star-fill text-warning ms-1" title="Documento destacado"></i>
+                                            {% endif %}
+                                        </h5>
+                                        
+                                        <p class="card-text">
+                                            {{ documento.resumen|default:"Sin resumen disponible"|truncatewords:30 }}
+                                        </p>
+                                        
+                                        <div class="mb-2">
+                                            <span class="badge bg-primary me-2">
+                                                <i class="bi bi-folder"></i> {{ documento.categoria.nombre }}
+                                            </span>
+                                            <span class="badge bg-secondary me-2">
+                                                {{ documento.categoria.get_tipo_display }}
+                                            </span>
+                                            {% if documento.palabras_clave %}
+                                                {% for palabra in documento.get_palabras_clave_lista|slice:":2" %}
+                                                    <span class="badge bg-light text-dark me-1">{{ palabra }}</span>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <small class="text-muted">
+                                            <i class="bi bi-person"></i> {{ documento.autor.get_full_name|default:documento.autor.username }}
+                                            <i class="bi bi-calendar ms-3"></i> {{ documento.fecha_actualizacion|date:"d/m/Y" }}
+                                        </small>
+                                    </div>
+                                    
+                                    <div class="col-md-4 text-end">
+                                        <div class="d-grid gap-2">
+                                            <a href="{% url 'documentacion:documento' documento.categoria.slug documento.slug %}" 
+                                               class="btn btn-primary">
+                                                <i class="bi bi-eye"></i> Ver Documento
+                                            </a>
+                                            <a href="{% url 'documentacion:categoria' documento.categoria.slug %}" 
+                                               class="btn btn-outline-secondary btn-sm">
+                                                <i class="bi bi-folder"></i> Ver Categoría
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <!-- Sin Resultados -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert alert-warning text-center">
+                            <i class="bi bi-search fs-1 text-muted"></i>
+                            <h4 class="mt-3">No se encontraron resultados</h4>
+                            <p>No hay documentos que coincidan con "<strong>{{ query }}</strong>".</p>
+                            
+                            <div class="mt-4">
+                                <h6>Sugerencias para mejorar tu búsqueda:</h6>
+                                <ul class="list-unstyled">
+                                    <li><i class="bi bi-arrow-right"></i> Verifica la ortografía de las palabras</li>
+                                    <li><i class="bi bi-arrow-right"></i> Intenta con palabras más generales</li>
+                                    <li><i class="bi bi-arrow-right"></i> Usa sinónimos o términos relacionados</li>
+                                    <li><i class="bi bi-arrow-right"></i> Reduce el número de palabras de búsqueda</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="mt-3">
+                                <a href="{% url 'documentacion:index' %}" class="btn btn-primary me-2">
+                                    <i class="bi bi-house"></i> Ir a Inicio
+                                </a>
+                                <a href="{% url 'documentacion:busqueda' %}" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-clockwise"></i> Nueva Búsqueda
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% else %}
+            <!-- Vista Inicial sin Búsqueda -->
+            <div class="row">
+                <div class="col-md-8 mx-auto">
+                    <div class="search-tips text-center">
+                        <i class="bi bi-lightbulb fs-1 text-primary"></i>
+                        <h4 class="mt-3">Tips de Búsqueda</h4>
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <h6><i class="bi bi-search"></i> Búsqueda Básica</h6>
+                                <ul class="list-unstyled text-start">
+                                    <li>• Usa palabras clave específicas</li>
+                                    <li>• Mínimo 3 caracteres</li>
+                                    <li>• No distingue mayúsculas</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6><i class="bi bi-bullseye"></i> Mejores Resultados</h6>
+                                <ul class="list-unstyled text-start">
+                                    <li>• Combina 2-3 palabras clave</li>
+                                    <li>• Usa términos técnicos específicos</li>
+                                    <li>• Busca por nombre de autor</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Acceso Rápido a Categorías -->
+            <div class="row mt-5">
+                <div class="col-12">
+                    <h4 class="text-center mb-4">
+                        <i class="bi bi-grid-3x3"></i> O explora por categorías
+                    </h4>
+                    <div class="d-flex justify-content-center">
+                        <a href="{% url 'documentacion:index' %}" class="btn btn-outline-primary btn-lg">
+                            <i class="bi bi-folder"></i> Ver Todas las Categorías
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Enlaces de Navegación -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="d-flex justify-content-center">
+                    <a href="{% url 'documentacion:index' %}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Volver a Documentación
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

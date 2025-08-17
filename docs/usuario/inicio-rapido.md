@@ -27,14 +27,14 @@ Al iniciar sesión verás el **Dashboard principal** con:
 
 El menú lateral te da acceso a:
 
-| Sección | Descripción | ¿Qué puedes hacer? |
-|---------|-------------|-------------------|
-| 🏠 **Inicio** | Dashboard principal | Ver resumen general |
-| 🏗️ **Proyectos** | Gestión de proyectos | Crear, ver, editar proyectos |
-| 💰 **Presupuestos** | Cotizaciones | Crear presupuestos, generar PDFs |
-| ⏱️ **Carga Horas** | Registro de tiempo | Anotar horas trabajadas |
-| 📊 **Reportes** | Informes | Ver estadísticas y reportes |
-| 👤 **Mi Perfil** | Datos personales | Cambiar contraseña, datos |
+| Sección             | Descripción          | ¿Qué puedes hacer?               |
+| ------------------- | -------------------- | -------------------------------- |
+| 🏠 **Inicio**       | Dashboard principal  | Ver resumen general              |
+| 🏗️ **Proyectos**    | Gestión de proyectos | Crear, ver, editar proyectos     |
+| 💰 **Presupuestos** | Cotizaciones         | Crear presupuestos, generar PDFs |
+| ⏱️ **Carga Horas**  | Registro de tiempo   | Anotar horas trabajadas          |
+| 📊 **Reportes**     | Informes             | Ver estadísticas y reportes      |
+| 👤 **Mi Perfil**    | Datos personales     | Cambiar contraseña, datos        |
 
 ### **🔍 Barra de Búsqueda**
 
@@ -102,6 +102,7 @@ El menú lateral te da acceso a:
 ### **❓ "No veo mis proyectos"**
 
 **Posibles causas**:
+
 - No tienes proyectos asignados → Contacta a tu supervisor
 - Filtros activos → Revisa los filtros en la parte superior
 - Permisos insuficientes → Contacta al administrador
@@ -109,6 +110,7 @@ El menú lateral te da acceso a:
 ### **❓ "No puedo editar un proyecto"**
 
 **Posibles causas**:
+
 - Proyecto cerrado/finalizado → Solo lectura
 - No eres el responsable → Solo el creador puede editar
 - Permisos de usuario → Contacta al administrador
@@ -116,6 +118,7 @@ El menú lateral te da acceso a:
 ### **❓ "Error al generar PDF"**
 
 **Soluciones**:
+
 1. **Actualiza la página** e intenta de nuevo
 2. **Verifica** que todos los campos obligatorios estén completos
 3. **Contacta soporte** si persiste el error
@@ -146,12 +149,13 @@ El menú lateral te da acceso a:
 
 ## 🎉 ¡Ya estás listo!
 
-Con esta guía tienes todo lo necesario para empezar a usar Ecodisseny eficientemente. 
+Con esta guía tienes todo lo necesario para empezar a usar Ecodisseny eficientemente.
 
 **Próximos pasos recomendados**:
+
 1. ✅ Explorar la interface
 2. ✅ Crear tu primer registro de horas
 3. ✅ Familiarizarte con los proyectos existentes
 4. ✅ Leer la documentación específica de tu rol
 
-*💡 **Recuerda**: La práctica hace la perfección. No dudes en explorar todas las funciones disponibles.*
+_💡 **Recuerda**: La práctica hace la perfección. No dudes en explorar todas las funciones disponibles._

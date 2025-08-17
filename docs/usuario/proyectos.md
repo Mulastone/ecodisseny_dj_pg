@@ -5,6 +5,7 @@ Los proyectos son el núcleo de Ecodisseny. Aquí aprenderás a crearlos, gestio
 ## 📋 ¿Qué es un Proyecto?
 
 Un **proyecto** en Ecodisseny representa:
+
 - 🏠 **Obra o trabajo** específico para un cliente
 - 📅 **Período definido** con fechas de inicio y fin
 - 👥 **Equipo asignado** con recursos específicos
@@ -14,11 +15,13 @@ Un **proyecto** en Ecodisseny representa:
 ## 🎯 Acceder a Proyectos
 
 ### **📱 Desde el Dashboard**
+
 - **Widget "Mis Proyectos"** → Ver proyectos asignados
 - **"Proyectos Recientes"** → Últimos proyectos modificados
 - **Búsqueda rápida** → Escribir nombre del proyecto
 
 ### **📋 Lista Completa**
+
 1. **Menú lateral** → 🏗️ **Proyectos**
 2. **Vista general** con todos los proyectos
 3. **Filtros disponibles**:
@@ -32,19 +35,20 @@ Un **proyecto** en Ecodisseny representa:
 ### **🚀 Proceso Paso a Paso**
 
 #### **1. Iniciar Creación**
+
 - Ve a **🏗️ Proyectos** → **"+ Nuevo Proyecto"**
 - O usa el atajo **Ctrl + N** en la lista de proyectos
 
 #### **2. Datos Básicos**
 
-| Campo | Descripción | Ejemplo |
-|-------|-------------|---------|
-| **📝 Nombre** | Título descriptivo del proyecto | "Reforma Vivienda Unifamiliar" |
-| **🏢 Cliente** | Empresa o persona | "Juan Pérez García" |
-| **📍 Ubicación** | Dirección o parroquia | "Andorra la Vella" |
-| **🏷️ Tipo** | Categoría del proyecto | "Reforma", "Obra Nueva", "Mantenimiento" |
-| **📅 Fecha Inicio** | Cuándo empieza | 15/08/2025 |
-| **📅 Fecha Fin** | Cuándo termina (estimado) | 15/12/2025 |
+| Campo               | Descripción                     | Ejemplo                                  |
+| ------------------- | ------------------------------- | ---------------------------------------- |
+| **📝 Nombre**       | Título descriptivo del proyecto | "Reforma Vivienda Unifamiliar"           |
+| **🏢 Cliente**      | Empresa o persona               | "Juan Pérez García"                      |
+| **📍 Ubicación**    | Dirección o parroquia           | "Andorra la Vella"                       |
+| **🏷️ Tipo**         | Categoría del proyecto          | "Reforma", "Obra Nueva", "Mantenimiento" |
+| **📅 Fecha Inicio** | Cuándo empieza                  | 15/08/2025                               |
+| **📅 Fecha Fin**    | Cuándo termina (estimado)       | 15/12/2025                               |
 
 #### **3. Información Adicional**
 
@@ -54,6 +58,7 @@ Un **proyecto** en Ecodisseny representa:
 - **💰 Presupuesto estimado**: Valor económico previsto
 
 #### **4. Guardar Proyecto**
+
 - **"Guardar y continuar"** → Para seguir editando
 - **"Guardar y cerrar"** → Volver a la lista
 
@@ -73,23 +78,27 @@ El sistema te ayuda con sugerencias inteligentes:
 Al hacer clic en un proyecto accedes a:
 
 #### **📋 Pestaña "Información"**
+
 - **Datos básicos** del proyecto
 - **Estado actual** y fechas
 - **Cliente y ubicación**
 - **Responsable asignado**
 
 #### **💰 Pestaña "Presupuestos"**
+
 - **Lista de presupuestos** asociados
 - **Estado** de cada presupuesto (Borrador, Enviado, Aprobado)
 - **Acciones**: Ver, Editar, Generar PDF, Duplicar
 
 #### **⏱️ Pestaña "Horas Trabajadas"**
+
 - **Registro detallado** por fecha y persona
 - **Total de horas** acumuladas
 - **Gráficos** de progreso
 - **Exportar** a Excel/PDF
 
 #### **📈 Pestaña "Estadísticas"**
+
 - **Progreso del proyecto** (% completado)
 - **Horas planificadas vs realizadas**
 - **Costes** estimados vs reales
@@ -98,16 +107,19 @@ Al hacer clic en un proyecto accedes a:
 ### **✏️ Editar Proyecto**
 
 **Quién puede editar**:
+
 - ✅ **Creador** del proyecto
 - ✅ **Administradores**
 - ✅ **Responsable** asignado
 
 **Cómo editar**:
+
 1. **Abrir proyecto** → **Botón "Editar"**
 2. **Modificar campos** necesarios
 3. **Guardar cambios**
 
 **Campos no editables**:
+
 - 🔒 **Código** del proyecto (generado automáticamente)
 - 🔒 **Fecha de creación**
 - 🔒 **Creador** original
@@ -115,18 +127,21 @@ Al hacer clic en un proyecto accedes a:
 ## 🔄 Estados del Proyecto
 
 ### **🟢 Activo**
+
 - **Descripción**: Proyecto en curso
 - **Acciones disponibles**: Todas
 - **Registro de horas**: ✅ Permitido
 - **Presupuestos**: ✅ Se pueden crear/editar
 
 ### **🟡 Pausado**
+
 - **Descripción**: Temporalmente detenido
 - **Acciones disponibles**: Solo lectura y reportes
 - **Registro de horas**: ❌ No permitido
 - **Presupuestos**: ⚠️ Solo lectura
 
 ### **🔴 Finalizado**
+
 - **Descripción**: Proyecto completado
 - **Acciones disponibles**: Solo lectura y reportes
 - **Registro de horas**: ❌ No permitido
@@ -153,6 +168,7 @@ En la lista de proyectos puedes filtrar por:
 ### **📋 Ordenación**
 
 Haz clic en los encabezados de columna para ordenar por:
+
 - 📅 **Fecha creación** (más recientes primero)
 - 📝 **Nombre** (alfabético)
 - 👤 **Responsable** (por persona)
@@ -166,6 +182,7 @@ Haz clic en los encabezados de columna para ordenar por:
 ### **🔄 Acciones Masivas**
 
 Selecciona múltiples proyectos para:
+
 - 📧 **Enviar reportes** por email
 - 📊 **Exportar datos** a Excel
 - 🏷️ **Cambiar estado** en lote
@@ -188,6 +205,7 @@ Selecciona múltiples proyectos para:
 ### **📱 Notificaciones**
 
 El sistema te notifica sobre:
+
 - 🔔 **Proyectos próximos a finalizar**
 - ⚠️ **Presupuestos pendientes de respuesta**
 - 📅 **Reuniones de seguimiento**
@@ -198,6 +216,7 @@ El sistema te notifica sobre:
 ### **✅ Nomenclatura de Proyectos**
 
 **Formato recomendado**:
+
 ```
 [TIPO] - [CLIENTE] - [UBICACIÓN] - [AÑO]
 
@@ -230,6 +249,7 @@ Ejemplos:
 ### **❓ "No puedo crear proyectos"**
 
 **Posibles causas**:
+
 - 🔒 **Permisos insuficientes** → Contacta al administrador
 - 📋 **Campos obligatorios** → Revisa que todos estén completos
 - 🏢 **Cliente inexistente** → Crea el cliente primero
@@ -237,6 +257,7 @@ Ejemplos:
 ### **❓ "El proyecto no aparece en mi lista"**
 
 **Soluciones**:
+
 - 🔍 **Revisa filtros** → Puede estar oculto por filtros activos
 - 👤 **Verificar asignación** → Asegúrate de estar asignado al proyecto
 - 🏷️ **Estado del proyecto** → Puede estar pausado o finalizado
@@ -244,6 +265,7 @@ Ejemplos:
 ### **❓ "No puedo cambiar el estado"**
 
 **Restricciones**:
+
 - ⏱️ **Horas pendientes** → Algunos estados requieren cerrar horas
 - 💰 **Presupuestos abiertos** → Cerrar presupuestos primero
 - 🔒 **Permisos** → Solo responsables/admins pueden cambiar estados
@@ -251,15 +273,17 @@ Ejemplos:
 ## 📞 Soporte
 
 ### **🆘 Ayuda Inmediata**
+
 - **F1**: Ayuda contextual en cualquier pantalla
 - **Chat**: Botón de soporte en esquina inferior
 - **Email**: proyectos@ecodisseny.com
 
 ### **📚 Documentación Relacionada**
+
 - [💰 Presupuestos](presupuestos.md) - Crear cotizaciones para proyectos
 - [⏱️ Carga de Horas](carga-horas.md) - Registrar tiempo en proyectos
 - [📈 Reportes](reportes.md) - Análisis de proyectos
 
 ---
 
-*🎯 **Próximo paso**: Aprende a crear [presupuestos profesionales](presupuestos.md) para tus proyectos.*
+_🎯 **Próximo paso**: Aprende a crear [presupuestos profesionales](presupuestos.md) para tus proyectos._

@@ -7,7 +7,7 @@
 ![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white)
 
-*Sistema completo de gestión de proyectos, presupuestos y recursos para Ecodisseny*
+_Sistema completo de gestión de proyectos, presupuestos y recursos para Ecodisseny_
 
 </div>
 
@@ -48,24 +48,28 @@
 ## 🛠️ Tecnologías
 
 ### **Backend**
+
 - **Django 5.2.4** - Framework web principal
 - **PostgreSQL 15** - Base de datos principal
 - **Gunicorn** - Servidor WSGI para producción
 - **WeasyPrint** - Generación de PDFs
 
 ### **Frontend**
+
 - **Django Templates** - Sistema de plantillas
 - **Bootstrap** - Framework CSS
 - **jQuery** - Interactividad JavaScript
 - **FontAwesome** - Iconografía
 
 ### **DevOps & Infraestructura**
+
 - **Docker & Docker Compose** - Containerización
 - **Nginx** - Servidor web y proxy reverso
 - **Let's Encrypt** - Certificados SSL gratuitos
 - **Multi-stage builds** - Optimización de imágenes Docker
 
 ### **Librerías Especializadas**
+
 - **psycopg2-binary** - Conector PostgreSQL
 - **django-phonenumber-field** - Validación de teléfonos
 - **python-decouple** - Gestión de configuración
@@ -221,6 +225,7 @@ nano .env  # Editar con tus datos
 ### **🔒 Configuración SSL**
 
 El script `setup-ssl.sh` configura automáticamente:
+
 - ✅ Certificados Let's Encrypt gratuitos
 - ✅ Renovación automática
 - ✅ Redirección HTTP → HTTPS
@@ -294,19 +299,19 @@ El sistema viene preconfigurado con usuarios de ejemplo:
 
 ### **🔑 Administradores**
 
-| Usuario | Contraseña | Rol | Email |
-|---------|------------|-----|-------|
-| `mulastone` | `Santom@E14` | Superusuario Principal | mulastone@ecodisseny.com |
-| `gonzalo` | `ecodisseny2024` | Administrador | gonzalo@ecodisseny.com |
+| Usuario     | Contraseña       | Rol                    | Email                    |
+| ----------- | ---------------- | ---------------------- | ------------------------ |
+| `mulastone` | `Santom@E14`     | Superusuario Principal | mulastone@ecodisseny.com |
+| `gonzalo`   | `ecodisseny2024` | Administrador          | gonzalo@ecodisseny.com   |
 
 ### **👤 Usuarios Normales**
 
-| Usuario | Contraseña | Recurso Asignado | Email |
-|---------|------------|------------------|-------|
-| `pilar` | `ecodisseny2024` | Pilar | pilar@ecodisseny.com |
-| `roger` | `ecodisseny2024` | Roger | roger@ecodisseny.com |
-| `santiago` | `ecodisseny2024` | Santiago | santiago@ecodisseny.com |
-| `sarah` | `ecodisseny2024` | Sarah | sarah@ecodisseny.com |
+| Usuario    | Contraseña       | Recurso Asignado | Email                   |
+| ---------- | ---------------- | ---------------- | ----------------------- |
+| `pilar`    | `ecodisseny2024` | Pilar            | pilar@ecodisseny.com    |
+| `roger`    | `ecodisseny2024` | Roger            | roger@ecodisseny.com    |
+| `santiago` | `ecodisseny2024` | Santiago         | santiago@ecodisseny.com |
+| `sarah`    | `ecodisseny2024` | Sarah            | sarah@ecodisseny.com    |
 
 ### **🎯 Accesos**
 
@@ -350,6 +355,7 @@ EMAIL_HOST_PASSWORD=tu_app_password
 Para producción, **SIEMPRE**:
 
 1. **Generar SECRET_KEY nueva**:
+
    ```python
    from django.core.management.utils import get_random_secret_key
    print(get_random_secret_key())
@@ -377,6 +383,7 @@ El sistema incluye datos iniciales (fixtures) que se cargan automáticamente:
 La documentación completa está disponible en la carpeta [`docs/`](docs/):
 
 #### **👤 Para Usuarios**
+
 - **[🚀 Guía de Inicio Rápido](docs/usuario/inicio-rapido.md)** - Primeros pasos en el sistema
 - **[🏗️ Gestión de Proyectos](docs/usuario/proyectos.md)** - Crear y administrar proyectos
 - **[💰 Presupuestos](docs/usuario/presupuestos.md)** - Cotizaciones y documentos PDF
@@ -384,6 +391,7 @@ La documentación completa está disponible en la carpeta [`docs/`](docs/):
 - **[📈 Reportes](docs/usuario/reportes.md)** - Informes y estadísticas
 
 #### **🔧 Para Administradores**
+
 - **[⚙️ Configuración Inicial](docs/admin/configuracion.md)** - Setup completo del sistema
 - **[👥 Gestión de Usuarios](docs/admin/usuarios.md)** - Usuarios, roles y permisos
 - **[🏗️ Datos Maestros](docs/admin/datos-maestros.md)** - Recursos, ubicaciones, tareas
@@ -391,22 +399,24 @@ La documentación completa está disponible en la carpeta [`docs/`](docs/):
 - **[📊 Mantenimiento](docs/admin/mantenimiento.md)** - Backups y monitoreo
 
 #### **🛠️ Para Desarrolladores**
+
 - **[🏗️ Arquitectura](docs/dev/arquitectura.md)** - Estructura técnica
 - **[🔌 API Reference](docs/dev/api.md)** - Endpoints disponibles
 - **[🎨 Personalización](docs/dev/personalizacion.md)** - Modificar interface
 - **[🐛 Debugging](docs/dev/debugging.md)** - Solución de problemas
 
 #### **🆘 Soporte**
+
 - **[🚨 Troubleshooting](docs/troubleshooting.md)** - Resolución de problemas comunes
 
 ### **🎯 Inicio Rápido por Rol**
 
-| Tu Rol | Empezar Aquí | Objetivo |
-|--------|--------------|----------|
-| **👤 Usuario Nuevo** | [Inicio Rápido](docs/usuario/inicio-rapido.md) | Aprender lo básico en 15 minutos |
-| **🏗️ Jefe de Proyecto** | [Gestión de Proyectos](docs/usuario/proyectos.md) | Dominar la gestión completa |
-| **🔧 Administrador** | [Configuración Inicial](docs/admin/configuracion.md) | Setup completo del sistema |
-| **🛠️ Desarrollador** | [Arquitectura](docs/dev/arquitectura.md) | Entender la estructura técnica |
+| Tu Rol                  | Empezar Aquí                                         | Objetivo                         |
+| ----------------------- | ---------------------------------------------------- | -------------------------------- |
+| **👤 Usuario Nuevo**    | [Inicio Rápido](docs/usuario/inicio-rapido.md)       | Aprender lo básico en 15 minutos |
+| **🏗️ Jefe de Proyecto** | [Gestión de Proyectos](docs/usuario/proyectos.md)    | Dominar la gestión completa      |
+| **🔧 Administrador**    | [Configuración Inicial](docs/admin/configuracion.md) | Setup completo del sistema       |
+| **🛠️ Desarrollador**    | [Arquitectura](docs/dev/arquitectura.md)             | Entender la estructura técnica   |
 
 ## �📖 API y Endpoints
 
@@ -481,7 +491,7 @@ Este proyecto está bajo la licencia MIT. Ver el archivo `LICENSE` para más det
 
 **🏗️ Desarrollado con ❤️ para Ecodisseny**
 
-*Sistema de gestión integral para proyectos de construcción y diseño*
+_Sistema de gestión integral para proyectos de construcción y diseño_
 
 [![Django](https://img.shields.io/badge/Powered%20by-Django-092E20?style=flat&logo=django)](https://djangoproject.com/)
 [![Docker](https://img.shields.io/badge/Containerized%20with-Docker-2496ED?style=flat&logo=docker)](https://docker.com/)
@@ -511,6 +521,7 @@ Si encuentras algún bug o tienes sugerencias:
 ### **🔧 Troubleshooting Común**
 
 **Error de conexión a PostgreSQL:**
+
 ```bash
 # Verificar que el contenedor está ejecutándose
 docker-compose ps
@@ -520,6 +531,7 @@ docker-compose logs db
 ```
 
 **Problemas con permisos:**
+
 ```bash
 # Verificar permisos en volúmenes
 docker-compose exec web ls -la /app/media/
@@ -529,6 +541,7 @@ sudo chown -R $USER:$USER ./media/
 ```
 
 **Error 500 en producción:**
+
 ```bash
 # Ver logs detallados
 docker-compose -f docker-compose.prod.yml logs web
@@ -539,4 +552,4 @@ docker-compose -f docker-compose.prod.yml exec web python manage.py check --depl
 
 ---
 
-*¡Gracias por usar Ecodisseny! 🎉*
+_¡Gracias por usar Ecodisseny! 🎉_

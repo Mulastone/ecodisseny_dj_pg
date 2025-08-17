@@ -5,7 +5,30 @@
 
 {% block extra_head %}
 <style>
-  .welcome-container {
+  .welc            <div class="col-md-6 mb-4">
+              <div class="card feature-card">
+                <div class="card-body text-center">
+                  <div class="feature-icon text-warning">
+                    <i class="fas fa-cog"></i>
+                  </div>
+                  <h5 class="card-title">Admin</h5>
+                  <p class="card-text">Accés a l'administració completa del sistema.</p>
+                  <a href="{% url 'admin:index' %}" class="btn btn-dark">Admin</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-4">
+              <div class="card feature-card">
+                <div class="card-body text-center">
+                  <div class="feature-icon text-purple">
+                    <i class="fas fa-book"></i>
+                  </div>
+                  <h5 class="card-title">Documentació</h5>
+                  <p class="card-text">Centre de documentació i ajuda del sistema.</p>
+                  <a href="{% url 'documentacion:index' %}" class="btn btn-outline-dark">Documentació</a>
+                </div>
+              </div>
+            </div>r {
     padding-top: 30px;
   }
   .logo {
@@ -28,6 +51,9 @@
     font-size: 2.5rem;
     margin-bottom: 1rem;
     color: #2c3e50;
+  }
+  .text-purple {
+    color: #6f42c1 !important;
   }
   .user-welcome {
     background-color: #343a40;
@@ -148,10 +174,10 @@
         </div>
       {% else %}
         <!-- Panel para Usuarios Normales -->
-        <div class="col-lg-8">
+        <div class="col-lg-12">
           <h4 class="mb-4"><i class="fas fa-clock me-2"></i>Gestió d'Hores</h4>
           <div class="row">
-            <div class="col-md-6 mb-4">
+            <div class="col-md-4 mb-4">
               <div class="card feature-card">
                 <div class="card-body text-center">
                   <div class="feature-icon text-primary">
@@ -163,7 +189,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-6 mb-4">
+            <div class="col-md-4 mb-4">
               <div class="card feature-card">
                 <div class="card-body text-center">
                   <div class="feature-icon text-info">
@@ -175,22 +201,18 @@
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div class="col-lg-4">
-          <div class="stats-card">
-            <h5><i class="fas fa-user-circle me-2"></i>El teu Perfil</h5>
-            <hr style="border-color: rgba(255,255,255,0.3);">
-            <p><i class="fas fa-id-badge me-2"></i>{{ user.get_full_name|default:user.username }}</p>
-            <p><i class="fas fa-envelope me-2"></i>{{ user.email|default:"No configurat" }}</p>
-            <p><i class="fas fa-briefcase me-2"></i>
-              {% if user.perfil.recurso %}
-                {{ user.perfil.recurso.nom }}
-              {% else %}
-                Sense recurso assignat
-              {% endif %}
-            </p>
-            <p><i class="fas fa-calendar me-2"></i>Registrat: {{ user.date_joined|date:"d/m/Y" }}</p>
+            <div class="col-md-4 mb-4">
+              <div class="card feature-card">
+                <div class="card-body text-center">
+                  <div class="feature-icon text-purple">
+                    <i class="fas fa-book"></i>
+                  </div>
+                  <h5 class="card-title">Documentació</h5>
+                  <p class="card-text">Guies i ajuda per utilitzar el sistema.</p>
+                  <a href="{% url 'documentacion:index' %}" class="btn btn-outline-dark-custom">Documentació</a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       {% endif %}

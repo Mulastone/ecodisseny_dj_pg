@@ -1,0 +1,285 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ titulo_pagina }} - Ecodisseny{% endblock %}
+
+{% block extra_head %}
+<style>
+    .documento-content {
+        line-height: 1.7;
+        font-size: 1.1rem;
+    }
+    .documento-content h1, .documento-content h2, .documento-content h3 {
+        color: #2c3e50;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+    }
+    .documento-content pre {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-radius: 5px;
+        border-left: 4px solid #007bff;
+    }
+    .documento-content blockquote {
+        border-left: 4px solid #6c757d;
+        padding-left: 1rem;
+        margin: 1rem 0;
+        font-style: italic;
+        background: #f8f9fa;
+        padding: 1rem;
+        border-radius: 0 5px 5px 0;
+    }
+    .documento-header {
+        background: #343a40;
+        color: white;
+        padding: 40px 0;
+        margin-bottom: 30px;
+    }
+    .feedback-section {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 30px;
+    }
+    .documento-relacionado {
+        transition: transform 0.2s;
+    }
+    .documento-relacionado:hover {
+        transform: translateY(-2px);
+    }
+    .tabla-contenidos {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 20px;
+        position: sticky;
+        top: 20px;
+    }
+    .btn-feedback {
+        margin: 2px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Header del Documento -->
+    <div class="documento-header">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb text-white-50">
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'documentacion:index' %}" class="text-white">
+                            <i class="bi bi-house"></i> Documentación
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'documentacion:categoria' categoria.slug %}" class="text-white">
+                            {{ categoria.nombre }}
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active text-white">{{ documento.titulo }}</li>
+                </ol>
+            </nav>
+            
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="display-5 mb-3">{{ documento.titulo }}</h1>
+                    {% if documento.resumen %}
+                        <p class="lead">{{ documento.resumen }}</p>
+                    {% endif %}
+                </div>
+                <div class="col-md-4">
+                    <div class="bg-white bg-opacity-25 rounded p-3">
+                        <div class="mb-2">
+                            <small><i class="bi bi-person"></i> Autor:</small><br>
+                            <strong>{{ documento.autor.get_full_name|default:documento.autor.username }}</strong>
+                        </div>
+                        <div class="mb-2">
+                            <small><i class="bi bi-calendar"></i> Actualizado:</small><br>
+                            <strong>{{ documento.fecha_actualizacion|date:"d/m/Y" }}</strong>
+                        </div>
+                        {% if documento.palabras_clave %}
+                        <div>
+                            <small><i class="bi bi-tags"></i> Etiquetas:</small><br>
+                            {% for palabra in documento.get_palabras_clave_lista %}
+                                <span class="badge bg-light text-dark me-1">{{ palabra }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <!-- Contenido Principal -->
+            <div class="col-lg-9">
+                <div class="documento-content">
+                    {{ contenido_html|safe }}
+                </div>
+
+                <!-- Sección de Feedback -->
+                <div class="feedback-section">
+                    <h4><i class="bi bi-chat-dots"></i> ¿Te fue útil este documento?</h4>
+                    <p class="text-muted">Tu feedback nos ayuda a mejorar la documentación.</p>
+                    
+                    <div id="feedback-buttons" class="mb-3">
+                        <button class="btn btn-success btn-feedback" data-tipo="util">
+                            <i class="bi bi-hand-thumbs-up"></i> Útil
+                        </button>
+                        <button class="btn btn-warning btn-feedback" data-tipo="mejoras">
+                            <i class="bi bi-exclamation-triangle"></i> Necesita mejoras
+                        </button>
+                        <button class="btn btn-danger btn-feedback" data-tipo="incorrecto">
+                            <i class="bi bi-hand-thumbs-down"></i> Incorrecto
+                        </button>
+                        <button class="btn btn-info btn-feedback" data-tipo="sugerencia">
+                            <i class="bi bi-lightbulb"></i> Sugerencia
+                        </button>
+                    </div>
+
+                    <div id="feedback-form" class="d-none">
+                        <div class="mb-3">
+                            <label for="comentario" class="form-label">Comentario (opcional):</label>
+                            <textarea id="comentario" class="form-control" rows="3" 
+                                      placeholder="Déjanos tus comentarios para mejorar este documento..."></textarea>
+                        </div>
+                        <button id="enviar-feedback" class="btn btn-primary">
+                            <i class="bi bi-send"></i> Enviar Feedback
+                        </button>
+                        <button id="cancelar-feedback" class="btn btn-secondary">
+                            Cancelar
+                        </button>
+                    </div>
+
+                    {% if feedback_usuario %}
+                    <div class="alert alert-info mt-3">
+                        <i class="bi bi-info-circle"></i>
+                        Ya has enviado feedback para este documento: <strong>{{ feedback_usuario.get_tipo_display }}</strong>
+                        {% if feedback_usuario.comentario %}
+                            <br><small>{{ feedback_usuario.comentario }}</small>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+
+                    <div id="feedback-message" class="mt-3"></div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-3">
+                <!-- Documentos Relacionados -->
+                {% if documentos_relacionados %}
+                <div class="tabla-contenidos mb-4">
+                    <h5><i class="bi bi-bookmark"></i> Documentos Relacionados</h5>
+                    <hr>
+                    {% for doc in documentos_relacionados %}
+                    <div class="documento-relacionado mb-2">
+                        <a href="{% url 'documentacion:documento' categoria.slug doc.slug %}" 
+                           class="text-decoration-none">
+                            <small class="text-muted d-block">{{ doc.titulo }}</small>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Navegación -->
+                <div class="tabla-contenidos">
+                    <h5><i class="bi bi-compass"></i> Navegación</h5>
+                    <hr>
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'documentacion:categoria' categoria.slug %}" 
+                           class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-arrow-left"></i> Volver a {{ categoria.nombre }}
+                        </a>
+                        <a href="{% url 'documentacion:index' %}" 
+                           class="btn btn-outline-secondary btn-sm">
+                            <i class="bi bi-house"></i> Inicio de Documentación
+                        </a>
+                        <a href="{% url 'documentacion:busqueda' %}" 
+                           class="btn btn-outline-info btn-sm">
+                            <i class="bi bi-search"></i> Buscar Documentos
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript para Feedback -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const feedbackButtons = document.querySelectorAll('.btn-feedback');
+    const feedbackForm = document.getElementById('feedback-form');
+    const enviarBtn = document.getElementById('enviar-feedback');
+    const cancelarBtn = document.getElementById('cancelar-feedback');
+    const comentarioTextarea = document.getElementById('comentario');
+    const messageDiv = document.getElementById('feedback-message');
+    
+    let tipoSeleccionado = '';
+
+    feedbackButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            tipoSeleccionado = this.dataset.tipo;
+            feedbackForm.classList.remove('d-none');
+            
+            // Resetear estilos
+            feedbackButtons.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+
+    cancelarBtn.addEventListener('click', function() {
+        feedbackForm.classList.add('d-none');
+        comentarioTextarea.value = '';
+        feedbackButtons.forEach(b => b.classList.remove('active'));
+        tipoSeleccionado = '';
+    });
+
+    enviarBtn.addEventListener('click', function() {
+        if (!tipoSeleccionado) return;
+
+        const formData = new FormData();
+        formData.append('tipo', tipoSeleccionado);
+        formData.append('comentario', comentarioTextarea.value);
+        formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+
+        fetch('{% url "documentacion:feedback" documento.id %}', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                messageDiv.innerHTML = `
+                    <div class="alert alert-success">
+                        <i class="bi bi-check-circle"></i> ${data.message}
+                    </div>
+                `;
+                feedbackForm.classList.add('d-none');
+                feedbackButtons.forEach(btn => btn.disabled = true);
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="bi bi-exclamation-circle"></i> ${data.error || 'Error al enviar feedback'}
+                    </div>
+                `;
+            }
+        })
+        .catch(error => {
+            messageDiv.innerHTML = `
+                <div class="alert alert-danger">
+                    <i class="bi bi-exclamation-circle"></i> Error de conexión
+                </div>
+            `;
+        });
+    });
+});
+</script>
+
+{% csrf_token %}
+{% endblock %}

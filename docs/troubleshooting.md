@@ -9,20 +9,23 @@ Guía completa para diagnosticar y resolver los problemas más comunes en Ecodis
 Cuando algo no funciona, sigue estos pasos en orden:
 
 1. **🔍 Identificar el problema**
+
    - ¿Qué estaba intentando hacer?
    - ¿Cuándo empezó el problema?
    - ¿Hay mensajes de error?
 
 2. **📊 Verificar servicios básicos**
+
    ```bash
    # Estado de contenedores
    docker-compose ps
-   
+
    # Logs recientes
    docker-compose logs --tail=50
    ```
 
 3. **🌐 Verificar conectividad**
+
    - ¿La aplicación responde en http://localhost:8000?
    - ¿El admin responde en /admin/?
    - ¿La base de datos está accesible?
@@ -37,11 +40,13 @@ Cuando algo no funciona, sigue estos pasos en orden:
 ### **❌ "No puedo acceder al sistema"**
 
 #### **Síntomas**:
+
 - Página de login no aparece
 - Error 500 en /accounts/login/
 - "Connection refused"
 
 #### **Diagnóstico**:
+
 ```bash
 # 1. Verificar servicios ejecutándose
 docker-compose ps
@@ -58,11 +63,13 @@ docker-compose logs web --tail=20
 #### **Soluciones**:
 
 **Si servicios no están ejecutándose**:
+
 ```bash
 docker-compose up -d
 ```
 
 **Si hay error en la aplicación**:
+
 ```bash
 # Ver error específico
 docker-compose logs web
@@ -78,10 +85,12 @@ docker-compose up --build
 ### **❌ "Credenciales incorrectas"**
 
 #### **Síntomas**:
+
 - "Please enter a correct username and password"
 - Usuario no puede iniciar sesión
 
 #### **Diagnóstico**:
+
 ```bash
 # Verificar usuario existe y está activo
 docker-compose exec web python manage.py shell -c "
@@ -100,11 +109,13 @@ except User.DoesNotExist:
 #### **Soluciones**:
 
 **Resetear contraseña**:
+
 ```bash
 docker-compose exec web python manage.py changepassword usuario_problema
 ```
 
 **Activar usuario desactivado**:
+
 ```bash
 docker-compose exec web python manage.py shell -c "
 from django.contrib.auth.models import User
@@ -118,10 +129,12 @@ print('Usuario activado')
 ### **❌ "No tengo permisos para ver esta página"**
 
 #### **Síntomas**:
+
 - Error 403 Forbidden
 - "You don't have permission to access this page"
 
 #### **Diagnóstico**:
+
 ```bash
 # Verificar permisos del usuario
 docker-compose exec web python manage.py shell -c "
@@ -136,6 +149,7 @@ print(f'Es superuser: {user.is_superuser}')
 #### **Soluciones**:
 
 **Asignar grupo correcto**:
+
 ```bash
 docker-compose exec web python manage.py shell -c "
 from django.contrib.auth.models import User, Group
@@ -151,11 +165,13 @@ print('Grupo asignado')
 ### **❌ "Error de conexión a la base de datos"**
 
 #### **Síntomas**:
+
 - "could not connect to server"
 - "connection to database failed"
 - La aplicación web no inicia
 
 #### **Diagnóstico**:
+
 ```bash
 # 1. Verificar contenedor de BD
 docker-compose ps db
@@ -170,11 +186,13 @@ docker-compose exec db psql -U ecodisseny ecodisseny_db -c "SELECT 1;"
 #### **Soluciones**:
 
 **Si el contenedor no está ejecutándose**:
+
 ```bash
 docker-compose up -d db
 ```
 
 **Si hay errores en los logs**:
+
 ```bash
 # Reiniciar base de datos
 docker-compose restart db
@@ -187,6 +205,7 @@ docker system prune -a
 ```
 
 **Si los datos están corruptos**:
+
 ```bash
 # ⚠️ CUIDADO: Esto borra todos los datos
 docker-compose down
@@ -198,16 +217,19 @@ docker-compose up -d
 ### **❌ "Migraciones pendientes"**
 
 #### **Síntomas**:
+
 - "You have X unapplied migration(s)"
 - Error al acceder a ciertas páginas
 
 #### **Diagnóstico**:
+
 ```bash
 # Verificar migraciones pendientes
 docker-compose exec web python manage.py showmigrations
 ```
 
 #### **Soluciones**:
+
 ```bash
 # Aplicar migraciones
 docker-compose exec web python manage.py migrate
@@ -225,11 +247,13 @@ docker-compose exec web python manage.py migrate
 ### **❌ "Error al generar PDF"**
 
 #### **Síntomas**:
+
 - "WeasyPrint error"
 - PDF en blanco o incompleto
 - Timeout al generar
 
 #### **Diagnóstico**:
+
 ```bash
 # 1. Verificar WeasyPrint funciona
 docker-compose exec web python -c "
@@ -250,12 +274,14 @@ docker-compose exec web df -h /app/media/
 #### **Soluciones**:
 
 **Problema de permisos**:
+
 ```bash
 # Corregir permisos
 docker-compose exec web chown -R ecodisseny:ecodisseny /app/media/
 ```
 
 **Problema de dependencias**:
+
 ```bash
 # Reconstruir contenedor
 docker-compose build --no-cache web
@@ -263,6 +289,7 @@ docker-compose up -d web
 ```
 
 **Problema de espacio**:
+
 ```bash
 # Limpiar archivos antiguos
 docker-compose exec web find /app/media/pdfs_pressupostos/ -name "*.pdf" -mtime +30 -delete
@@ -273,11 +300,13 @@ docker-compose exec web find /app/media/pdfs_pressupostos/ -name "*.pdf" -mtime 
 ### **❌ "La aplicación va muy lenta"**
 
 #### **Síntomas**:
+
 - Páginas tardan más de 5 segundos en cargar
 - Timeouts frecuentes
 - Alta carga de CPU/memoria
 
 #### **Diagnóstico**:
+
 ```bash
 # 1. Verificar uso de recursos
 docker stats
@@ -285,7 +314,7 @@ docker stats
 # 2. Verificar procesos en la BD
 docker-compose exec db psql -U ecodisseny ecodisseny_db -c "
 SELECT pid, usename, application_name, state, query_start, query
-FROM pg_stat_activity 
+FROM pg_stat_activity
 WHERE state = 'active' AND query NOT LIKE '%pg_stat_activity%';
 "
 
@@ -296,6 +325,7 @@ docker-compose logs web | grep -i "slow"
 #### **Soluciones**:
 
 **Optimizar base de datos**:
+
 ```bash
 # Actualizar estadísticas
 docker-compose exec db psql -U ecodisseny ecodisseny_db -c "VACUUM ANALYZE;"
@@ -305,6 +335,7 @@ docker-compose exec db psql -U ecodisseny ecodisseny_db -c "REINDEX DATABASE eco
 ```
 
 **Aumentar recursos**:
+
 ```bash
 # En docker-compose.yml, añadir:
 services:
@@ -325,11 +356,13 @@ services:
 ### **❌ "Muchos archivos en media/"**
 
 #### **Síntomas**:
+
 - Disco lleno
 - Búsquedas lentas
 - Backup tardando mucho
 
 #### **Soluciones**:
+
 ```bash
 # Script de limpieza de archivos antiguos
 docker-compose exec web bash -c "
@@ -349,11 +382,13 @@ find /app/media/ -name '*.pdf' -mtime +30 -mtime -90 -exec gzip {} \;
 ### **❌ "Intentos de acceso no autorizados"**
 
 #### **Síntomas**:
+
 - Muchos intentos de login fallidos en logs
 - IPs sospechosas accediendo
 - Usuarios reportan cuentas comprometidas
 
 #### **Diagnóstico**:
+
 ```bash
 # Verificar intentos fallidos recientes
 docker-compose logs web | grep -i "invalid\|failed\|unauthorized" | tail -20
@@ -376,6 +411,7 @@ for user in recent_logins:
 #### **Soluciones**:
 
 **Medidas inmediatas**:
+
 ```bash
 # Desactivar usuarios comprometidos
 docker-compose exec web python manage.py shell -c "
@@ -391,6 +427,7 @@ docker-compose exec web python manage.py changepassword usuario_comprometido
 ```
 
 **Configurar firewall (en VPS)**:
+
 ```bash
 # Bloquear IP específica
 sudo ufw deny from 192.168.1.100
@@ -408,11 +445,13 @@ sudo ufw deny 80
 ### **❌ "Contenedores no inician"**
 
 #### **Síntomas**:
+
 - `docker-compose up` falla
 - Contenedores en estado "Exited"
 - Errores de construcción
 
 #### **Diagnóstico**:
+
 ```bash
 # Ver estado detallado
 docker-compose ps
@@ -427,6 +466,7 @@ docker-compose logs
 #### **Soluciones**:
 
 **Limpiar y reconstruir**:
+
 ```bash
 # Parar y limpiar
 docker-compose down
@@ -438,6 +478,7 @@ docker-compose up -d
 ```
 
 **Problemas de espacio**:
+
 ```bash
 # Verificar espacio
 df -h
@@ -452,6 +493,7 @@ docker volume prune
 ### **❌ "Volúmenes corruptos"**
 
 #### **Síntomas**:
+
 - Datos perdidos entre reinicios
 - Errores de permisos en archivos
 - Base de datos no inicia
@@ -549,18 +591,21 @@ docker-compose exec db pg_dump -U ecodisseny ecodisseny_db | gzip > backup_$(dat
 ## 📞 Cuándo Contactar Soporte
 
 ### **🚨 Contacta INMEDIATAMENTE si**:
+
 - 🔒 **Sospecha de brecha de seguridad**
 - 💾 **Pérdida de datos** críticos
 - 🌐 **Sistema completamente inaccesible** por más de 30 minutos
 - 🔥 **Errores que afectan** a múltiples usuarios
 
 ### **📧 Contacta en horario laboral si**:
+
 - 📊 **Reportes funcionan mal**
 - 🎨 **Problemas de interface**
 - ⚡ **Rendimiento degradado**
 - ❓ **Dudas de configuración**
 
 ### **📝 Información a incluir**:
+
 1. **Descripción del problema**
 2. **Pasos para reproducir**
 3. **Logs relevantes** (últimas 20 líneas)
@@ -568,6 +613,7 @@ docker-compose exec db pg_dump -U ecodisseny ecodisseny_db | gzip > backup_$(dat
 5. **Urgencia** (alta/media/baja)
 
 ### **📬 Canales de Contacto**:
+
 - **🚨 Emergencias**: +376 XXX XXX
 - **📧 Email**: soporte@ecodisseny.com
 - **💬 Chat**: Botón de ayuda en la aplicación
@@ -575,4 +621,4 @@ docker-compose exec db pg_dump -U ecodisseny ecodisseny_db | gzip > backup_$(dat
 
 ---
 
-*💡 **Recuerda**: Antes de contactar soporte, intenta los pasos básicos de diagnóstico. Esto acelera la resolución.*
+_💡 **Recuerda**: Antes de contactar soporte, intenta los pasos básicos de diagnóstico. Esto acelera la resolución._

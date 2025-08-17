@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ titulo_pagina }} - Ecodisseny{% endblock %}
+
+{% block extra_head %}
+<style>
+    .documento-card {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .documento-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .categoria-header {
+        background: #343a40;
+        color: white;
+        padding: 40px 0;
+        margin-bottom: 30px;
+    }
+    .search-box {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .documento-meta {
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Header de Categoría -->
+    <div class="categoria-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb text-white-50">
+                            <li class="breadcrumb-item">
+                                <a href="{% url 'documentacion:index' %}" class="text-white">
+                                    <i class="bi bi-house"></i> Documentación
+                                </a>
+                            </li>
+                            <li class="breadcrumb-item active text-white">{{ categoria.nombre }}</li>
+                        </ol>
+                    </nav>
+                    <h1 class="display-5 mb-2">
+                        {{ categoria.nombre }}
+                    </h1>
+                    {% if categoria.descripcion %}
+                        <p class="lead mb-0">{{ categoria.descripcion }}</p>
+                    {% endif %}
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="d-inline-block bg-white bg-opacity-25 rounded p-3">
+                        <i class="bi bi-file-earmark-text fs-1"></i>
+                        <div class="fw-bold">{{ documentos.count }} Documento{{ documentos.count|pluralize }}</div>
+                        <small>{{ categoria.get_tipo_display }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Barra de Búsqueda -->
+        <div class="row mb-4">
+            <div class="col-md-8 mx-auto">
+                <div class="search-box">
+                    <form method="get" class="d-flex">
+                        <input type="text" name="q" class="form-control me-2" 
+                               placeholder="Buscar en {{ categoria.nombre|lower }}..." 
+                               value="{{ busqueda }}" autofocus>
+                        <button class="btn btn-primary" type="submit">
+                            <i class="bi bi-search"></i> Buscar
+                        </button>
+                        {% if busqueda %}
+                        <a href="{% url 'documentacion:categoria' categoria.slug %}" 
+                           class="btn btn-outline-secondary ms-2">
+                            <i class="bi bi-x"></i>
+                        </a>
+                        {% endif %}
+                    </form>
+                    
+                    {% if busqueda %}
+                    <div class="mt-2">
+                        <small class="text-muted">
+                            <i class="bi bi-search"></i>
+                            Resultados para: <strong>"{{ busqueda }}"</strong>
+                            ({{ documentos.count }} encontrado{{ documentos.count|pluralize }})
+                        </small>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Documentos -->
+        {% if documentos %}
+            <div class="row">
+                {% for documento in documentos %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card documento-card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="{% url 'documentacion:documento' categoria.slug documento.slug %}" 
+                                   class="text-decoration-none">
+                                    {{ documento.titulo }}
+                                </a>
+                                {% if documento.destacado %}
+                                    <i class="bi bi-star-fill text-warning ms-1" title="Documento destacado"></i>
+                                {% endif %}
+                            </h5>
+                            
+                            {% if documento.resumen %}
+                                <p class="card-text">{{ documento.resumen|truncatewords:20 }}</p>
+                            {% endif %}
+                            
+                            {% if documento.palabras_clave %}
+                                <div class="mb-2">
+                                    {% for palabra in documento.get_palabras_clave_lista|slice:":3" %}
+                                        <span class="badge bg-secondary me-1">{{ palabra }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            
+                            <div class="documento-meta">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>
+                                        <i class="bi bi-calendar"></i>
+                                        {{ documento.fecha_actualizacion|date:"d/m/Y" }}
+                                    </span>
+                                    <span>
+                                        <i class="bi bi-person"></i>
+                                        {{ documento.autor.get_full_name|default:documento.autor.username }}
+                                    </span>
+                                </div>
+                                {% if documento.fecha_creacion != documento.fecha_actualizacion %}
+                                <small class="text-muted">
+                                    <i class="bi bi-clock-history"></i>
+                                    Actualizado: {{ documento.fecha_actualizacion|date:"d/m/Y" }}
+                                </small>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="card-footer bg-transparent">
+                            <a href="{% url 'documentacion:documento' categoria.slug documento.slug %}" 
+                               class="btn btn-primary btn-sm w-100">
+                                <i class="bi bi-eye"></i> Leer Documento
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Paginación (si fuera necesaria en el futuro) -->
+            <!-- Se puede implementar si hay muchos documentos -->
+            
+        {% else %}
+            <div class="row">
+                <div class="col-12">
+                    {% if busqueda %}
+                        <div class="alert alert-warning text-center">
+                            <i class="bi bi-search"></i>
+                            <h5>No se encontraron resultados</h5>
+                            <p>No hay documentos que coincidan con "<strong>{{ busqueda }}</strong>" en esta categoría.</p>
+                            <a href="{% url 'documentacion:categoria' categoria.slug %}" class="btn btn-primary">
+                                <i class="bi bi-arrow-left"></i> Ver todos los documentos
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info text-center">
+                            <i class="bi bi-info-circle"></i>
+                            <h5>Sin documentos disponibles</h5>
+                            <p>Esta categoría aún no tiene documentos publicados.</p>
+                            <a href="{% url 'documentacion:index' %}" class="btn btn-primary">
+                                <i class="bi bi-arrow-left"></i> Volver a Documentación
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Enlaces de Navegación -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'documentacion:index' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Volver a Documentación
+                    </a>
+                    <a href="{% url 'documentacion:busqueda' %}" class="btn btn-outline-primary">
+                        <i class="bi bi-search"></i> Búsqueda Global
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
