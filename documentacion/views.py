@@ -14,7 +14,9 @@ def index_documentacion(request):
     """Vista principal de la documentación"""
     
     # Obtener categorías según permisos del usuario
-    categorias = CategoriaDocumentacion.objects.filter(activa=True)
+    categorias = CategoriaDocumentacion.objects.filter(activa=True).annotate(
+        num_documentos=Count('documentos', filter=Q(documentos__publicado=True))
+    )
     categorias_permitidas = []
     
     for categoria in categorias:

@@ -47,7 +47,8 @@ class DocumentoMarkdown(models.Model):
     slug = models.SlugField(verbose_name="URL amigable")
     categoria = models.ForeignKey(
         CategoriaDocumentacion, 
-        on_delete=models.CASCADE, 
+        on_delete=models.CASCADE,
+        related_name='documentos',
         verbose_name="Categoría"
     )
     
@@ -98,15 +99,20 @@ class DocumentoMarkdown(models.Model):
             'documento_slug': self.slug
         })
     
+    def obtener_contenido(self):
+        """Obtiene el contenido markdown raw del archivo"""
+        try:
+            with open(self.archivo_markdown, 'r', encoding='utf-8') as archivo:
+                return archivo.read()
+        except FileNotFoundError:
+            return f"Error: No se encontró el archivo {self.archivo_markdown}"
+        except Exception as e:
+            return f"Error: {str(e)}"
+    
     def get_contenido_html(self):
         """Convierte el markdown a HTML"""
         try:
-            ruta_completa = os.path.join(
-                os.path.dirname(os.path.dirname(__file__)), 
-                self.archivo_markdown
-            )
-            
-            with open(ruta_completa, 'r', encoding='utf-8') as archivo:
+            with open(self.archivo_markdown, 'r', encoding='utf-8') as archivo:
                 contenido_md = archivo.read()
                 
             # Convertir markdown a HTML con extensiones
@@ -150,6 +156,7 @@ class HistorialAcceso(models.Model):
     documento = models.ForeignKey(
         DocumentoMarkdown, 
         on_delete=models.CASCADE,
+        related_name='accesos',
         verbose_name="Documento"
     )
     usuario = models.ForeignKey(

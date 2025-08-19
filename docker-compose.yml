@@ -37,7 +37,11 @@ services:
         python manage.py migrate &&
         echo '📥 Cargando fixtures...' &&
         ./docker-load-fixtures.sh &&
-        echo '🚀 Iniciando servidor Django...' &&
+        echo '� Cargando documentación...' &&
+        python manage.py cargar_documentacion --update &&
+        echo '🧹 Limpiando documentos huérfanos...' &&
+        python manage.py limpiar_documentos &&
+        echo '�🚀 Iniciando servidor Django...' &&
         python manage.py runserver 0.0.0.0:8000
       "
     ports:

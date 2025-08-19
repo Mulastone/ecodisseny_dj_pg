@@ -23,6 +23,7 @@
             <th><i class="bi bi-person"></i> Recurs</th>
             <th class="text-center"><i class="bi bi-clock"></i> Hores</th>
             <th><i class="bi bi-chat-text"></i> Observacions</th>
+            <th class="text-center"><i class="bi bi-gear"></i> Accions</th>
           </tr>
         </thead>
         <tbody>
@@ -51,6 +52,46 @@
               </td>
               <td>
                 <small>{{ item.observacions|default:"—"|truncatechars:50 }}</small>
+              </td>
+              <td class="text-center">
+                {% comment "Verificar permisos de edición" %}{% endcomment %}
+                {% if user.is_superuser or item.usuari == user %}
+                  {% comment "Calcular si puede editar (dentro de 24h para usuarios normales)" %}{% endcomment %}
+                  {% if user.is_superuser %}
+                    {% comment "Administradores pueden editar siempre" %}{% endcomment %}
+                    <div class="btn-group" role="group">
+                      <a href="{% url 'carregahores:editar' item.pk %}" class="btn btn-sm btn-outline-primary" title="Editar">
+                        <i class="bi bi-pencil"></i>
+                      </a>
+                      <button type="button" class="btn btn-sm btn-outline-danger" title="Eliminar" 
+                              onclick="confirmarEliminacion({{ item.pk }}, '{{ item.data|date:"d/m/Y" }}', '{{ item.hores }}')">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </div>
+                  {% else %}
+                    {% comment "Usuarios normales: verificar tiempo límite" %}{% endcomment %}
+                    {% now "U" as now_timestamp %}
+                    {% with item.creat|date:"U"|add:"86400" as limite_edicion %}
+                      {% if now_timestamp <= limite_edicion %}
+                        <div class="btn-group" role="group">
+                          <a href="{% url 'carregahores:editar' item.pk %}" class="btn btn-sm btn-outline-primary" title="Editar (dins 24h)">
+                            <i class="bi bi-pencil"></i>
+                          </a>
+                          <button type="button" class="btn btn-sm btn-outline-danger" title="Eliminar (dins 24h)" 
+                                  onclick="confirmarEliminacion({{ item.pk }}, '{{ item.data|date:"d/m/Y" }}', '{{ item.hores }}')">
+                            <i class="bi bi-trash"></i>
+                          </button>
+                        </div>
+                      {% else %}
+                        <span class="text-muted small">
+                          <i class="bi bi-lock" title="Temps d'edició vençut (24h)"></i>
+                        </span>
+                      {% endif %}
+                    {% endwith %}
+                  {% endif %}
+                {% else %}
+                  <span class="text-muted small">—</span>
+                {% endif %}
               </td>
             </tr>
           {% endfor %}
@@ -91,4 +132,58 @@
     </div>
   {% endif %}
 </div>
+
+<!-- Modal de confirmación para eliminar -->
+<div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="modalEliminarLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="modalEliminarLabel">
+          <i class="bi bi-exclamation-triangle"></i> Confirmar Eliminació
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Estàs segur que vols eliminar aquesta càrrega d'hores?</p>
+        <div class="bg-light p-3 rounded">
+          <strong>Data:</strong> <span id="eliminar-data"></span><br>
+          <strong>Hores:</strong> <span id="eliminar-hores"></span> h
+        </div>
+        <div class="mt-3">
+          <small class="text-muted">
+            <i class="bi bi-info-circle"></i> 
+            Aquesta acció no es pot desfer.
+          </small>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          <i class="bi bi-x-circle"></i> Cancel·lar
+        </button>
+        <form id="form-eliminar" method="post" class="d-inline">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">
+            <i class="bi bi-trash"></i> Eliminar
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function confirmarEliminacion(id, data, hores) {
+    // Actualizar contenido del modal
+    document.getElementById('eliminar-data').textContent = data;
+    document.getElementById('eliminar-hores').textContent = hores;
+    
+    // Actualizar action del formulario
+    const form = document.getElementById('form-eliminar');
+    form.action = `/carrega-hores/eliminar/${id}/`;
+    
+    // Mostrar modal
+    const modal = new bootstrap.Modal(document.getElementById('modalEliminar'));
+    modal.show();
+}
+</script>
 {% endblock %}

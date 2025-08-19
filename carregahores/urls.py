@@ -7,6 +7,8 @@ urlpatterns = [
     # URLs públicas (para usuarios autenticados)
     path("nova/", views.nova_carrega, name="nova"),
     path("meves/", views.meves_carregues, name="meves"),
+    path("editar/<int:pk>/", views.editar_carrega, name="editar"),
+    path("eliminar/<int:pk>/", views.eliminar_carrega, name="eliminar"),
     path("ajax/lineas/", views.lineas_por_pressupost, name="ajax_lineas"),
     
     # URLs solo para administradores

@@ -1,7 +1,9 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_GET, require_POST
+from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from .forms import CarregaHoresForm
 from .models import CarregaHores
 from pressupostos import models as pressupost_models
@@ -9,6 +11,26 @@ from pressupostos import models as pressupost_models
 # Helper function para verificar si es admin
 def is_admin(user):
     return user.is_authenticated and user.is_superuser
+
+# Helper function para verificar permisos de edición/eliminación
+def can_edit_carrega(user, carrega):
+    """
+    Determina si un usuario puede editar/eliminar una carga de horas.
+    - Administradores: pueden editar cualquier registro
+    - Usuario normal: solo puede editar sus propios registros y solo dentro de 24h
+    """
+    if user.is_superuser:
+        return True
+    
+    if carrega.usuari != user:
+        return False
+    
+    # Verificar que sea dentro de las 24 horas
+    from django.utils import timezone
+    from datetime import timedelta
+    
+    tiempo_limite = carrega.creat + timedelta(hours=24)
+    return timezone.now() <= tiempo_limite
 
 @login_required
 def nova_carrega(request):
@@ -49,6 +71,69 @@ def nova_carrega(request):
     else:
         form = CarregaHoresForm(user=request.user)
     return render(request, "carregahores/form.html", {"form": form})
+
+
+@login_required
+def editar_carrega(request, pk):
+    """
+    Vista para editar una carga de horas.
+    Solo el propietario (dentro de 24h) o administradores pueden editar.
+    """
+    carrega = get_object_or_404(CarregaHores, pk=pk)
+    
+    # Verificar permisos
+    if not can_edit_carrega(request.user, carrega):
+        messages.error(request, 'No tens permisos per editar aquest registre.')
+        return redirect('carregahores:meves')
+    
+    if request.method == "POST":
+        form = CarregaHoresForm(request.POST, instance=carrega, user=request.user)
+        if form.is_valid():
+            try:
+                ch = form.save()
+                messages.success(request, f'Càrrega d\'hores actualitzada correctament: {ch.hores} hores el {ch.data.strftime("%d/%m/%Y")}')
+                return redirect("carregahores:meves")
+            except Exception as e:
+                messages.error(request, f"Error al actualitzar: {str(e)}")
+        else:
+            # Mostrar errores de validación
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+    else:
+        form = CarregaHoresForm(instance=carrega, user=request.user)
+    
+    context = {
+        'form': form,
+        'carrega': carrega,
+        'is_edit': True
+    }
+    return render(request, "carregahores/form.html", context)
+
+
+@login_required
+@require_POST
+def eliminar_carrega(request, pk):
+    """
+    Vista para eliminar una carga de horas.
+    Solo el propietario (dentro de 24h) o administradores pueden eliminar.
+    """
+    carrega = get_object_or_404(CarregaHores, pk=pk)
+    
+    # Verificar permisos
+    if not can_edit_carrega(request.user, carrega):
+        messages.error(request, 'No tens permisos per eliminar aquest registre.')
+        return redirect('carregahores:meves')
+    
+    try:
+        data_str = carrega.data.strftime('%d/%m/%Y')
+        hores = carrega.hores
+        carrega.delete()
+        messages.success(request, f'Càrrega d\'hores eliminada correctament: {hores} hores del {data_str}')
+    except Exception as e:
+        messages.error(request, f"Error al eliminar: {str(e)}")
+    
+    return redirect('carregahores:meves')
 
 
 @login_required

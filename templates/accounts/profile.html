@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Perfil d'Usuari - Ecodisseny{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-person-circle me-2"></i>Perfil d'Usuari
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <div class="mb-3">
+                                <i class="bi bi-person-circle" style="font-size: 5rem; color: #495057;"></i>
+                            </div>
+                            {% if user.is_superuser %}
+                                <span class="badge bg-danger">Administrador</span>
+                            {% else %}
+                                <span class="badge bg-primary">Usuari</span>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-8">
+                            <h5 class="mb-3">Informació Personal</h5>
+                            
+                            <div class="row mb-2">
+                                <div class="col-sm-4">
+                                    <strong><i class="bi bi-person me-2"></i>Nom d'usuari:</strong>
+                                </div>
+                                <div class="col-sm-8">
+                                    {{ user.username }}
+                                </div>
+                            </div>
+                            
+                            {% if user.first_name or user.last_name %}
+                            <div class="row mb-2">
+                                <div class="col-sm-4">
+                                    <strong><i class="bi bi-card-text me-2"></i>Nom complet:</strong>
+                                </div>
+                                <div class="col-sm-8">
+                                    {{ user.get_full_name|default:"No especificat" }}
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="row mb-2">
+                                <div class="col-sm-4">
+                                    <strong><i class="bi bi-envelope me-2"></i>Email:</strong>
+                                </div>
+                                <div class="col-sm-8">
+                                    {{ user.email|default:"No especificat" }}
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-2">
+                                <div class="col-sm-4">
+                                    <strong><i class="bi bi-calendar me-2"></i>Registrat:</strong>
+                                </div>
+                                <div class="col-sm-8">
+                                    {{ user.date_joined|date:"d/m/Y H:i" }}
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-2">
+                                <div class="col-sm-4">
+                                    <strong><i class="bi bi-clock me-2"></i>Últim accés:</strong>
+                                </div>
+                                <div class="col-sm-8">
+                                    {% if user.last_login %}
+                                        {{ user.last_login|date:"d/m/Y H:i" }}
+                                    {% else %}
+                                        Mai
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a href="{% url 'change_password' %}" class="btn btn-primary">
+                            <i class="bi bi-key me-2"></i>Canviar Contrasenya
+                        </a>
+                        
+                        {% if user.is_superuser %}
+                            <a href="{% url 'admin:index' %}" class="btn btn-secondary">
+                                <i class="bi bi-gear me-2"></i>Administració
+                            </a>
+                        {% endif %}
+                        
+                        <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-2"></i>Tornar a l'inici
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

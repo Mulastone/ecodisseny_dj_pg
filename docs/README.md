@@ -19,7 +19,7 @@ Bienvenido a la documentación completa del sistema Ecodisseny. Aquí encontrar�
 - [🔐 Seguridad](/documentacion/admin/seguridad/) - Permisos y configuración de seguridad
 - [🔧 Mantenimiento](/documentacion/admin/mantenimiento/) - Backups, logs y monitoreo### 🛠️ **Para Desarrolladores**
 
-- [🏗️ Guía de Desarrollo y Despliegue](/documentacion/dev/despliegue-vps/) - Deploy detallado en VPS y desarrollo
+- [🏗️ Guía Completa de Despliegue VPS](/documentacion/dev/guia-completa-vps/) - Deploy detallado en VPS y desarrollo
 - [📖 Arquitectura del Sistema](/documentacion/dev/arquitectura/) - Estructura técnica (próximamente)
 - [🔌 API Reference](/documentacion/dev/api/) - Endpoints y métodos (próximamente)
 
@@ -46,7 +46,7 @@ Si eres responsable de configurar y gestionar el sistema:
 
 Si necesitas modificar, extender o desplegar el sistema:
 
-- Consulta la [Guía de Desarrollo y Despliegue](/documentacion/dev/despliegue-vps/) para deploy en VPS
+- Consulta la [Guía Completa de Despliegue VPS](/documentacion/dev/guia-completa-vps/) para deploy en VPS
 - Revisa la arquitectura técnica del sistema
 - Sigue las mejores prácticas de desarrollo
 

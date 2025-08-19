@@ -94,7 +94,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <small class="text-muted">
                                         <i class="bi bi-file-earmark-text"></i>
-                                        {{ categoria.documentomarkdown_set.count }} documento{{ categoria.documentomarkdown_set.count|pluralize }}
+                                        {{ categoria.num_documentos }} documento{{ categoria.num_documentos|pluralize:"s" }}
                                     </small>
                                     <span class="badge bg-primary">{{ categoria.get_tipo_display }}</span>
                                 </div>

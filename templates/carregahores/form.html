@@ -6,12 +6,28 @@
 <div class="container-fluid mt-4">
   <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
     <h2 class="mb-0">
-      <i class="bi bi-clock-history"></i> Carregar Hores
+      <i class="bi bi-clock-history"></i> 
+      {% if is_edit %}
+        Editar Càrrega d'Hores
+      {% else %}
+        Carregar Hores
+      {% endif %}
     </h2>
     <a href="{% url 'carregahores:meves' %}" class="btn btn-outline-dark">
       <i class="bi bi-list-ul"></i> Les Meves Hores
     </a>
   </div>
+
+  {% if is_edit %}
+    <div class="alert alert-info">
+      <i class="bi bi-info-circle"></i>
+      Estàs editant la càrrega del <strong>{{ carrega.data|date:"d/m/Y" }}</strong> 
+      de <strong>{{ carrega.hores }} hores</strong>.
+      {% if not user.is_superuser %}
+        <br><small>Recorda que només pots editar registres dins les primeres 24 hores.</small>
+      {% endif %}
+    </div>
+  {% endif %}
 
   <form method="post" novalidate>
     {% csrf_token %}
@@ -96,10 +112,16 @@
 
     <div class="d-flex gap-2">
       <a href="{% url 'carregahores:meves' %}" class="btn btn-outline-dark">
-        <i class="bi bi-arrow-left-circle"></i> Tornar
+        <i class="bi bi-arrow-left-circle"></i> 
+        {% if is_edit %}Cancel·lar{% else %}Tornar{% endif %}
       </a>
       <button type="submit" class="btn btn-dark">
-        <i class="bi bi-save2"></i> Guardar
+        <i class="bi bi-save2"></i> 
+        {% if is_edit %}
+          Actualitzar
+        {% else %}
+          Guardar
+        {% endif %}
       </button>
     </div>
   </form>

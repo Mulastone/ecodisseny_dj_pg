@@ -88,73 +88,72 @@ class Command(BaseCommand):
                 admin_user.save()
                 self.stdout.write(f"✅ Usuario actualizado: {admin_user.username} -> Axel Rasmussen")
         
-        # Mapeo de archivos a documentos
-        documentos = [
-            # Documentos de usuario
-            {
-                'categoria_slug': 'usuario',
-                'titulo': 'Inicio Rápido',
-                'archivo_markdown': 'docs/usuario/inicio-rapido.md',
-                'resumen': 'Guía de inicio rápido para nuevos usuarios',
-                'palabras_clave': 'inicio, tutorial, primeros pasos',
-                'destacado': True,
-                'orden': 1,
-            },
-            {
-                'categoria_slug': 'usuario',
-                'titulo': 'Gestión de Presupuestos',
-                'archivo_markdown': 'docs/usuario/presupuestos.md',
-                'resumen': 'Cómo crear y gestionar presupuestos en el sistema',
-                'palabras_clave': 'presupuestos, costos, facturación',
-                'orden': 2,
-            },
-            {
-                'categoria_slug': 'usuario',
-                'titulo': 'Gestión de Proyectos',
-                'archivo_markdown': 'docs/usuario/proyectos.md',
-                'resumen': 'Guía para la gestión de proyectos',
-                'palabras_clave': 'proyectos, gestión, planificación',
-                'orden': 3,
-            },
+        # Buscar automáticamente todos los archivos .md en docs/
+        import glob
+        
+        documentos = []
+        docs_base = os.path.join('/app', 'docs')  # Para Docker
+        
+        # Buscar todos los archivos .md
+        md_files = glob.glob(os.path.join(docs_base, '**/*.md'), recursive=True)
+        
+        for archivo_path in md_files:
+            # Obtener ruta relativa
+            archivo_relativo = os.path.relpath(archivo_path, '/app')
             
-            # Documentos de administrador
-            {
-                'categoria_slug': 'admin',
-                'titulo': 'Configuración del Sistema',
-                'archivo_markdown': 'docs/admin/configuracion.md',
-                'resumen': 'Configuración inicial y avanzada del sistema',
-                'palabras_clave': 'configuración, setup, administración',
-                'destacado': True,
-                'orden': 1,
-            },
-            {
-                'categoria_slug': 'admin',
-                'titulo': 'Gestión de Usuarios',
-                'archivo_markdown': 'docs/admin/usuarios.md',
-                'resumen': 'Cómo gestionar usuarios y permisos',
-                'palabras_clave': 'usuarios, permisos, roles, grupos',
-                'orden': 2,
-            },
+            # Determinar categoría basada en la estructura de carpetas
+            if '/admin/' in archivo_relativo:
+                categoria_slug = 'admin'
+            elif '/usuario/' in archivo_relativo:
+                categoria_slug = 'usuario'
+            elif '/dev/' in archivo_relativo:
+                categoria_slug = 'dev'
+            else:
+                categoria_slug = 'general'
             
-            # Documentos generales
-            {
-                'categoria_slug': 'general',
-                'titulo': 'README Principal',
-                'archivo_markdown': 'docs/README.md',
-                'resumen': 'Información general del proyecto',
-                'palabras_clave': 'readme, información, general',
-                'orden': 1,
-            },
-            {
-                'categoria_slug': 'general',
-                'titulo': 'Solución de Problemas',
-                'archivo_markdown': 'docs/troubleshooting.md',
-                'resumen': 'Guía para resolver problemas comunes',
-                'palabras_clave': 'problemas, errores, troubleshooting, soluciones',
-                'destacado': True,
-                'orden': 2,
-            },
-        ]
+            # Obtener título del nombre del archivo
+            nombre_archivo = os.path.basename(archivo_path)
+            titulo_base = nombre_archivo.replace('.md', '').replace('-', ' ').replace('_', ' ')
+            titulo = titulo_base.title()
+            
+            # Configuraciones especiales para algunos archivos
+            configuraciones_especiales = {
+                'README.md': {
+                    'titulo': 'README Principal',
+                    'destacado': True,
+                    'orden': 1
+                },
+                'inicio-rapido.md': {
+                    'titulo': 'Inicio Rápido',
+                    'destacado': True,
+                    'orden': 1
+                },
+                'troubleshooting.md': {
+                    'titulo': 'Solución de Problemas',
+                    'destacado': True,
+                    'orden': 10
+                },
+                'configuracion.md': {
+                    'titulo': 'Configuración del Sistema',
+                    'destacado': True,
+                    'orden': 1
+                }
+            }
+            
+            config = configuraciones_especiales.get(nombre_archivo, {})
+            titulo = config.get('titulo', titulo)
+            
+            documentos.append({
+                'categoria_slug': categoria_slug,
+                'titulo': titulo,
+                'archivo_markdown': archivo_relativo,
+                'resumen': f'Documentación sobre {titulo.lower()}',
+                'palabras_clave': titulo.lower().replace(' ', ', '),
+                'destacado': config.get('destacado', False),
+                'orden': config.get('orden', 5),
+            })
+        
+        self.stdout.write(f"📁 Encontrados {len(documentos)} archivos de documentación")
         
         documentos_creados = 0
         documentos_existentes = 0

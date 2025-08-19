@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',                      # CORS headers
     'widget_tweaks',
     'maestros',
     'projectes',
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # CORS middleware - debe estar primero
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -222,3 +224,64 @@ DEFAULT_FROM_EMAIL = "noreply@ecodisseny.local"
 # EMAIL_HOST_USER = 'tu@email.com'
 # EMAIL_HOST_PASSWORD = 'tu_contraseña'
 # DEFAULT_FROM_EMAIL = 'webmaster@example.com'
+
+# =============================================================================
+# CONFIGURACIÓN CORS (Cross-Origin Resource Sharing)
+# =============================================================================
+
+# CORS: Permitir todos los orígenes en desarrollo
+CORS_ALLOW_ALL_ORIGINS = DEBUG
+
+# CORS: Orígenes permitidos en producción
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "http://0.0.0.0:8000",
+    # Añadir aquí los dominios de producción cuando sea necesario
+]
+
+# CORS: Headers permitidos
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+# CORS: Métodos permitidos
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+# CORS: Permitir cookies y credenciales
+CORS_ALLOW_CREDENTIALS = True
+
+# =============================================================================
+# CONFIGURACIÓN DE SEGURIDAD ADICIONAL
+# =============================================================================
+
+# Configuración para desarrollo - más permisiva
+if DEBUG:
+    # Desactivar algunas restricciones en desarrollo
+    SECURE_CROSS_ORIGIN_OPENER_POLICY = None
+    SECURE_REFERRER_POLICY = None
+    
+    # Headers de seguridad menos restrictivos para desarrollo
+    SECURE_CONTENT_TYPE_NOSNIFF = False
+    X_FRAME_OPTIONS = 'SAMEORIGIN'
+else:
+    # Configuración de seguridad para producción
+    SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin'
+    SECURE_REFERRER_POLICY = 'same-origin'
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'

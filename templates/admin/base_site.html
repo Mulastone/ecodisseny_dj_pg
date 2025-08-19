@@ -1,6 +1,95 @@
-{% extends "admin/base.html" %} {% block branding %}
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | Ecodisseny Admin{% endblock %}
+
+{% block extrahead %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <style>
+        /* Personalización del admin para que se vea como la app */
+        #header {
+            background: #343a40 !important;
+            color: white;
+            height: 70px;
+            display: flex;
+            align-items: center;
+        }
+        
+        #branding h1 {
+            font-size: 1.5rem;
+            color: white !important;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        #branding h1 a {
+            color: white !important;
+            text-decoration: none;
+        }
+        
+        #branding h1 a:hover {
+            color: #ccc !important;
+        }
+        
+        .admin-badge {
+            background: #495057;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-left: 10px;
+        }
+        
+        #user-tools {
+            color: white !important;
+            padding: 10px;
+        }
+        
+        #user-tools a {
+            color: white !important;
+            margin-left: 10px;
+        }
+        
+        .breadcrumbs {
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            padding: 10px 20px;
+        }
+        
+        .module h2, .module caption, .inline-group h2 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .button, input[type=submit], input[type=button], .submit-row input, .submit-row a {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            border: none !important;
+            color: white !important;
+        }
+        
+        .button:hover, input[type=submit]:hover, input[type=button]:hover {
+            background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%) !important;
+        }
+    </style>
+{% endblock %}
+
+{% block branding %}
 <h1 id="site-name">
-  <a href="{% url 'admin:index' %}">Ecodisseny Admin</a>
-  | <a href="{% url 'list' %}" style="font-size: 1rem">Pressupostos</a>
+    <img src="{% static 'logo_ecodisseny_negatiu.png' %}" alt="Ecodisseny" style="width: 80px; height: auto; margin-right: 15px;">
+    <a href="{% url 'admin:index' %}">Ecodisseny</a>
+    <span class="admin-badge">
+        <i class="bi bi-gear-fill"></i> Admin
+    </span>
+    <span style="margin-left: 20px; font-size: 0.9rem;">
+        | <a href="{% url 'home' %}" style="font-size: 0.9rem">
+            <i class="bi bi-arrow-left me-1"></i>Tornar a l'app
+        </a>
+        | <a href="{% url 'documentacion:index' %}" style="font-size: 0.9rem">
+            <i class="bi bi-file-text me-1"></i>Documentació
+        </a>
+    </span>
 </h1>
 {% endblock %}
