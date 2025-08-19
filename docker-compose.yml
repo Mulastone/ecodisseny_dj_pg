@@ -1,8 +1,29 @@
 version: '3.8'
 
 services:
-  # Base de datos PostgreSQL
-  db:
+  # Base de d        echo '📚 Cargando documentación...' &&
+        python manage.py cargar_documentacion --update &&
+        echo '🧹 Limpiando documentos huérfanos...' &&
+        python manage.py limpiar_documentos &&
+        echo '📁 Recolectando archivos estáticos...' &&
+        python manage.py collectstatic --noinput &&
+        echo '🚀 Iniciando servidor Django...' &&
+        python manage.py runserver 0.0.0.0:8000
+      "
+    expose:
+      - "8000"
+    volumes:
+      - .:/app
+      - static_files:/app/static
+      - media_files:/app/media
+    environment:
+      - DEBUG=False
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=ecodisseny_db
+      - DB_USER=ecodisseny
+      - DB_PASSWORD=ecodisseny2024
+      - ALLOWED_HOSTS=localhost,127.0.0.1,app.arasmu.net,161.97.147.142b:
     image: postgres:15
     restart: unless-stopped
     environment:
@@ -62,4 +83,5 @@ services:
 
 volumes:
   postgres_data:
+  static_files:
   media_files:
