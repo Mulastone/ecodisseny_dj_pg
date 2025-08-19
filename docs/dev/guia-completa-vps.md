@@ -132,9 +132,9 @@ EOF
 └── Total estimado: ~1.2GB de 8GB (sobra mucho!)
 ```
 
-### 2.2 Configuración Inicial del Sistema
+### 2.2 Configuración Inicial del Sistema (Simplificada para Docker)
 
-#### Primer Acceso y Seguridad
+#### Primer Acceso y Setup Básico
 
 ```bash
 # Conectar por primera vez (Contabo te enviará credenciales)
@@ -143,27 +143,89 @@ ssh root@TU_IP_VPS
 # Actualizar sistema
 apt update && apt upgrade -y
 
-# Crear usuario deploy
-useradd -m -s /bin/bash deploy
-usermod -aG sudo deploy
-passwd deploy
+# Instalar dependencias mínimas para Docker
+apt install -y docker.io docker-compose git nginx certbot python3-certbot-nginx htop curl wget
 
-# Configurar SSH para deploy
-mkdir -p /home/deploy/.ssh
-echo "tu_clave_publica_ssh" >> /home/deploy/.ssh/authorized_keys
-chown -R deploy:deploy /home/deploy/.ssh
-chmod 700 /home/deploy/.ssh
-chmod 600 /home/deploy/.ssh/authorized_keys
+# Opcional: Cambiar puerto SSH por seguridad
+nano /etc/ssh/sshd_config
+# Cambiar: Port 22 → Port 2222
+systemctl restart sshd
 
 # Configurar firewall
-ufw allow 22    # SSH
-ufw allow 80    # HTTP
-ufw allow 443   # HTTPS
+ufw allow 2222   # SSH (si cambiaste puerto)
+ufw allow 22     # SSH (si mantienes puerto por defecto)
+ufw allow 80     # HTTP
+ufw allow 443    # HTTPS
 ufw --force enable
 
-# Cambiar a usuario deploy
-su - deploy
+# Verificar que Docker funciona
+docker --version
+docker-compose --version
 ```
+
+#### ⚠️ **Importante - Docker vs Manual:**
+
+Con **Docker** ya NO necesitas:
+
+- ❌ Python3, pip, venv (Docker se encarga)
+- ❌ PostgreSQL nativo (usamos container)
+- ❌ Usuario deploy (puedes usar root para Docker)
+- ❌ Configuración manual de Python
+
+**Solo necesitas: Docker + Nginx nativo + Certbot**
+
+---
+
+## 🐳 **FASE 3: DESPLIEGUE CON DOCKER**
+
+### 3.1 Clonar y Configurar Proyecto
+
+```bash
+# Clonar repositorio
+git clone https://github.com/Mulastone/ecodisseny_dj_pg.git
+cd ecodisseny_dj_pg
+
+# El proyecto ya incluye:
+# ✅ docker-compose.yml optimizado para VPS
+# ✅ nginx/vps-app.arasmu.net.conf (configuración Nginx)
+# ✅ deploy-vps.sh (script automatizado)
+```
+
+### 3.2 Despliegue Automatizado
+
+```bash
+# Hacer ejecutable el script
+chmod +x deploy-vps.sh
+
+# Ejecutar despliegue completo
+./deploy-vps.sh
+```
+
+**El script `deploy-vps.sh` hace automáticamente:**
+
+1. 🔄 Actualiza código desde Git
+2. 🛑 Para contenedores existentes
+3. 🔨 Construye nueva imagen Docker
+4. 🚀 Inicia servicios (PostgreSQL + Django)
+5. ⚙️ Configura Nginx automáticamente
+6. ✅ Verifica que todo funciona
+
+### 3.3 Configuración Manual de Nginx (si es necesario)
+
+```bash
+# Si el script no configuró Nginx automáticamente:
+sudo cp nginx/vps-app.arasmu.net.conf /etc/nginx/sites-available/app.arasmu.net
+sudo ln -sf /etc/nginx/sites-available/app.arasmu.net /etc/nginx/sites-enabled/
+sudo rm -f /etc/nginx/sites-enabled/default
+
+# Verificar configuración
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+---
+
+## 🌐 **FASE 4: CONFIGURACIÓN DNS Y SSL**
 
 ### 2.3 Instalación de Dependencias
 
@@ -465,9 +527,7 @@ sudo systemctl status ecodisseny
 
 ---
 
-## 🌐 **FASE 5: DNS Y SSL**
-
-### 5.1 Configuración DNS Cloudflare
+### 4.1 Configuración DNS Cloudflare
 
 #### Registros DNS a Añadir
 
@@ -477,21 +537,124 @@ sudo systemctl status ecodisseny
 1️⃣ Aplicación Django:
    Tipo: A
    Nombre: app
-   Contenido: IP_DE_TU_VPS_CONTABO
+   Contenido: 161.97.147.142 (tu IP VPS)
    Proxy status: DNS only (🔘 gris) - IMPORTANTE
 
 2️⃣ Futuro Oscar Shop:
    Tipo: A
    Nombre: tienda
-   Contenido: IP_DE_TU_VPS_CONTABO
-   Proxy status: DNS only (🔘 gris) - IMPORTANTE
-
-3️⃣ Administración (opcional):
-   Tipo: A
-   Nombre: admin
-   Contenido: IP_DE_TU_VPS_CONTABO
+   Contenido: 161.97.147.142 (tu IP VPS)
    Proxy status: DNS only (🔘 gris) - IMPORTANTE
 ```
+
+#### Verificar Propagación DNS
+
+```bash
+# Verificar que DNS apunta correctamente
+dig app.arasmu.net
+# Debe devolver: 161.97.147.142
+
+# Verificar que la aplicación responde
+curl -I http://161.97.147.142:8000
+# Debe devolver: HTTP 200 o 302
+```
+
+### 4.2 Certificados SSL Let's Encrypt
+
+```bash
+# Generar certificados SSL automáticamente
+sudo certbot --nginx -d app.arasmu.net
+
+# Si tienes múltiples dominios:
+sudo certbot --nginx -d app.arasmu.net -d tienda.arasmu.net
+
+# Verificar renovación automática
+sudo systemctl enable certbot.timer
+sudo systemctl start certbot.timer
+sudo certbot renew --dry-run
+```
+
+**Certbot modificará automáticamente:**
+
+- ✅ Configuración SSL en Nginx
+- ✅ Redirección HTTP → HTTPS
+- ✅ Headers de seguridad
+- ✅ Renovación automática
+
+### 4.3 Verificación Final
+
+```bash
+# Verificar que HTTPS funciona
+curl -I https://app.arasmu.net
+# Debe devolver: HTTP 200
+
+# Verificar redirección HTTP → HTTPS
+curl -I http://app.arasmu.net
+# Debe devolver: HTTP 301 → HTTPS
+
+# Verificar certificado SSL
+openssl s_client -connect app.arasmu.net:443 -servername app.arasmu.net
+```
+
+---
+
+## 💻 **FASE 5: DESARROLLO REMOTO (OPCIONAL)**
+
+### 5.1 VSCode Remote SSH
+
+#### Configurar SSH Local
+
+```bash
+# En tu máquina local, editar ~/.ssh/config:
+Host ecodisseny-vps
+    HostName 161.97.147.142
+    User root  # O deploy si prefieres
+    Port 2222  # Si cambiaste el puerto SSH
+    IdentityFile ~/.ssh/id_rsa
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+```
+
+#### Conectar VSCode
+
+```bash
+# 1. Instalar extensión "Remote - SSH" en VSCode
+# 2. F1 > "Remote-SSH: Connect to Host"
+# 3. Seleccionar "ecodisseny-vps"
+# 4. ¡Listo! VSCode conectado al VPS
+```
+
+### 5.2 Comandos Útiles para Desarrollo
+
+```bash
+# Ver logs en tiempo real
+docker-compose logs -f web
+docker-compose logs -f db
+
+# Acceder al container Django
+docker-compose exec web bash
+
+# Ejecutar comandos Django
+docker-compose exec web python manage.py shell
+docker-compose exec web python manage.py migrate
+docker-compose exec web python manage.py cargar_documentacion --update
+
+# Reiniciar solo Django (mantener DB)
+docker-compose restart web
+
+# Rebuilding tras cambios de código
+./deploy-vps.sh
+```
+
+---
+
+## 📊 **FASE 6: MONITOREO Y MANTENIMIENTO**
+
+Nombre: admin
+Contenido: IP_DE_TU_VPS_CONTABO
+Proxy status: DNS only (🔘 gris) - IMPORTANTE
+
+````
 
 #### Verificar Propagación
 
@@ -500,7 +663,7 @@ sudo systemctl status ecodisseny
 nslookup app.arasmu.net
 dig app.arasmu.net
 # Debe devolver la IP de tu VPS
-```
+````
 
 ### 5.2 Certificados SSL Let's Encrypt
 
@@ -577,49 +740,111 @@ echo 'alias logs="sudo tail -f /var/log/django/ecodisseny.log"' >> ~/.bashrc
 source ~/.bashrc
 ```
 
-### 6.3 Debugging y Testing
-
-#### Configuración Debug
-
-```json
-// .vscode/launch.json en el VPS:
-{
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "name": "Django Debug (Development Mode)",
-      "type": "python",
-      "request": "launch",
-      "program": "${workspaceFolder}/manage.py",
-      "args": ["runserver", "0.0.0.0:8001"],
-      "django": true,
-      "env": {
-        "DEBUG": "True"
-      }
-    }
-  ]
-}
-```
-
-#### Port Forwarding
+### 6.1 Scripts de Monitoreo para Docker
 
 ```bash
-# En VSCode > Terminal > PORTS:
-# Forward port 8001 para testing local
-# Acceder desde navegador: localhost:8001
+# Script de monitoreo general
+cat > /home/deploy/ecodisseny/scripts/monitor.sh << 'EOF'
+#!/bin/bash
+echo "=== 🖥️  ESTADO DEL SERVIDOR $(date) ==="
+echo "📊 CPU y Memoria:"
+echo "CPU: $(top -bn1 | grep "Cpu(s)" | awk '{print $2}' | cut -d'%' -f1)% usado"
+echo "RAM: $(free -h | awk 'NR==2{printf "%.1f/%.1fGB (%.1f%%)\n", $3/1024/1024,$2/1024/1024,$3*100/$2}')"
+echo "💾 Espacio: $(df -h / | tail -1 | awk '{print $3 "/" $2 " (" $5 ")"}')"
+
+echo "🐳 Contenedores Docker:"
+docker-compose ps
+
+echo "🔧 Servicios del sistema:"
+for service in nginx docker; do
+    if systemctl is-active $service >/dev/null; then
+        echo "✅ $service: ACTIVO"
+    else
+        echo "❌ $service: INACTIVO"
+    fi
+done
+
+echo "🌐 Web: $(curl -s -o /dev/null -w "%{http_code}" https://app.arasmu.net 2>/dev/null || echo 'Sin SSL')"
+echo "🌐 Local: $(curl -s -o /dev/null -w "%{http_code}" http://localhost:8000 2>/dev/null || echo 'Error')"
+EOF
+
+chmod +x /home/deploy/ecodisseny/scripts/monitor.sh
+```
+
+### 6.2 Backups Automatizados para Docker
+
+```bash
+# Script de backup completo con Docker
+cat > /home/deploy/ecodisseny/scripts/backup_docker.sh << 'EOF'
+#!/bin/bash
+DATE=$(date +%Y%m%d_%H%M%S)
+BACKUP_DIR="/home/deploy/ecodisseny/backups"
+PROJECT_DIR="/home/deploy/ecodisseny"
+
+# Crear directorio si no existe
+mkdir -p $BACKUP_DIR
+
+echo "🗄️ Iniciando backup Docker ($DATE)..."
+
+# 1. Backup de volúmenes Docker
+echo "📦 Backup de volúmenes Docker..."
+docker run --rm -v ecodisseny_dj_pg_postgres_data:/data -v $BACKUP_DIR:/backup alpine tar -czf /backup/postgres_data_$DATE.tar.gz -C /data .
+docker run --rm -v ecodisseny_dj_pg_static_files:/data -v $BACKUP_DIR:/backup alpine tar -czf /backup/static_files_$DATE.tar.gz -C /data .
+docker run --rm -v ecodisseny_dj_pg_media_files:/data -v $BACKUP_DIR:/backup alpine tar -czf /backup/media_files_$DATE.tar.gz -C /data .
+
+# 2. Backup de base de datos desde container
+echo "🗃️ Backup de base de datos..."
+docker-compose exec -T db pg_dump -U ecodisseny ecodisseny_db | gzip > $BACKUP_DIR/database_$DATE.sql.gz
+
+# 3. Backup del código y configuración
+echo "📁 Backup del código..."
+tar --exclude='__pycache__' --exclude='.git' --exclude='venv*' -czf $BACKUP_DIR/codigo_$DATE.tar.gz -C /home/deploy ecodisseny
+
+# 4. Limpiar backups antiguos (7 días)
+find $BACKUP_DIR -name "*_*.tar.gz" -mtime +7 -delete
+find $BACKUP_DIR -name "*_*.sql.gz" -mtime +7 -delete
+
+echo "✅ Backup completado: $DATE"
+ls -lh $BACKUP_DIR/*$DATE*
+EOF
+
+chmod +x /home/deploy/ecodisseny/scripts/backup_docker.sh
+
+# Cron para backup diario a las 2 AM
+(crontab -l 2>/dev/null; echo "0 2 * * * /home/deploy/ecodisseny/scripts/backup_docker.sh") | crontab -
+```
+
+### 6.3 Scripts de Actualización
+
+```bash
+# Script de actualización para Docker
+cat > /home/deploy/ecodisseny/scripts/actualizar_docker.sh << 'EOF'
+#!/bin/bash
+cd /home/deploy/ecodisseny
+
+echo "🔄 Iniciando actualización Docker..."
+
+# Backup de seguridad
+./scripts/backup_docker.sh
+
+# Actualizar código
+echo "📥 Actualizando código..."
+git pull origin docker
+
+# Rebuilding y reinicio
+echo "🐳 Rebuilding containers..."
+./deploy-vps.sh
+
+echo "✅ Actualización completada"
+EOF
+
+chmod +x /home/deploy/ecodisseny/scripts/actualizar_docker.sh
 ```
 
 ---
 
-## 🛒 **FASE 7: MULTI-APLICACIONES**
+## 🛒 **FASE 7: MULTI-APLICACIONES (PREPARACIÓN FUTURA)**
 
-### 7.1 Arquitectura Multi-App
-
-```
-🏗️ Arquitectura VPS:
-                    🌐 Internet
-                         |
-                    [DNS Provider]
                          |
                    ┌─────▼─────┐
                    │    VPS    │
@@ -641,7 +866,8 @@ source ~/.bashrc
             │ PostgreSQL  │
             │   :5432     │
             └─────────────┘
-```
+
+````
 
 ### 7.2 Configuración Django Oscar
 
@@ -680,7 +906,7 @@ server {
     }
 }
 EOF
-```
+````
 
 ### 7.3 Gestión de Puertos
 
@@ -790,21 +1016,230 @@ chmod +x /home/deploy/scripts/actualizar_app.sh
 
 ---
 
-## 🔍 **FASE 9: TROUBLESHOOTING**
+## 🔍 **FASE 8: TROUBLESHOOTING**
 
-### 9.1 Problemas Comunes
+### 8.1 Problemas Comunes con Docker
 
 #### Error 502 Bad Gateway
 
 ```bash
-# Verificar Gunicorn
+# 1. Verificar contenedores
+docker-compose ps
+
+# 2. Ver logs de Django
+docker-compose logs -f web
+
+# 3. Verificar que Django responde internamente
+curl -I http://localhost:8000
+
+# 4. Reiniciar servicios
+docker-compose restart web
+sudo systemctl reload nginx
+```
+
+#### Contenedores no inician
+
+```bash
+# Ver logs detallados
+docker-compose logs web
+docker-compose logs db
+
+# Reconstruir desde cero
+docker-compose down -v  # ⚠️ ELIMINA VOLÚMENES
+docker-compose build --no-cache
+docker-compose up -d
+
+# O usar el script de despliegue
+./deploy-vps.sh
+```
+
+#### Error de Base de Datos
+
+```bash
+# Verificar container PostgreSQL
+docker-compose exec db pg_isready -U ecodisseny
+
+# Ver logs de PostgreSQL
+docker-compose logs db
+
+# Test de conexión desde Django
+docker-compose exec web python manage.py dbshell
+```
+
+#### Problemas con archivos estáticos
+
+```bash
+# Recolectar archivos estáticos manualmente
+docker-compose exec web python manage.py collectstatic --noinput
+
+# Verificar volúmenes
+docker volume ls
+docker volume inspect ecodisseny_dj_pg_static_files
+
+# Verificar permisos en Nginx
+sudo ls -la /var/lib/docker/volumes/ecodisseny_dj_pg_static_files/_data/
+```
+
+### 8.2 Comandos de Debugging
+
+```bash
+# Monitoreo en tiempo real
+docker-compose logs -f                    # Todos los servicios
+docker-compose logs -f web               # Solo Django
+docker-compose logs -f db                # Solo PostgreSQL
+
+# Acceso a containers
+docker-compose exec web bash            # Shell en Django container
+docker-compose exec db psql -U ecodisseny ecodisseny_db  # PostgreSQL
+
+# Información del sistema
+docker system df                         # Uso de espacio Docker
+docker-compose top                       # Procesos en containers
+docker stats                            # Uso de recursos en tiempo real
+
+# Verificar red
+docker network ls
+docker-compose port web 8000           # Puerto mapeado
+```
+
+### 8.3 Script de Diagnóstico Completo
+
+```bash
+# Script de diagnóstico automático
+cat > /home/deploy/ecodisseny/scripts/diagnostico.sh << 'EOF'
+#!/bin/bash
+echo "🔍 DIAGNÓSTICO COMPLETO DEL SISTEMA"
+echo "=================================="
+
+echo "📊 SISTEMA:"
+echo "CPU: $(top -bn1 | grep "Cpu(s)" | awk '{print $2}' | cut -d'%' -f1)%"
+echo "RAM: $(free -h | awk 'NR==2{printf "%.1f/%.1fGB (%.1f%%)\n", $3/1024/1024,$2/1024/1024,$3*100/$2}')"
+echo "Disco: $(df -h / | tail -1 | awk '{print $5}')"
+
+echo ""
+echo "🐳 DOCKER:"
+docker --version
+docker-compose --version
+echo "Containers:"
+docker-compose ps
+
+echo ""
+echo "🌐 CONECTIVIDAD:"
+echo "Puerto 8000: $(curl -s -o /dev/null -w "%{http_code}" http://localhost:8000 2>/dev/null || echo 'Error')"
+echo "HTTPS: $(curl -s -o /dev/null -w "%{http_code}" https://app.arasmu.net 2>/dev/null || echo 'Error/Sin SSL')"
+
+echo ""
+echo "🔧 SERVICIOS SISTEMA:"
+for service in nginx docker; do
+    if systemctl is-active $service >/dev/null; then
+        echo "✅ $service: ACTIVO"
+    else
+        echo "❌ $service: INACTIVO"
+    fi
+done
+
+echo ""
+echo "📁 VOLÚMENES DOCKER:"
+docker volume ls | grep ecodisseny
+
+echo ""
+echo "📊 LOGS RECIENTES (últimas 10 líneas):"
+echo "--- Django ---"
+docker-compose logs --tail=10 web
+echo "--- PostgreSQL ---"
+docker-compose logs --tail=10 db
+EOF
+
+chmod +x /home/deploy/ecodisseny/scripts/diagnostico.sh
+```
+
+### 8.4 Checklist de Verificación
+
+```bash
+✅ VPS Contabo contratado y funcionando
+✅ Docker y docker-compose instalados
+✅ Repositorio clonado
+✅ Script deploy-vps.sh ejecutado exitosamente
+✅ Contenedores Docker corriendo (docker-compose ps)
+✅ Nginx configurado y activo
+✅ DNS Cloudflare apuntando a VPS
+✅ SSL Let's Encrypt funcionando
+✅ Aplicación accesible vía HTTPS
+✅ Backups automatizados configurados
+✅ Scripts de monitoreo funcionando
+```
+
+---
+
+## 🎉 **¡DESPLIEGUE COMPLETADO!**
+
+### ✅ **Resultado Final:**
+
+- **🚀 Aplicación Django** en https://app.arasmu.net
+- **🐳 Docker** con PostgreSQL y Django optimizados
+- **🛡️ HTTPS seguro** con certificados automáticos
+- **💾 Backups diarios** automatizados con volúmenes Docker
+- **📊 Monitoreo** del sistema y containers
+- **🔧 Scripts** de despliegue y mantenimiento automatizados
+
+### 🎯 **URLs Finales:**
+
+```
+🌐 Producción: https://app.arasmu.net
+🌐 IP directa: http://161.97.147.142 (redirige a HTTPS)
+🔧 Admin: https://app.arasmu.net/admin/
+📚 Docs: https://app.arasmu.net/documentacion/
+```
+
+### 👥 **Usuarios Listos:**
+
+```
+👑 ADMIN:
+- mulastone / ecodisseny2024
+- gonzalo / ecodisseny2024
+
+👤 USUARIOS:
+- sarah / ecodisseny2024
+- pilar / ecodisseny2024
+- santiago / ecodisseny2024
+- roger / ecodisseny2024
+```
+
+### 🚀 **Comandos Clave:**
+
+```bash
+# Despliegue/Actualización
+./deploy-vps.sh
+
+# Monitoreo
+./scripts/diagnostico.sh
+docker-compose logs -f web
+
+# Backup
+./scripts/backup_docker.sh
+
+# Reinicio rápido
+docker-compose restart web
+```
+
+### 🎯 **Próximos Pasos:**
+
+1. 🛒 Instalar Django Oscar Shop en puerto 8001
+2. 📊 Configurar monitoreo avanzado (Grafana/Prometheus)
+3. 🔄 CI/CD con GitHub Actions
+4. 📧 Notificaciones por email
+5. 🎨 Personalización y branding
+
+**¡Tu aplicación está lista para producción con Docker!** 🚀🔐🐳
 sudo systemctl status ecodisseny
 sudo journalctl -u ecodisseny -f
 
 # Verificar Nginx
+
 sudo nginx -t
 sudo systemctl restart ecodisseny nginx
-```
+
+````
 
 #### Error de Base de Datos
 
@@ -823,7 +1258,7 @@ conn = psycopg2.connect(
 )
 print('✅ Conexión exitosa')
 "
-```
+````
 
 #### Usar Scripts de Configuración
 
