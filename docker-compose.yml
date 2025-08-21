@@ -1,87 +1,50 @@
 version: '3.8'
 
 services:
-  # Base de d        echo '📚 Cargando documentación...' &&
-        python manage.py cargar_documentacion --update &&
-        echo '🧹 Limpiando documentos huérfanos...' &&
-        python manage.py limpiar_documentos &&
-        echo '📁 Recolectando archivos estáticos...' &&
-        python manage.py collectstatic --noinput &&
-        echo '🚀 Iniciando servidor Django...' &&
-        python manage.py runserver 0.0.0.0:8000
-      "
-    expose:
-      - "8000"
-    volumes:
-      - .:/app
-      - static_files:/app/static
-      - media_files:/app/media
-    environment:
-      - DEBUG=False
-      - DB_HOST=db
-      - DB_PORT=5432
-      - DB_NAME=ecodisseny_db
-      - DB_USER=ecodisseny
-      - DB_PASSWORD=ecodisseny2024
-      - ALLOWED_HOSTS=localhost,127.0.0.1,app.arasmu.net,161.97.147.142b:
+  db:
     image: postgres:15
-    restart: unless-stopped
+    restart: always
     environment:
       POSTGRES_DB: ecodisseny_db
-      POSTGRES_USER: ecodisseny
-      POSTGRES_PASSWORD: ecodisseny2024
+      POSTGRES_USER: ecodisseny_user
+      POSTGRES_PASSWORD: ecodisseny_password123
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     ports:
-      - "5433:5432"
+      - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ecodisseny -d ecodisseny_db"]
+      test: ["CMD-SHELL", "pg_isready -U ecodisseny_user -d ecodisseny_db"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-  # Aplicación Django
   web:
     build: .
-    restart: unless-stopped
-    command: >
-      sh -c "
-        echo '🔄 Esperando PostgreSQL...' &&
-        while ! pg_isready -h db -p 5432 -U ecodisseny; do
-          echo 'PostgreSQL no está listo - esperando...'
-          sleep 2
-        done &&
-        echo '✅ PostgreSQL está listo!' &&
-        echo '🔄 Ejecutando migraciones...' &&
-        python manage.py makemigrations &&
-        python manage.py migrate &&
-        echo '📥 Cargando fixtures...' &&
-        ./docker-load-fixtures.sh &&
-        echo '� Cargando documentación...' &&
-        python manage.py cargar_documentacion --update &&
-        echo '🧹 Limpiando documentos huérfanos...' &&
-        python manage.py limpiar_documentos &&
-        echo '�🚀 Iniciando servidor Django...' &&
-        python manage.py runserver 0.0.0.0:8000
-      "
+    restart: always
     ports:
       - "8000:8000"
     volumes:
       - .:/app
-      - media_files:/app/media
+      - static_volume:/app/static
+      - media_volume:/app/media
     environment:
-      - DEBUG=True
+      - DEBUG=False
+      - ALLOWED_HOSTS=161.97.147.142,app.arasmu.net
       - DB_HOST=db
-      - DB_PORT=5432
       - DB_NAME=ecodisseny_db
-      - DB_USER=ecodisseny
-      - DB_PASSWORD=ecodisseny2024
+      - DB_USER=ecodisseny_user
+      - DB_PASSWORD=ecodisseny_password123
+      - DB_PORT=5432
     depends_on:
       db:
         condition: service_healthy
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput &&
+             gunicorn ecodisseny.wsgi:application --bind 0.0.0.0:8000"
 
 volumes:
   postgres_data:
-  static_files:
-  media_files:
+  static_volume:
+  media_volume:

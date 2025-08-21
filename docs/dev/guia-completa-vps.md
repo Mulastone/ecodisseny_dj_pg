@@ -146,14 +146,22 @@ apt update && apt upgrade -y
 # Instalar dependencias mínimas para Docker
 apt install -y docker.io docker-compose git nginx certbot python3-certbot-nginx htop curl wget
 
-# Opcional: Cambiar puerto SSH por seguridad
-nano /etc/ssh/sshd_config
-# Cambiar: Port 22 → Port 2222
-systemctl restart sshd
+# Opcional: Cambiar puerto SSH por seguridad (AVANZADO)
+# ⚠️ IMPORTANTE: Solo hacer si tienes experiencia con SSH
+# Si pierdes la conexión, necesitarás usar la consola VNC de Contabo
 
-# Configurar firewall
-ufw allow 2222   # SSH (si cambiaste puerto)
-ufw allow 22     # SSH (si mantienes puerto por defecto)
+# Opción SEGURA - Mantener puerto 22 (RECOMENDADO para principiantes):
+# No cambiar el puerto SSH por ahora
+
+# Si quieres cambiar el puerto SSH (solo usuarios avanzados):
+# nano /etc/ssh/sshd_config
+# Cambiar: #Port 22 → Port 2222 (quitar # y cambiar número)
+# systemctl restart ssh
+# ⚠️ NO cierres la sesión actual hasta verificar que funciona el nuevo puerto
+
+# Configurar firewall (usar puerto 22 por defecto)
+ufw allow 22     # SSH puerto por defecto (RECOMENDADO)
+# ufw allow 2222   # SSH puerto personalizado (solo si cambiaste arriba)
 ufw allow 80     # HTTP
 ufw allow 443    # HTTPS
 ufw --force enable
@@ -609,7 +617,7 @@ openssl s_client -connect app.arasmu.net:443 -servername app.arasmu.net
 Host ecodisseny-vps
     HostName 161.97.147.142
     User root  # O deploy si prefieres
-    Port 2222  # Si cambiaste el puerto SSH
+    Port 22    # Puerto SSH por defecto
     IdentityFile ~/.ssh/id_rsa
     ServerAliveInterval 60
     ServerAliveCountMax 3
