@@ -14,7 +14,15 @@ ALLOWED_HOSTS = [
     '127.0.0.1', 
     '0.0.0.0',
     'web',  # nombre del servicio en docker-compose
+    'app.arasmu.net',  # Dominio de producción
     '*'     # Para desarrollo - cambiar en producción
+]
+
+# Configuración CSRF para dominios confiables
+CSRF_TRUSTED_ORIGINS = [
+    'https://app.arasmu.net',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
 ]
 
 # Apps instaladas
