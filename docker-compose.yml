@@ -26,7 +26,7 @@ services:
       - "8000:8000"
     volumes:
       - .:/app
-      - static_volume:/app/static
+      - static_volume:/app/staticfiles
       - media_volume:/app/media
     environment:
       - DEBUG=False
@@ -36,7 +36,7 @@ services:
       - DB_USER=ecodisseny_user
       - DB_PASSWORD=ecodisseny_password123
       - DB_PORT=5432
-      - STATIC_ROOT=/app/static
+      - STATIC_ROOT=/app/staticfiles
     depends_on:
       db:
         condition: service_healthy
