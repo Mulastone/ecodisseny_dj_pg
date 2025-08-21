@@ -62,5 +62,5 @@ __pycache__/
 *.bak
 
 # Archivos de exportación de datos (opcional)
-*.json
+# *.json  # Comentado para permitir fixtures
 *.sql

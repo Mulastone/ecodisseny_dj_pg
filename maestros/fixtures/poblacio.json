@@ -1,0 +1,585 @@
+[
+{
+  "model": "maestros.poblacio",
+  "pk": 1,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 1,
+    "poblacio": "L'Aldosa de Canillo",
+    "codi_postal": "AD100"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 2,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 1,
+    "poblacio": "Canillo",
+    "codi_postal": "AD100"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 3,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 1,
+    "poblacio": "El Forn",
+    "codi_postal": "AD100"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 4,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 1,
+    "poblacio": "Incles",
+    "codi_postal": "AD100"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 5,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 1,
+    "poblacio": "Meritxell",
+    "codi_postal": "AD100"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 6,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 1,
+    "poblacio": "Els Plans",
+    "codi_postal": "AD100"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 7,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 1,
+    "poblacio": "Prats",
+    "codi_postal": "AD100"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 8,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 1,
+    "poblacio": "Ransol",
+    "codi_postal": "AD100"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 9,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 1,
+    "poblacio": "Soldeu",
+    "codi_postal": "AD100"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 10,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 1,
+    "poblacio": "El Tarter",
+    "codi_postal": "AD100"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 11,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 1,
+    "poblacio": "El Vilar",
+    "codi_postal": "AD100"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 12,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 2,
+    "poblacio": "Les Bons",
+    "codi_postal": "AD200"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 13,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 2,
+    "poblacio": "Encamp-vila",
+    "codi_postal": "AD200"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 14,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 2,
+    "poblacio": "El Pas de la Casa",
+    "codi_postal": "AD200"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 15,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 2,
+    "poblacio": "El Tremat",
+    "codi_postal": "AD200"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 16,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 2,
+    "poblacio": "Vila",
+    "codi_postal": "AD200"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 17,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 3,
+    "poblacio": "Ansalonga",
+    "codi_postal": "AD300"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 18,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 3,
+    "poblacio": "Arans",
+    "codi_postal": "AD300"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 19,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 3,
+    "poblacio": "La Cortinada",
+    "codi_postal": "AD300"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 20,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 3,
+    "poblacio": "Llorts",
+    "codi_postal": "AD300"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 21,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 3,
+    "poblacio": "Ordino-vila",
+    "codi_postal": "AD300"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 22,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 3,
+    "poblacio": "Segudet",
+    "codi_postal": "AD300"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 23,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 3,
+    "poblacio": "El Serrat",
+    "codi_postal": "AD300"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 24,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 3,
+    "poblacio": "Sornàs",
+    "codi_postal": "AD300"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 25,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 4,
+    "poblacio": "L'Aldosa de la Massana",
+    "codi_postal": "AD400"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 26,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 4,
+    "poblacio": "Anyós",
+    "codi_postal": "AD400"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 27,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 4,
+    "poblacio": "Arinsal",
+    "codi_postal": "AD400"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 28,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 4,
+    "poblacio": "Erts",
+    "codi_postal": "AD400"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 29,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 4,
+    "poblacio": "Escàs",
+    "codi_postal": "AD400"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 30,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 4,
+    "poblacio": "La Massana-vila",
+    "codi_postal": "AD400"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 31,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 4,
+    "poblacio": "Pal",
+    "codi_postal": "AD400"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 32,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 4,
+    "poblacio": "Puiol del Piu",
+    "codi_postal": "AD400"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 33,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 4,
+    "poblacio": "Sispony",
+    "codi_postal": "AD400"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 34,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 4,
+    "poblacio": "Xixerella",
+    "codi_postal": "AD400"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 35,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 5,
+    "poblacio": "Andorra la Vella",
+    "codi_postal": "AD500"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 36,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 5,
+    "poblacio": "La Margineda",
+    "codi_postal": "AD500"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 37,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 5,
+    "poblacio": "Santa Coloma",
+    "codi_postal": "AD500"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 38,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 6,
+    "poblacio": "Aixirivall",
+    "codi_postal": "AD600"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 39,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 6,
+    "poblacio": "Aixovall",
+    "codi_postal": "AD600"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 40,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 6,
+    "poblacio": "Auvinyà",
+    "codi_postal": "AD600"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 41,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 6,
+    "poblacio": "Bixessarri",
+    "codi_postal": "AD600"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 42,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 6,
+    "poblacio": "Certers",
+    "codi_postal": "AD600"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 43,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 6,
+    "poblacio": "Fontaneda",
+    "codi_postal": "AD600"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 44,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 6,
+    "poblacio": "Juberri",
+    "codi_postal": "AD600"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 45,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 6,
+    "poblacio": "Llumeneres",
+    "codi_postal": "AD600"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 46,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 6,
+    "poblacio": "Nagol",
+    "codi_postal": "AD600"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 47,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 6,
+    "poblacio": "Sant Julià-vila",
+    "codi_postal": "AD600"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 48,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 7,
+    "poblacio": "Engolasters",
+    "codi_postal": "AD700"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 49,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 7,
+    "poblacio": "Engordany",
+    "codi_postal": "AD700"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 50,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 7,
+    "poblacio": "Entremesaigües",
+    "codi_postal": "AD700"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 51,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 7,
+    "poblacio": "Les Escaldes",
+    "codi_postal": "AD700"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 52,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 7,
+    "poblacio": "Ràmio",
+    "codi_postal": "AD700"
+  }
+},
+{
+  "model": "maestros.poblacio",
+  "pk": 53,
+  "fields": {
+    "data_creacio": "2024-11-18T21:55:49Z",
+    "data_modificacio": "2024-11-18T21:55:49Z",
+    "parroquia": 7,
+    "poblacio": "Els Vilars",
+    "codi_postal": "AD700"
+  }
+}
+]

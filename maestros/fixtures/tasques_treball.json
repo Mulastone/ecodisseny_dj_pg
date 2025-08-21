@@ -1,0 +1,695 @@
+[
+{
+  "model": "maestros.tasquestreball",
+  "pk": 1,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 1,
+    "treball": 1,
+    "observacions": "Desplaçament"
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 2,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 2,
+    "treball": 1,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 3,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 3,
+    "treball": 1,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 4,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 4,
+    "treball": 2,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 5,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 5,
+    "treball": 2,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 6,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 6,
+    "treball": 2,
+    "observacions": "Extern"
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 7,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 7,
+    "treball": 2,
+    "observacions": "Extern"
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 8,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 3,
+    "treball": 2,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 9,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 8,
+    "treball": 3,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 10,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 1,
+    "treball": 3,
+    "observacions": "Desplaçament"
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 11,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 2,
+    "treball": 3,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 12,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 9,
+    "treball": 3,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 13,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 3,
+    "treball": 3,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 14,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 8,
+    "treball": 4,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 15,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 1,
+    "treball": 4,
+    "observacions": "Desplaçament"
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 16,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 2,
+    "treball": 4,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 17,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 9,
+    "treball": 4,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 18,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 10,
+    "treball": 4,
+    "observacions": "Extern / Interno"
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 19,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 11,
+    "treball": 4,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 20,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 3,
+    "treball": 4,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 21,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 8,
+    "treball": 5,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 22,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 1,
+    "treball": 5,
+    "observacions": "Desplaçament"
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 23,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 2,
+    "treball": 5,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 24,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 9,
+    "treball": 5,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 25,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 10,
+    "treball": 5,
+    "observacions": "Extern / Interno"
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 26,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 12,
+    "treball": 5,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 27,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 3,
+    "treball": 5,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 28,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 8,
+    "treball": 6,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 29,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 1,
+    "treball": 6,
+    "observacions": "Desplaçament"
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 30,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 2,
+    "treball": 6,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 31,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 13,
+    "treball": 6,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 32,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 9,
+    "treball": 6,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 33,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 10,
+    "treball": 6,
+    "observacions": "Extern / Interno"
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 34,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 12,
+    "treball": 6,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 35,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 6,
+    "treball": 6,
+    "observacions": "Extern"
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 36,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 7,
+    "treball": 6,
+    "observacions": "Extern"
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 37,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 3,
+    "treball": 6,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 38,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 8,
+    "treball": 7,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 39,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 1,
+    "treball": 7,
+    "observacions": "Desplaçament"
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 40,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 2,
+    "treball": 7,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 41,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 9,
+    "treball": 7,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 42,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 14,
+    "treball": 7,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 43,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 13,
+    "treball": 7,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 44,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 10,
+    "treball": 7,
+    "observacions": "Extern / Interno"
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 45,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 5,
+    "treball": 7,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 46,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 15,
+    "treball": 7,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 47,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 6,
+    "treball": 7,
+    "observacions": "Extern"
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 48,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 7,
+    "treball": 7,
+    "observacions": "Extern"
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 49,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 3,
+    "treball": 7,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 50,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 16,
+    "treball": 8,
+    "observacions": "Desplaçament"
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 51,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 17,
+    "treball": 8,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 52,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 18,
+    "treball": 8,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 53,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 19,
+    "treball": 8,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 54,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 3,
+    "treball": 8,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 55,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 20,
+    "treball": 9,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 56,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 17,
+    "treball": 9,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 57,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 4,
+    "treball": 9,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 58,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 16,
+    "treball": 9,
+    "observacions": "Desplaçament"
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 59,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 3,
+    "treball": 9,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 60,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 21,
+    "treball": 4,
+    "observacions": "Extern / Interno"
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 61,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 22,
+    "treball": 8,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 62,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 23,
+    "treball": 8,
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasquestreball",
+  "pk": 63,
+  "fields": {
+    "data_creacio": "2025-02-19T20:53:43Z",
+    "data_modificacio": "2025-02-19T20:53:43Z",
+    "tasca": 24,
+    "treball": 8,
+    "observacions": "Desplaçament"
+  }
+}
+]

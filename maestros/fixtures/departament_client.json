@@ -1,0 +1,47 @@
+[
+{
+  "model": "maestros.departamentclient",
+  "pk": 1,
+  "fields": {
+    "data_creacio": "2024-12-22T15:42:19Z",
+    "data_modificacio": "2024-12-22T15:42:19Z",
+    "nom": "Unic"
+  }
+},
+{
+  "model": "maestros.departamentclient",
+  "pk": 2,
+  "fields": {
+    "data_creacio": "2024-12-22T15:42:28Z",
+    "data_modificacio": "2024-12-22T15:42:28Z",
+    "nom": "Restauració"
+  }
+},
+{
+  "model": "maestros.departamentclient",
+  "pk": 3,
+  "fields": {
+    "data_creacio": "2024-12-22T15:42:40Z",
+    "data_modificacio": "2024-12-22T15:42:40Z",
+    "nom": "Direcció"
+  }
+},
+{
+  "model": "maestros.departamentclient",
+  "pk": 4,
+  "fields": {
+    "data_creacio": "2024-12-22T15:42:47Z",
+    "data_modificacio": "2024-12-22T15:42:47Z",
+    "nom": "Manteniment"
+  }
+},
+{
+  "model": "maestros.departamentclient",
+  "pk": 5,
+  "fields": {
+    "data_creacio": "2024-12-22T15:42:57Z",
+    "data_modificacio": "2024-12-22T15:43:13Z",
+    "nom": "Activitats"
+  }
+}
+]

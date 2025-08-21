@@ -1,0 +1,2628 @@
+[
+{
+  "model": "maestros.desplacament",
+  "pk": 1,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 1,
+    "tasca": 1,
+    "increment_hores": "1.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 2,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 1,
+    "tasca": 2,
+    "increment_hores": "1.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 3,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 1,
+    "tasca": 16,
+    "increment_hores": "1.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 4,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 1,
+    "tasca": 1,
+    "increment_hores": "0.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 5,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 1,
+    "tasca": 2,
+    "increment_hores": "0.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 6,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 1,
+    "tasca": 16,
+    "increment_hores": "0.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 7,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 1,
+    "tasca": 1,
+    "increment_hores": "1.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 8,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 1,
+    "tasca": 2,
+    "increment_hores": "1.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 9,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 1,
+    "tasca": 16,
+    "increment_hores": "1.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 10,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 1,
+    "tasca": 1,
+    "increment_hores": "0.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 11,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 1,
+    "tasca": 2,
+    "increment_hores": "0.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 12,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 1,
+    "tasca": 16,
+    "increment_hores": "0.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 13,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 5,
+    "ubicacio": 1,
+    "tasca": 1,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 14,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 5,
+    "ubicacio": 1,
+    "tasca": 2,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 15,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 5,
+    "ubicacio": 1,
+    "tasca": 16,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 16,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 1,
+    "tasca": 1,
+    "increment_hores": "0.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 17,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 1,
+    "tasca": 2,
+    "increment_hores": "0.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 18,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 1,
+    "tasca": 16,
+    "increment_hores": "0.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 19,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 7,
+    "ubicacio": 1,
+    "tasca": 1,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 20,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 7,
+    "ubicacio": 1,
+    "tasca": 2,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 21,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 7,
+    "ubicacio": 1,
+    "tasca": 16,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 22,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 2,
+    "tasca": 1,
+    "increment_hores": "1.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 23,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 2,
+    "tasca": 2,
+    "increment_hores": "1.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 24,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 2,
+    "tasca": 16,
+    "increment_hores": "1.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 25,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 2,
+    "tasca": 1,
+    "increment_hores": "1.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 26,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 2,
+    "tasca": 2,
+    "increment_hores": "1.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 27,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 2,
+    "tasca": 16,
+    "increment_hores": "1.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 28,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 2,
+    "tasca": 1,
+    "increment_hores": "1.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 29,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 2,
+    "tasca": 2,
+    "increment_hores": "1.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 30,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 2,
+    "tasca": 16,
+    "increment_hores": "1.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 31,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 2,
+    "tasca": 1,
+    "increment_hores": "1.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 32,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 2,
+    "tasca": 2,
+    "increment_hores": "1.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 33,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 2,
+    "tasca": 16,
+    "increment_hores": "1.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 34,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 5,
+    "ubicacio": 2,
+    "tasca": 1,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 35,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 5,
+    "ubicacio": 2,
+    "tasca": 2,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 36,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 5,
+    "ubicacio": 2,
+    "tasca": 16,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 37,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 2,
+    "tasca": 1,
+    "increment_hores": "1.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 38,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 2,
+    "tasca": 2,
+    "increment_hores": "1.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 39,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 2,
+    "tasca": 16,
+    "increment_hores": "1.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 40,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 7,
+    "ubicacio": 2,
+    "tasca": 1,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 41,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 7,
+    "ubicacio": 2,
+    "tasca": 2,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 42,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 7,
+    "ubicacio": 2,
+    "tasca": 16,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 43,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 3,
+    "tasca": 1,
+    "increment_hores": "2.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 44,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 3,
+    "tasca": 2,
+    "increment_hores": "2.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 45,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 3,
+    "tasca": 16,
+    "increment_hores": "2.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 46,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 3,
+    "tasca": 1,
+    "increment_hores": "1.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 47,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 3,
+    "tasca": 2,
+    "increment_hores": "1.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 48,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 3,
+    "tasca": 16,
+    "increment_hores": "1.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 49,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 3,
+    "tasca": 1,
+    "increment_hores": "2.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 50,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 3,
+    "tasca": 2,
+    "increment_hores": "2.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 51,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 3,
+    "tasca": 16,
+    "increment_hores": "2.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 52,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 3,
+    "tasca": 1,
+    "increment_hores": "2.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 53,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 3,
+    "tasca": 2,
+    "increment_hores": "2.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 54,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 3,
+    "tasca": 16,
+    "increment_hores": "2.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 55,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 5,
+    "ubicacio": 3,
+    "tasca": 1,
+    "increment_hores": "0.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 56,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 5,
+    "ubicacio": 3,
+    "tasca": 2,
+    "increment_hores": "0.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 57,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 5,
+    "ubicacio": 3,
+    "tasca": 16,
+    "increment_hores": "0.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 58,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 3,
+    "tasca": 1,
+    "increment_hores": "1.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 59,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 3,
+    "tasca": 2,
+    "increment_hores": "1.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 60,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 3,
+    "tasca": 16,
+    "increment_hores": "1.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 61,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 7,
+    "ubicacio": 3,
+    "tasca": 1,
+    "increment_hores": "0.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 62,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 7,
+    "ubicacio": 3,
+    "tasca": 2,
+    "increment_hores": "0.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 63,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 7,
+    "ubicacio": 3,
+    "tasca": 16,
+    "increment_hores": "0.50",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 64,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 1,
+    "tasca": 2,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 65,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 1,
+    "tasca": 3,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 66,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 1,
+    "tasca": 1,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 67,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 1,
+    "tasca": 11,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 68,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 1,
+    "tasca": 17,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 69,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 1,
+    "tasca": 18,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 70,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 1,
+    "tasca": 20,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 71,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 1,
+    "tasca": 2,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 72,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 1,
+    "tasca": 3,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 73,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 1,
+    "tasca": 1,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 74,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 1,
+    "tasca": 11,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 75,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 1,
+    "tasca": 17,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 76,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 1,
+    "tasca": 18,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 77,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 1,
+    "tasca": 20,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 78,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 1,
+    "tasca": 2,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 79,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 1,
+    "tasca": 3,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 80,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 1,
+    "tasca": 1,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 81,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 1,
+    "tasca": 11,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 82,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 1,
+    "tasca": 17,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 83,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 1,
+    "tasca": 18,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 84,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 1,
+    "tasca": 20,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 85,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 1,
+    "tasca": 2,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 86,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 1,
+    "tasca": 3,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 87,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 1,
+    "tasca": 1,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 88,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 1,
+    "tasca": 11,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 89,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 1,
+    "tasca": 17,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 90,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 1,
+    "tasca": 18,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 91,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 1,
+    "tasca": 20,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 92,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 5,
+    "ubicacio": 1,
+    "tasca": 3,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 93,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 5,
+    "ubicacio": 1,
+    "tasca": 11,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 94,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 5,
+    "ubicacio": 1,
+    "tasca": 17,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 95,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 5,
+    "ubicacio": 1,
+    "tasca": 18,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 96,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 5,
+    "ubicacio": 1,
+    "tasca": 20,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 97,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 1,
+    "tasca": 2,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 98,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 1,
+    "tasca": 3,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 99,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 1,
+    "tasca": 1,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 100,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 1,
+    "tasca": 11,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 101,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 1,
+    "tasca": 17,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 102,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 1,
+    "tasca": 18,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 103,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 1,
+    "tasca": 20,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 104,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 7,
+    "ubicacio": 1,
+    "tasca": 3,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 105,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 7,
+    "ubicacio": 1,
+    "tasca": 11,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 106,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 7,
+    "ubicacio": 1,
+    "tasca": 17,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 107,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 7,
+    "ubicacio": 1,
+    "tasca": 18,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 108,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 7,
+    "ubicacio": 1,
+    "tasca": 20,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 109,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 2,
+    "tasca": 2,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 110,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 2,
+    "tasca": 3,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 111,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 2,
+    "tasca": 1,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 112,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 2,
+    "tasca": 11,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 113,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 2,
+    "tasca": 17,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 114,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 2,
+    "tasca": 18,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 115,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 2,
+    "tasca": 20,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 116,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 2,
+    "tasca": 2,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 117,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 2,
+    "tasca": 3,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 118,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 2,
+    "tasca": 1,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 119,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 2,
+    "tasca": 11,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 120,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 2,
+    "tasca": 17,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 121,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 2,
+    "tasca": 18,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 122,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 2,
+    "tasca": 20,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 123,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 2,
+    "tasca": 2,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 124,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 2,
+    "tasca": 3,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 125,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 2,
+    "tasca": 1,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 126,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 2,
+    "tasca": 11,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 127,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 2,
+    "tasca": 17,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 128,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 2,
+    "tasca": 18,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 129,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 2,
+    "tasca": 20,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 130,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 2,
+    "tasca": 2,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 131,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 2,
+    "tasca": 3,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 132,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 2,
+    "tasca": 1,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 133,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 2,
+    "tasca": 11,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 134,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 2,
+    "tasca": 17,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 135,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 2,
+    "tasca": 18,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 136,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 2,
+    "tasca": 20,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 137,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 5,
+    "ubicacio": 2,
+    "tasca": 3,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 138,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 5,
+    "ubicacio": 2,
+    "tasca": 11,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 139,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 5,
+    "ubicacio": 2,
+    "tasca": 17,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 140,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 5,
+    "ubicacio": 2,
+    "tasca": 18,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 141,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 5,
+    "ubicacio": 2,
+    "tasca": 20,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 142,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 2,
+    "tasca": 2,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 143,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 2,
+    "tasca": 3,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 144,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 2,
+    "tasca": 1,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 145,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 2,
+    "tasca": 11,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 146,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 2,
+    "tasca": 17,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 147,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 2,
+    "tasca": 18,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 148,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 2,
+    "tasca": 20,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 149,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 7,
+    "ubicacio": 2,
+    "tasca": 3,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 150,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 7,
+    "ubicacio": 2,
+    "tasca": 11,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 151,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 7,
+    "ubicacio": 2,
+    "tasca": 17,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 152,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 7,
+    "ubicacio": 2,
+    "tasca": 18,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 153,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 7,
+    "ubicacio": 2,
+    "tasca": 20,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 154,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 3,
+    "tasca": 2,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 155,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 3,
+    "tasca": 3,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 156,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 3,
+    "tasca": 1,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 157,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 3,
+    "tasca": 11,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 158,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 3,
+    "tasca": 17,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 159,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 3,
+    "tasca": 18,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 160,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 1,
+    "ubicacio": 3,
+    "tasca": 20,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 161,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 3,
+    "tasca": 2,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 162,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 3,
+    "tasca": 3,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 163,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 3,
+    "tasca": 1,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 164,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 3,
+    "tasca": 11,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 165,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 3,
+    "tasca": 17,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 166,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 3,
+    "tasca": 18,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 167,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 2,
+    "ubicacio": 3,
+    "tasca": 20,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 168,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 3,
+    "tasca": 2,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 169,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 3,
+    "tasca": 3,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 170,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 3,
+    "tasca": 1,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 171,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 3,
+    "tasca": 11,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 172,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 3,
+    "tasca": 17,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 173,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 3,
+    "tasca": 18,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 174,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 3,
+    "ubicacio": 3,
+    "tasca": 20,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 175,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 3,
+    "tasca": 2,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 176,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 3,
+    "tasca": 3,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 177,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 3,
+    "tasca": 1,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 178,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 3,
+    "tasca": 11,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 179,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 3,
+    "tasca": 17,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 180,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 3,
+    "tasca": 18,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 181,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 4,
+    "ubicacio": 3,
+    "tasca": 20,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 182,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 5,
+    "ubicacio": 3,
+    "tasca": 2,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 183,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 5,
+    "ubicacio": 3,
+    "tasca": 3,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 184,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 5,
+    "ubicacio": 3,
+    "tasca": 1,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 185,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 5,
+    "ubicacio": 3,
+    "tasca": 11,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 186,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 5,
+    "ubicacio": 3,
+    "tasca": 17,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 187,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 5,
+    "ubicacio": 3,
+    "tasca": 18,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 188,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 5,
+    "ubicacio": 3,
+    "tasca": 20,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 189,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 3,
+    "tasca": 2,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 190,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 3,
+    "tasca": 3,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 191,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 3,
+    "tasca": 1,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 192,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 3,
+    "tasca": 11,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 193,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 3,
+    "tasca": 17,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 194,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 3,
+    "tasca": 18,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 195,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 6,
+    "ubicacio": 3,
+    "tasca": 20,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 196,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 7,
+    "ubicacio": 3,
+    "tasca": 2,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 197,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 7,
+    "ubicacio": 3,
+    "tasca": 3,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 198,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 7,
+    "ubicacio": 3,
+    "tasca": 1,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 199,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 7,
+    "ubicacio": 3,
+    "tasca": 11,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 200,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 7,
+    "ubicacio": 3,
+    "tasca": 17,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 201,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 7,
+    "ubicacio": 3,
+    "tasca": 18,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.desplacament",
+  "pk": 202,
+  "fields": {
+    "data_creacio": "2025-02-22T13:12:15Z",
+    "data_modificacio": "2025-02-22T13:12:15Z",
+    "parroquia": 7,
+    "ubicacio": 3,
+    "tasca": 20,
+    "increment_hores": "0.00",
+    "observacions": null
+  }
+}
+]

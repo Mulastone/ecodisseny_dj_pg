@@ -1,0 +1,62 @@
+[
+{
+  "model": "maestros.recurso",
+  "pk": 2,
+  "fields": {
+    "data_creacio": "2024-11-30T17:35:33Z",
+    "data_modificacio": "2024-11-30T17:35:33Z",
+    "nom": "Gonzalo",
+    "tipus_recurso": 1,
+    "preu_tancat": 0,
+    "preu_hora": "42.60"
+  }
+},
+{
+  "model": "maestros.recurso",
+  "pk": 3,
+  "fields": {
+    "data_creacio": "2024-11-30T17:35:33Z",
+    "data_modificacio": "2024-11-30T17:35:33Z",
+    "nom": "Sarah",
+    "tipus_recurso": 1,
+    "preu_tancat": 0,
+    "preu_hora": "19.60"
+  }
+},
+{
+  "model": "maestros.recurso",
+  "pk": 4,
+  "fields": {
+    "data_creacio": "2024-11-30T17:35:33Z",
+    "data_modificacio": "2024-11-30T17:35:33Z",
+    "nom": "Pilar",
+    "tipus_recurso": 1,
+    "preu_tancat": 0,
+    "preu_hora": "7.50"
+  }
+},
+{
+  "model": "maestros.recurso",
+  "pk": 5,
+  "fields": {
+    "data_creacio": "2024-11-30T17:35:33Z",
+    "data_modificacio": "2024-12-15T11:04:09Z",
+    "nom": "Santiago",
+    "tipus_recurso": 2,
+    "preu_tancat": 1,
+    "preu_hora": "0.00"
+  }
+},
+{
+  "model": "maestros.recurso",
+  "pk": 6,
+  "fields": {
+    "data_creacio": "2024-11-30T17:35:33Z",
+    "data_modificacio": "2024-11-30T17:35:33Z",
+    "nom": "Roger",
+    "tipus_recurso": 2,
+    "preu_tancat": 1,
+    "preu_hora": "0.00"
+  }
+}
+]

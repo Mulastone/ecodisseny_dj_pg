@@ -1,0 +1,65 @@
+[
+{
+  "model": "maestros.parroquia",
+  "pk": 1,
+  "fields": {
+    "data_creacio": "2024-11-18T21:53:22Z",
+    "data_modificacio": "2024-11-18T21:53:22Z",
+    "parroquia": "Canillo"
+  }
+},
+{
+  "model": "maestros.parroquia",
+  "pk": 2,
+  "fields": {
+    "data_creacio": "2024-11-18T21:53:22Z",
+    "data_modificacio": "2024-11-18T21:53:22Z",
+    "parroquia": "Encamp"
+  }
+},
+{
+  "model": "maestros.parroquia",
+  "pk": 3,
+  "fields": {
+    "data_creacio": "2024-11-18T21:53:22Z",
+    "data_modificacio": "2024-11-18T21:53:22Z",
+    "parroquia": "Ordino"
+  }
+},
+{
+  "model": "maestros.parroquia",
+  "pk": 4,
+  "fields": {
+    "data_creacio": "2024-11-18T21:53:22Z",
+    "data_modificacio": "2024-11-18T21:53:22Z",
+    "parroquia": "La Massana"
+  }
+},
+{
+  "model": "maestros.parroquia",
+  "pk": 5,
+  "fields": {
+    "data_creacio": "2024-11-18T21:53:22Z",
+    "data_modificacio": "2024-11-18T21:53:22Z",
+    "parroquia": "Andorra la Vella"
+  }
+},
+{
+  "model": "maestros.parroquia",
+  "pk": 6,
+  "fields": {
+    "data_creacio": "2024-11-18T21:53:22Z",
+    "data_modificacio": "2024-11-18T21:53:22Z",
+    "parroquia": "Sant Julia de Loria"
+  }
+},
+{
+  "model": "maestros.parroquia",
+  "pk": 7,
+  "fields": {
+    "data_creacio": "2024-11-18T21:53:22Z",
+    "data_modificacio": "2024-11-18T21:53:22Z",
+    "parroquia": "Escaldes Engordany"
+  }
+}
+]

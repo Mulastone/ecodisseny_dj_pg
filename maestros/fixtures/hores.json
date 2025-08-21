@@ -1,0 +1,182 @@
+[
+{
+  "model": "maestros.hores",
+  "pk": 1,
+  "fields": {
+    "data_creacio": "2025-02-14T13:48:54Z",
+    "data_modificacio": "2025-02-14T13:48:54Z",
+    "hores": "0.50"
+  }
+},
+{
+  "model": "maestros.hores",
+  "pk": 2,
+  "fields": {
+    "data_creacio": "2025-02-14T13:48:54Z",
+    "data_modificacio": "2025-02-14T13:48:54Z",
+    "hores": "1.00"
+  }
+},
+{
+  "model": "maestros.hores",
+  "pk": 3,
+  "fields": {
+    "data_creacio": "2025-02-14T13:48:54Z",
+    "data_modificacio": "2025-02-14T13:48:54Z",
+    "hores": "1.50"
+  }
+},
+{
+  "model": "maestros.hores",
+  "pk": 4,
+  "fields": {
+    "data_creacio": "2025-02-14T13:48:54Z",
+    "data_modificacio": "2025-02-14T13:48:54Z",
+    "hores": "2.00"
+  }
+},
+{
+  "model": "maestros.hores",
+  "pk": 5,
+  "fields": {
+    "data_creacio": "2025-02-14T13:48:54Z",
+    "data_modificacio": "2025-02-14T13:48:54Z",
+    "hores": "2.50"
+  }
+},
+{
+  "model": "maestros.hores",
+  "pk": 6,
+  "fields": {
+    "data_creacio": "2025-02-14T13:48:54Z",
+    "data_modificacio": "2025-02-14T13:48:54Z",
+    "hores": "3.00"
+  }
+},
+{
+  "model": "maestros.hores",
+  "pk": 7,
+  "fields": {
+    "data_creacio": "2025-02-14T13:48:54Z",
+    "data_modificacio": "2025-02-14T13:48:54Z",
+    "hores": "3.50"
+  }
+},
+{
+  "model": "maestros.hores",
+  "pk": 8,
+  "fields": {
+    "data_creacio": "2025-02-14T13:48:54Z",
+    "data_modificacio": "2025-02-14T13:48:54Z",
+    "hores": "4.00"
+  }
+},
+{
+  "model": "maestros.hores",
+  "pk": 9,
+  "fields": {
+    "data_creacio": "2025-02-14T13:48:54Z",
+    "data_modificacio": "2025-02-14T13:48:54Z",
+    "hores": "4.50"
+  }
+},
+{
+  "model": "maestros.hores",
+  "pk": 10,
+  "fields": {
+    "data_creacio": "2025-02-14T13:48:54Z",
+    "data_modificacio": "2025-02-14T13:48:54Z",
+    "hores": "5.00"
+  }
+},
+{
+  "model": "maestros.hores",
+  "pk": 11,
+  "fields": {
+    "data_creacio": "2025-02-14T13:48:54Z",
+    "data_modificacio": "2025-02-14T13:48:54Z",
+    "hores": "5.50"
+  }
+},
+{
+  "model": "maestros.hores",
+  "pk": 12,
+  "fields": {
+    "data_creacio": "2025-02-14T13:48:54Z",
+    "data_modificacio": "2025-02-14T13:48:54Z",
+    "hores": "6.00"
+  }
+},
+{
+  "model": "maestros.hores",
+  "pk": 13,
+  "fields": {
+    "data_creacio": "2025-02-14T13:48:54Z",
+    "data_modificacio": "2025-02-14T13:48:54Z",
+    "hores": "6.50"
+  }
+},
+{
+  "model": "maestros.hores",
+  "pk": 14,
+  "fields": {
+    "data_creacio": "2025-02-14T13:48:54Z",
+    "data_modificacio": "2025-02-14T13:48:54Z",
+    "hores": "7.00"
+  }
+},
+{
+  "model": "maestros.hores",
+  "pk": 15,
+  "fields": {
+    "data_creacio": "2025-02-14T13:48:54Z",
+    "data_modificacio": "2025-02-14T13:48:54Z",
+    "hores": "7.50"
+  }
+},
+{
+  "model": "maestros.hores",
+  "pk": 16,
+  "fields": {
+    "data_creacio": "2025-02-14T13:48:54Z",
+    "data_modificacio": "2025-02-14T13:48:54Z",
+    "hores": "8.00"
+  }
+},
+{
+  "model": "maestros.hores",
+  "pk": 17,
+  "fields": {
+    "data_creacio": "2025-02-14T13:48:54Z",
+    "data_modificacio": "2025-02-14T13:48:54Z",
+    "hores": "8.50"
+  }
+},
+{
+  "model": "maestros.hores",
+  "pk": 18,
+  "fields": {
+    "data_creacio": "2025-02-14T13:48:54Z",
+    "data_modificacio": "2025-02-14T13:48:54Z",
+    "hores": "9.00"
+  }
+},
+{
+  "model": "maestros.hores",
+  "pk": 19,
+  "fields": {
+    "data_creacio": "2025-02-14T13:48:54Z",
+    "data_modificacio": "2025-02-14T13:48:54Z",
+    "hores": "9.50"
+  }
+},
+{
+  "model": "maestros.hores",
+  "pk": 20,
+  "fields": {
+    "data_creacio": "2025-02-14T13:48:54Z",
+    "data_modificacio": "2025-02-14T13:48:54Z",
+    "hores": "10.00"
+  }
+}
+]

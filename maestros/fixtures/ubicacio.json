@@ -1,0 +1,29 @@
+[
+{
+  "model": "maestros.ubicacio",
+  "pk": 1,
+  "fields": {
+    "data_creacio": "2025-02-14T11:07:41Z",
+    "data_modificacio": "2025-02-14T11:07:41Z",
+    "ubicacio": "Nucli Urbà"
+  }
+},
+{
+  "model": "maestros.ubicacio",
+  "pk": 2,
+  "fields": {
+    "data_creacio": "2025-02-14T11:07:56Z",
+    "data_modificacio": "2025-02-14T11:07:56Z",
+    "ubicacio": "Pobles"
+  }
+},
+{
+  "model": "maestros.ubicacio",
+  "pk": 3,
+  "fields": {
+    "data_creacio": "2025-02-14T11:08:07Z",
+    "data_modificacio": "2025-02-14T11:08:07Z",
+    "ubicacio": "Muntanya"
+  }
+}
+]

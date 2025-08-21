@@ -1,0 +1,242 @@
+[
+{
+  "model": "maestros.tasca",
+  "pk": 1,
+  "fields": {
+    "data_creacio": "2025-02-19T20:40:38Z",
+    "data_modificacio": "2025-02-19T20:40:38Z",
+    "tasca": "Aixecament Edifici",
+    "observacions": "Desplaçament"
+  }
+},
+{
+  "model": "maestros.tasca",
+  "pk": 2,
+  "fields": {
+    "data_creacio": "2025-02-19T20:40:38Z",
+    "data_modificacio": "2025-02-19T20:40:38Z",
+    "tasca": "Dibuix Plànols",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasca",
+  "pk": 3,
+  "fields": {
+    "data_creacio": "2025-02-19T20:40:38Z",
+    "data_modificacio": "2025-02-19T20:40:38Z",
+    "tasca": "Revisió",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasca",
+  "pk": 4,
+  "fields": {
+    "data_creacio": "2025-02-19T20:40:38Z",
+    "data_modificacio": "2025-02-19T20:40:38Z",
+    "tasca": "Informe",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasca",
+  "pk": 5,
+  "fields": {
+    "data_creacio": "2025-02-19T20:40:38Z",
+    "data_modificacio": "2025-02-19T20:40:38Z",
+    "tasca": "Amidament",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasca",
+  "pk": 6,
+  "fields": {
+    "data_creacio": "2025-02-19T20:40:38Z",
+    "data_modificacio": "2025-02-19T20:40:38Z",
+    "tasca": "Projecte Estructura",
+    "observacions": "Extern"
+  }
+},
+{
+  "model": "maestros.tasca",
+  "pk": 7,
+  "fields": {
+    "data_creacio": "2025-02-19T20:40:38Z",
+    "data_modificacio": "2025-02-19T20:40:38Z",
+    "tasca": "Projecte Instal·lacions",
+    "observacions": "Extern"
+  }
+},
+{
+  "model": "maestros.tasca",
+  "pk": 8,
+  "fields": {
+    "data_creacio": "2025-02-19T20:40:38Z",
+    "data_modificacio": "2025-02-19T20:40:38Z",
+    "tasca": "Reunions Client",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasca",
+  "pk": 9,
+  "fields": {
+    "data_creacio": "2025-02-19T20:40:38Z",
+    "data_modificacio": "2025-02-19T20:40:38Z",
+    "tasca": "Disseny",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasca",
+  "pk": 10,
+  "fields": {
+    "data_creacio": "2025-02-19T20:40:38Z",
+    "data_modificacio": "2025-02-19T20:40:38Z",
+    "tasca": "Renders",
+    "observacions": "Extern / Interno"
+  }
+},
+{
+  "model": "maestros.tasca",
+  "pk": 11,
+  "fields": {
+    "data_creacio": "2025-02-19T20:40:38Z",
+    "data_modificacio": "2025-02-19T20:40:38Z",
+    "tasca": "Valoració Econòmica",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasca",
+  "pk": 12,
+  "fields": {
+    "data_creacio": "2025-02-19T20:40:38Z",
+    "data_modificacio": "2025-02-19T20:40:38Z",
+    "tasca": "Estimació de cost",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasca",
+  "pk": 13,
+  "fields": {
+    "data_creacio": "2025-02-19T20:40:38Z",
+    "data_modificacio": "2025-02-19T20:40:38Z",
+    "tasca": "Document Legalització",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasca",
+  "pk": 14,
+  "fields": {
+    "data_creacio": "2025-02-19T20:40:38Z",
+    "data_modificacio": "2025-02-19T20:40:38Z",
+    "tasca": "Projecte Executiu",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasca",
+  "pk": 15,
+  "fields": {
+    "data_creacio": "2025-02-19T20:40:38Z",
+    "data_modificacio": "2025-02-19T20:40:38Z",
+    "tasca": "Comparativa empreses",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasca",
+  "pk": 16,
+  "fields": {
+    "data_creacio": "2025-02-19T20:40:38Z",
+    "data_modificacio": "2025-02-19T20:40:38Z",
+    "tasca": "Visites d'obra",
+    "observacions": "Desplaçament"
+  }
+},
+{
+  "model": "maestros.tasca",
+  "pk": 17,
+  "fields": {
+    "data_creacio": "2025-02-19T20:40:38Z",
+    "data_modificacio": "2025-02-19T20:40:38Z",
+    "tasca": "Actes",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasca",
+  "pk": 18,
+  "fields": {
+    "data_creacio": "2025-02-19T20:40:38Z",
+    "data_modificacio": "2025-02-19T20:40:38Z",
+    "tasca": "Actualitzacions plànols",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasca",
+  "pk": 19,
+  "fields": {
+    "data_creacio": "2025-02-19T20:40:38Z",
+    "data_modificacio": "2025-02-19T20:40:38Z",
+    "tasca": "Legalitzacions final d'obra",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasca",
+  "pk": 20,
+  "fields": {
+    "data_creacio": "2025-02-19T20:40:38Z",
+    "data_modificacio": "2025-02-19T20:40:38Z",
+    "tasca": "Reunions / Coordinació",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasca",
+  "pk": 21,
+  "fields": {
+    "data_creacio": "2025-02-19T20:40:38Z",
+    "data_modificacio": "2025-02-19T20:40:38Z",
+    "tasca": "Implementació de marca",
+    "observacions": "Extern / Interno"
+  }
+},
+{
+  "model": "maestros.tasca",
+  "pk": 22,
+  "fields": {
+    "data_creacio": "2025-02-19T20:40:38Z",
+    "data_modificacio": "2025-02-19T20:40:38Z",
+    "tasca": "DF Estructura",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasca",
+  "pk": 23,
+  "fields": {
+    "data_creacio": "2025-02-19T20:40:38Z",
+    "data_modificacio": "2025-02-19T20:40:38Z",
+    "tasca": "DF Instal·lacions",
+    "observacions": null
+  }
+},
+{
+  "model": "maestros.tasca",
+  "pk": 24,
+  "fields": {
+    "data_creacio": "2025-02-19T20:40:38Z",
+    "data_modificacio": "2025-02-19T20:40:38Z",
+    "tasca": "Certificacio",
+    "observacions": "Desplaçament"
+  }
+}
+]

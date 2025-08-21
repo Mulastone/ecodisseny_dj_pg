@@ -1,0 +1,29 @@
+[
+{
+  "model": "maestros.tipusrecurso",
+  "pk": 1,
+  "fields": {
+    "data_creacio": "2024-11-30T11:39:11Z",
+    "data_modificacio": "2024-11-30T11:39:11Z",
+    "tipus": "Intern"
+  }
+},
+{
+  "model": "maestros.tipusrecurso",
+  "pk": 2,
+  "fields": {
+    "data_creacio": "2024-11-30T11:39:11Z",
+    "data_modificacio": "2024-11-30T11:39:11Z",
+    "tipus": "Colaborador"
+  }
+},
+{
+  "model": "maestros.tipusrecurso",
+  "pk": 3,
+  "fields": {
+    "data_creacio": "2024-11-30T11:39:11Z",
+    "data_modificacio": "2024-11-30T11:39:11Z",
+    "tipus": "Extern"
+  }
+}
+]

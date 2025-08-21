@@ -1,0 +1,83 @@
+[
+{
+  "model": "maestros.treball",
+  "pk": 1,
+  "fields": {
+    "data_creacio": "2024-12-22T17:37:19Z",
+    "data_modificacio": "2024-12-22T17:37:19Z",
+    "descripcio": "Aixecament Edifici"
+  }
+},
+{
+  "model": "maestros.treball",
+  "pk": 2,
+  "fields": {
+    "data_creacio": "2024-12-22T17:37:55Z",
+    "data_modificacio": "2024-12-22T17:37:55Z",
+    "descripcio": "Informe"
+  }
+},
+{
+  "model": "maestros.treball",
+  "pk": 3,
+  "fields": {
+    "data_creacio": "2024-12-22T17:38:14Z",
+    "data_modificacio": "2024-12-22T17:38:14Z",
+    "descripcio": "Proposta Disseny"
+  }
+},
+{
+  "model": "maestros.treball",
+  "pk": 4,
+  "fields": {
+    "data_creacio": "2024-12-22T17:38:23Z",
+    "data_modificacio": "2024-12-22T17:38:23Z",
+    "descripcio": "Decoració"
+  }
+},
+{
+  "model": "maestros.treball",
+  "pk": 5,
+  "fields": {
+    "data_creacio": "2024-12-22T17:38:36Z",
+    "data_modificacio": "2024-12-22T17:38:36Z",
+    "descripcio": "Avantprojecte"
+  }
+},
+{
+  "model": "maestros.treball",
+  "pk": 6,
+  "fields": {
+    "data_creacio": "2024-12-22T17:38:55Z",
+    "data_modificacio": "2024-12-22T17:38:55Z",
+    "descripcio": "Projecte Basic"
+  }
+},
+{
+  "model": "maestros.treball",
+  "pk": 7,
+  "fields": {
+    "data_creacio": "2024-12-22T17:39:08Z",
+    "data_modificacio": "2024-12-22T17:39:08Z",
+    "descripcio": "Projecte Executiu"
+  }
+},
+{
+  "model": "maestros.treball",
+  "pk": 8,
+  "fields": {
+    "data_creacio": "2024-12-22T17:39:28Z",
+    "data_modificacio": "2024-12-22T17:39:28Z",
+    "descripcio": "Direcció d'Obra"
+  }
+},
+{
+  "model": "maestros.treball",
+  "pk": 9,
+  "fields": {
+    "data_creacio": "2024-12-22T17:39:37Z",
+    "data_modificacio": "2024-12-22T17:39:37Z",
+    "descripcio": "Projecte Manager"
+  }
+}
+]
