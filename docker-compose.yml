@@ -37,7 +37,6 @@ services:
       - DB_PASSWORD=ecodisseny_password123
       - DB_PORT=5432
       - STATIC_ROOT=/app/static
-      - STATIC_ROOT=/app/static
     depends_on:
       db:
         condition: service_healthy
