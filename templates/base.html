@@ -49,6 +49,7 @@
         border-radius: 8px;
         border: 1px solid #ddd;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
       }
       
       .dropdown-item {
@@ -79,6 +80,38 @@
         background-color: rgba(255, 255, 255, 0.1);
         border-color: white;
       }
+      @media (max-width: 576px) {
+        .navbar .dropdown-menu,
+        .navbar .dropdown-menu.dropdown-menu-end,
+        .navbar .dropdown-menu.show {
+          background-color: #343a40 !important;
+          color: #fff !important;
+          border: 1px solid #222 !important;
+        }
+        .navbar .dropdown-menu .dropdown-item,
+        .navbar .dropdown-menu .dropdown-header {
+          color: #fff !important;
+        }
+        .navbar .dropdown-menu .dropdown-item:hover {
+          background-color: #495057 !important;
+          color: #fff !important;
+        }
+        .navbar .dropdown-menu .dropdown-item.text-danger:hover {
+          background-color: #dc3545 !important;
+          color: #fff !important;
+        }
+        .navbar .dropdown-menu .dropdown-divider {
+          border-top: 1px solid #555 !important;
+        }
+        footer {
+          font-size: 1rem;
+          padding: 12px 0 8px 0;
+          max-height: none;
+        }
+        footer .container {
+          padding: 0 8px !important;
+        }
+      }
     </style>
 
     {% block extra_head %}{% endblock %}
@@ -87,97 +120,102 @@
     {% with request.path as path %}
       {% if path != '/accounts/login/' and '/accounts/password' not in path and '/accounts/reset' not in path %}
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          <div class="d-flex align-items-center">
-            <img src="{% static 'logo_ecodisseny_negatiu.png' %}" alt="Logo" class="logo" />
-            <ul class="navbar-nav ml-3">
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'home' %}">Inici</a>
-              </li>
-              {% if request.user.is_authenticated %}
+          <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+              <img src="{% static 'logo_ecodisseny_negatiu.png' %}" alt="Logo" class="logo" />
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                  <a class="nav-link" href="{% url 'carregahores:nova' %}">Carregar Hores</a>
+                  <a class="nav-link" href="{% url 'home' %}">Inici</a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'carregahores:meves' %}">Les Meves Hores</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'documentacion:index' %}">Documentació</a>
-                </li>
-                {% if request.user.is_superuser %}
-                  <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Admin Hores
-                    </a>
-                    <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="{% url 'carregahores:admin_totes' %}">Totes les Càrregues</a></li>
-                      <li><a class="dropdown-item" href="{% url 'carregahores:admin_stats' %}">Estadístiques</a></li>
-                    </ul>
+                {% if request.user.is_authenticated %}
+                  <li class="nav-item">
+                    <a class="nav-link" href="{% url 'carregahores:nova' %}">Carregar Hores</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="{% url 'pressupostos:list' %}">Pressupostos</a>
+                    <a class="nav-link" href="{% url 'carregahores:meves' %}">Les Meves Hores</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
-                  </li>
-                {% endif %}
-              {% endif %}
-            </ul>
-          </div>
-          {% if request.user.is_authenticated %}
-            <div class="ms-auto">
-              <div class="dropdown">
-                <button class="btn btn-outline-light dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="bi bi-person-circle me-2"></i>
-                  <span class="d-none d-md-inline">{{ request.user.get_full_name|default:request.user.username }}</span>
-                  <span class="d-md-none">Compte</span>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end">
-                  <li>
-                    <h6 class="dropdown-header">
-                      <i class="bi bi-person-fill me-2"></i>{{ request.user.get_full_name|default:request.user.username }}
-                    </h6>
-                  </li>
-                  <li>
-                    <span class="dropdown-item-text small text-muted">
-                      {% if request.user.is_superuser %}
-                        <i class="bi bi-shield-check me-1"></i>Administrador
-                      {% else %}
-                        <i class="bi bi-person me-1"></i>Usuari
-                      {% endif %}
-                    </span>
-                  </li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li>
-                    <a class="dropdown-item" href="{% url 'profile' %}">
-                      <i class="bi bi-person-lines-fill me-2"></i>Veure Perfil
-                    </a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="{% url 'change_password' %}">
-                      <i class="bi bi-key me-2"></i>Canviar Contrasenya
-                    </a>
+                    <a class="nav-link" href="{% url 'documentacion:index' %}">Documentació</a>
                   </li>
                   {% if request.user.is_superuser %}
-                    <li><hr class="dropdown-divider"></li>
-                    <li>
-                      <a class="dropdown-item" href="{% url 'admin:index' %}">
-                        <i class="bi bi-gear me-2"></i>Administració
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Admin Hores
                       </a>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'carregahores:admin_totes' %}">Totes les Càrregues</a></li>
+                        <li><a class="dropdown-item" href="{% url 'carregahores:admin_stats' %}">Estadístiques</a></li>
+                      </ul>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'pressupostos:list' %}">Pressupostos</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
                     </li>
                   {% endif %}
-                  <li><hr class="dropdown-divider"></li>
-                  <li>
-                    <form method="post" action="{% url 'logout' %}" class="d-inline">
-                      {% csrf_token %}
-                      <button type="submit" class="dropdown-item text-danger">
-                        <i class="bi bi-box-arrow-right me-2"></i>Finalitzar Sessió
-                      </button>
-                    </form>
-                  </li>
-                </ul>
-              </div>
+                {% endif %}
+              </ul>
+              {% if request.user.is_authenticated %}
+                <div class="dropdown">
+                  <button class="btn btn-outline-light dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person-circle me-2"></i>
+                    <span class="d-none d-md-inline">{{ request.user.get_full_name|default:request.user.username }}</span>
+                    <span class="d-md-none">Compte</span>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <h6 class="dropdown-header">
+                        <i class="bi bi-person-fill me-2"></i>{{ request.user.get_full_name|default:request.user.username }}
+                      </h6>
+                    </li>
+                    <li>
+                      <span class="dropdown-item-text small text-muted">
+                        {% if request.user.is_superuser %}
+                          <i class="bi bi-shield-check me-1"></i>Administrador
+                        {% else %}
+                          <i class="bi bi-person me-1"></i>Usuari
+                        {% endif %}
+                      </span>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                      <a class="dropdown-item" href="{% url 'profile' %}">
+                        <i class="bi bi-person-lines-fill me-2"></i>Veure Perfil
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="{% url 'change_password' %}">
+                        <i class="bi bi-key me-2"></i>Canviar Contrasenya
+                      </a>
+                    </li>
+                    {% if request.user.is_superuser %}
+                      <li><hr class="dropdown-divider"></li>
+                      <li>
+                        <a class="dropdown-item" href="{% url 'admin:index' %}">
+                          <i class="bi bi-gear me-2"></i>Administració
+                        </a>
+                      </li>
+                    {% endif %}
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                      <form method="post" action="{% url 'logout' %}" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="dropdown-item text-danger">
+                          <i class="bi bi-box-arrow-right me-2"></i>Finalitzar Sessió
+                        </button>
+                      </form>
+                    </li>
+                  </ul>
+                </div>
+              {% endif %}
             </div>
-          {% endif %}
+          </div>
         </nav>
       {% endif %}
     {% endwith %}
@@ -244,6 +282,28 @@
             dateFormat: "d/m/Y",
             locale: "cat",
             allowInput: true
+          });
+
+          // Refuerzo JS para fondo del menú en móvil
+          function isMobile() {
+            return window.innerWidth <= 576;
+          }
+          document.querySelectorAll('.navbar .dropdown-toggle').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+              setTimeout(function() {
+                document.querySelectorAll('.navbar .dropdown-menu').forEach(function(menu) {
+                  if (isMobile()) {
+                    menu.classList.add('bg-dark');
+                    menu.style.backgroundColor = '#343a40';
+                    menu.style.color = '#fff';
+                  } else {
+                    menu.classList.remove('bg-dark');
+                    menu.style.backgroundColor = '';
+                    menu.style.color = '';
+                  }
+                });
+              }, 100);
+            });
           });
         });
       </script>
