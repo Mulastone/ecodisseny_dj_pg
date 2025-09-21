@@ -2,12 +2,57 @@
 {% block content %}
 
 <div class="container mt-4">
-  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
-    <h2 class="mb-0">Pressupostos</h2>
-    <a href="{% url 'pressupostos:create' %}" class="btn btn-dark text-white">
-      <i class="bi bi-plus-circle"></i> Nou pressupost
-    </a>
-  </div>
+  <h2 class="mb-3">Pressupostos</h2>
+
+  <form method="get" class="mb-4">
+    <div class="row g-3">
+      <div class="col-md-3">
+        <input type="text" 
+               name="q" 
+               class="form-control" 
+               placeholder="Nom, client o projecte..." 
+               value="{{ q|default:'' }}"
+               aria-label="Cercar pressupostos">
+      </div>
+      <div class="col-md-3">
+        <select name="tancat" class="form-select">
+          <option value="">Estat: Tots</option>
+          <option value="true" {% if tancat == 'true' %}selected{% endif %}>Tancats</option>
+          <option value="false" {% if tancat == 'false' %}selected{% endif %}>Oberts</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <input type="text" 
+               name="date_range" 
+               class="form-control" 
+               id="dateRange"
+               value="{{ data_inici|default:''|date:'d/m/Y' }}{% if data_inici and data_fi %} - {% endif %}{{ data_fi|default:''|date:'d/m/Y' }}"
+               placeholder="Rang de dates..."
+               aria-label="Seleccionar dates">
+        <input type="hidden" name="data_inici" id="dataInici" value="{{ data_inici|default:'' }}">
+        <input type="hidden" name="data_fi" id="dataFi" value="{{ data_fi|default:'' }}">
+      </div>
+      <div class="col-md-3">
+        <div class="d-flex gap-2">
+          <button class="btn btn-dark" type="submit">
+            <i class="bi bi-search"></i> Cercar
+          </button>
+          <a href="{% url 'pressupostos:create' %}" class="btn btn-dark">
+            <i class="bi bi-plus-circle"></i> Nou pressupost
+          </a>
+        </div>
+      </div>
+    </div>
+    {% if q or tancat or data_inici or data_fi %}
+    <div class="row mt-2">
+      <div class="col-12">
+        <a href="{% url 'pressupostos:list' %}" class="btn btn-outline-dark">
+          <i class="bi bi-x-circle"></i> Netejar filtres
+        </a>
+      </div>
+    </div>
+    {% endif %}
+  </form>
 
   {% if pressupostos %}
     <div class="table-responsive">
@@ -109,8 +154,44 @@
 {% endblock %}
 
 {% block extra_scripts %}
+<!-- Date Range Picker -->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
 <script>
   document.addEventListener("DOMContentLoaded", () => {
+    // Inicializar Date Range Picker
+    $('#dateRange').daterangepicker({
+      autoUpdateInput: false,
+      locale: {
+        format: 'DD/MM/YYYY',
+        separator: ' - ',
+        applyLabel: 'Aplicar',
+        cancelLabel: 'Netejar',
+        fromLabel: 'Des de',
+        toLabel: 'Fins a',
+        customRangeLabel: 'Personalitzat',
+        weekLabel: 'S',
+        daysOfWeek: ['Dg', 'Dl', 'Dt', 'Dc', 'Dj', 'Dv', 'Ds'],
+        monthNames: ['Gener', 'Febrer', 'Març', 'Abril', 'Maig', 'Juny', 'Juliol', 'Agost', 'Setembre', 'Octubre', 'Novembre', 'Desembre'],
+        firstDay: 1
+      }
+    });
+
+    $('#dateRange').on('apply.daterangepicker', function(ev, picker) {
+      $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+      $('#dataInici').val(picker.startDate.format('YYYY-MM-DD'));
+      $('#dataFi').val(picker.endDate.format('YYYY-MM-DD'));
+    });
+
+    $('#dateRange').on('cancel.daterangepicker', function(ev, picker) {
+      $(this).val('');
+      $('#dataInici').val('');
+      $('#dataFi').val('');
+    });
+
     let idToDelete = null;
 
     document.querySelectorAll(".btn-delete-pressupost").forEach(btn => {

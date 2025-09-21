@@ -4,6 +4,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.http import require_http_methods, require_POST
 from django.db import transaction
+from django.db.models import Q
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.timezone import now
 from django.urls import reverse
 from django.template.loader import get_template
@@ -103,8 +105,45 @@ def detail_view(request, pk):
 # --- LLISTAT ---
 @user_passes_test(is_admin, login_url='/admin/login/')
 def list_pressuposts(request):
-    pressupostos = Pressupost.objects.all()
-    return render(request, 'pressupostos/list.html', {'pressupostos': pressupostos})
+    # Inicializar variables de contexto
+    context = {
+        'pressupostos': [],
+        'q': '',
+        'tancat': '',
+        'data_inici': None,
+        'data_fi': None
+    }
+    
+    try:
+        # Obtener los filtros
+        q = request.GET.get('q', '').strip()
+        tancat = request.GET.get('tancat', '')
+        
+        # Query base con todas las relaciones necesarias
+        pressupostos = Pressupost.objects.select_related('client', 'projecte').all()
+        
+        # Aplicar filtros si existen
+        if q:
+            pressupostos = pressupostos.filter(
+                Q(nom__icontains=q) |
+                Q(client__nom_client__icontains=q) |
+                Q(projecte__nom__icontains=q)
+            )
+            
+        if tancat in ['true', 'false']:
+            pressupostos = pressupostos.filter(tancat=(tancat == 'true'))
+            
+        # Actualizar contexto
+        context.update({
+            'pressupostos': pressupostos.order_by('-data'),  # Ordenar por fecha descendente
+            'q': q,
+            'tancat': tancat
+        })
+        
+    except Exception as e:
+        messages.error(request, f'Error al cargar els pressupostos: {str(e)}')
+    
+    return render(request, 'pressupostos/list.html', context)
 
 
 @user_passes_test(is_admin, login_url='/admin/login/')
