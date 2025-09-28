@@ -55,10 +55,10 @@ class PressupostLinia(SafeSaveModel):
 class PressupostPDFVersion(SafeSaveModel):
     pressupost = models.ForeignKey(Pressupost, on_delete=models.CASCADE, related_name="pdf_versions")
     version = models.PositiveIntegerField()
-    arxiu = models.FileField(upload_to="media/pdfs_pressupostos/")
+    arxiu = models.FileField(upload_to="pdfs_pressupostos/")
     generat_per = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     data_generat = models.DateTimeField(auto_now_add=True)
-    html = models.TextField("Contingut HTML generat", blank=True, null=True)  # 👈 añadido
+    html = models.TextField("Contingut HTML generat", blank=True, null=True)
 
     class Meta:
         unique_together = ('pressupost', 'version')

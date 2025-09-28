@@ -10,6 +10,7 @@ from django.utils.timezone import now
 from django.urls import reverse
 from django.template.loader import get_template
 from django.core.files import File
+from django.core.files.base import ContentFile
 from weasyprint import HTML
 import tempfile
 
@@ -47,17 +48,30 @@ def generar_pdf_y_guardar(request, pressupost_id):
         "generat_per": request.user.get_full_name() or request.user.username
     })
 
-    with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as output:
-        HTML(string=html_string, base_url=request.build_absolute_uri()).write_pdf(output.name)
-        output.seek(0)
-
+    try:
+        # Crear el PDF en memoria primero
+        pdf_content = HTML(string=html_string, base_url=request.build_absolute_uri()).write_pdf()
+        
+        # Crear el objeto PressupostPDFVersion
         nova_pdf = PressupostPDFVersion(
             pressupost=pressupost,
             version=nova_version,
             generat_per=request.user,
-            html=html_string  # 👈 Guardamos el HTML generado
+            html=html_string
         )
-        nova_pdf.arxiu.save(f"pressupost_{pressupost.pk}_v{nova_version}.pdf", File(output))
+        
+        # Guardar el PDF
+        pdf_file = ContentFile(pdf_content)
+        nova_pdf.arxiu.save(
+            f"pressupost_{pressupost.pk}_v{nova_version}.pdf", 
+            pdf_file,
+            save=True
+        )
+        
+        messages.success(request, f'PDF versió {nova_version} generat correctament.')
+        
+    except Exception as e:
+        messages.error(request, f'Error al generar el PDF: {str(e)}')
 
     return HttpResponseRedirect(reverse("pressupostos:detall", args=[pressupost.pk]))
 
