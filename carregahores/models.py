@@ -6,13 +6,6 @@ from django.utils import timezone
 from pressupostos.models import Pressupost, PressupostLinia
 from maestros.models import Recurso, Treball, Tasca
 
-class PerfilUsuario(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="perfil")
-    recurso = models.ForeignKey(Recurso, on_delete=models.PROTECT, related_name="usuarios", null=True, blank=True)
-
-    def __str__(self):
-        return f"{self.user.get_username()} → {self.recurso or '—'}"
-
 
 class CarregaHores(models.Model):
     usuari = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="carregues")

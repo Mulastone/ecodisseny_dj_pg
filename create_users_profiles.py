@@ -12,7 +12,7 @@ django.setup()
 
 from django.contrib.auth.models import User
 from maestros.models import Recurso
-from carregahores.models import PerfilUsuario
+from maestros.models import PerfilUsuario
 
 def crear_superusuario_mulastone():
     """Crear el superusuario mulastone si no existe"""

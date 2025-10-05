@@ -81,13 +81,17 @@ class TipusRecursoFilter(SimpleListFilter):
 
 @admin.register(Recurso)
 class RecursoAdmin(admin.ModelAdmin):
-    list_display = ("nom", "mostrar_tipus", "preu_tancat", "preu_hora")
+    list_display = ("nom", "mostrar_tipus", "necessita_usuari", "preu_tancat", "preu_hora")
     list_filter = (TipusRecursoFilter, "preu_tancat")
     search_fields = ("nom",)
 
     @admin.display(description="Tipus", ordering="tipus_recurso__tipus")
     def mostrar_tipus(self, obj):
         return obj.tipus_recurso.tipus if obj.tipus_recurso else "-"
+    
+    @admin.display(description="Necessita Usuari", boolean=True)
+    def necessita_usuari(self, obj):
+        return obj.necesita_usuario
 
 
 @admin.register(Treball)
@@ -339,3 +343,68 @@ class PersonaContactClientAdmin(SafeDeleteAdmin):
     @admin.display(description="Client")
     def mostrar_client(self, obj):
         return obj.client.nom_client if obj.client else "-"
+
+
+# PerfilUsuario Admin (movido desde carregahores)
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.models import User
+from .models import PerfilUsuario
+
+
+class PerfilUsuarioInline(admin.StackedInline):
+    """Inline para gestionar el perfil desde el admin de usuarios"""
+    model = PerfilUsuario
+    can_delete = False
+    verbose_name = "Perfil i Recurs Assignat"
+    verbose_name_plural = "Perfil i Recurs Assignat"
+    extra = 0
+    fields = ('recurso',)
+
+
+class UserAdmin(BaseUserAdmin):
+    """Admin de usuarios extendido con perfil inline"""
+    inlines = (PerfilUsuarioInline,)
+    
+    def get_inline_instances(self, request, obj=None):
+        if not obj:
+            return []
+        return super().get_inline_instances(request, obj)
+
+
+# Re-registrar User admin con el perfil incluido
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
+
+
+@admin.register(PerfilUsuario)
+class PerfilUsuarioAdmin(admin.ModelAdmin):
+    list_display = ("mostrar_usuario", "mostrar_recurso", "es_admin")
+    list_filter = ("recurso", "user__is_staff", "user__is_superuser")
+    search_fields = ("user__username", "user__first_name", "user__last_name", "recurso__nom")
+    raw_id_fields = ("user",)
+    
+    @admin.display(description="Usuari", ordering="user__username")
+    def mostrar_usuario(self, obj):
+        name = obj.user.get_full_name() or obj.user.username
+        return f"{name} (@{obj.user.username})"
+    
+    @admin.display(description="Recurs Assignat")
+    def mostrar_recurso(self, obj):
+        if obj.recurso:
+            tipus_info = f"({obj.recurso.tipus_recurso.tipus})" if obj.recurso.tipus_recurso else ""
+            if obj.recurso.es_extern:
+                return f"🌐 {obj.recurso.nom} {tipus_info}"
+            else:
+                return f"👤 {obj.recurso.nom} {tipus_info}"
+        return "❌ Sense recurs"
+    
+    @admin.display(description="Admin", boolean=True)
+    def es_admin(self, obj):
+        return obj.user.is_superuser or obj.user.is_staff
+    
+    fieldsets = (
+        (None, {
+            'fields': ('user', 'recurso'),
+            'description': 'Assigna un recurs a l\'usuari per controlar els seus permisos en CarregaHores.'
+        }),
+    )

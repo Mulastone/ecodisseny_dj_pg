@@ -1,161 +1,191 @@
-# 🚀 Guía de Inicio Rápido para Usuarios
+# 🚀 Guía de Inicio Rápido para Usuarios - Ecodisseny
 
-¡Bienvenido a Ecodisseny! Esta guía te ayudará a empezar a usar el sistema en pocos minutos.
+¡Bienvenido a Ecodisseny! Esta guía te ayudará a empezar a usar el sistema de gestión de proyectos y registro de horas en pocos minutos.
 
 ## 🔐 Primer Acceso
 
 ### **1. Acceder al Sistema**
 
-1. **Abre tu navegador** y ve a: http://localhost:8000 (o la URL de tu empresa)
+1. **Abre tu navegador** y ve a la URL proporcionada por tu administrador
 2. **Haz clic en "Iniciar Sesión"** o ve directamente a `/accounts/login/`
 3. **Introduce tus credenciales**:
    - Usuario: `tu_usuario`
-   - Contraseña: `tu_contraseña`
+   - Contraseña: `tu_contraseña_temporal`
 
-### **2. Pantalla Principal**
+> 💡 **Importante**: Cambia tu contraseña en el primer acceso por seguridad.
 
-Al iniciar sesión verás el **Dashboard principal** con:
+### **2. Verificar tu Perfil de Usuario**
 
-- 📊 **Resumen de actividad** - Tus proyectos recientes
-- 🎯 **Accesos rápidos** - Funciones más usadas
-- 📈 **Estadísticas** - Horas trabajadas, proyectos activos
-- 🔔 **Notificaciones** - Tareas pendientes
+Al iniciar sesión, verifica que tu perfil esté correctamente configurado:
 
-## 🧭 Navegación Básica
+- **Recurso asignado**: Debes tener asignado uno de estos recursos:
+  - 👤 **Intern**: Empleado interno (ej: Gonzalo, Sarah, Pilar, Ana García)
+  - 🤝 **Colaborador**: Colaborador externo (ej: Santiago, Roger)
+  - 🌐 **Extern**: Recurso externo (gestionado por admin)
 
-### **📋 Menú Principal**
+- **Permisos**: Según tu recurso tendrás acceso a diferentes funcionalidades
 
-El menú lateral te da acceso a:
+## 🧭 Navegación Principal
 
-| Sección             | Descripción          | ¿Qué puedes hacer?               |
-| ------------------- | -------------------- | -------------------------------- |
-| 🏠 **Inicio**       | Dashboard principal  | Ver resumen general              |
-| 🏗️ **Proyectos**    | Gestión de proyectos | Crear, ver, editar proyectos     |
-| 💰 **Presupuestos** | Cotizaciones         | Crear presupuestos, generar PDFs |
-| ⏱️ **Carga Horas**  | Registro de tiempo   | Anotar horas trabajadas          |
-| 📊 **Reportes**     | Informes             | Ver estadísticas y reportes      |
-| 👤 **Mi Perfil**    | Datos personales     | Cambiar contraseña, datos        |
+### **📋 Funcionalidades Disponibles**
 
-### **🔍 Barra de Búsqueda**
+| Sección                   | Descripción                    | ¿Qué puedes hacer?                               |
+| ------------------------- | ------------------------------ | ------------------------------------------------ |
+| ⏱️ **Carga de Horas**     | Registro de tiempo trabajado   | Crear, ver, editar tus registros de horas       |
+| 👤 **Mi Perfil**          | Datos personales               | Ver tu recurso asignado, cambiar contraseña     |
+| 🏗️ **Proyectos**          | Ver proyectos asignados        | Consultar proyectos en los que puedes trabajar  |
+| 💰 **Presupuestos**       | Ver presupuestos relacionados  | Consultar presupuestos de tus proyectos         |
+| 📊 **Reportes**           | Estadísticas personales        | Ver resumen de tus horas trabajadas             |
 
-- **Buscar proyectos**: Escribe el nombre o código
-- **Buscar clientes**: Por nombre o empresa
-- **Buscar presupuestos**: Por número o descripción
+## ⏱️ Carga de Horas - Funcionalidad Principal
 
-## 🎯 Primeras Tareas
+### **✅ 1. Registrar Nuevas Horas**
 
-### **✅ 1. Completar tu Perfil**
+1. **Ve a "Carga de Horas"** → **"Nova Càrrega"**
+2. **Completa el formulario**:
+   - 📅 **Fecha**: Día en que trabajaste
+   - 🏗️ **Proyecto**: Elige entre los proyectos disponibles:
+     - "Proy prueba" - Cliente: Prueba
+     - "Abarset" - Cliente: Ensisa
+   - 💰 **Presupuesto**: Se cargarán automáticamente según el proyecto
+   - 📋 **Línea de Presupuesto**: Selecciona la línea específica
+   - ⏰ **Horas**: Cantidad de horas trabajadas (ej: 1.5, 2.25, 8)
+   - 📝 **Observaciones**: Descripción del trabajo realizado (opcional)
 
-1. Ve a **👤 Mi Perfil**
-2. **Revisa tus datos**:
-   - Nombre completo
-   - Email de contacto
-   - Teléfono
-   - Recurso asignado
-3. **Cambia tu contraseña** (recomendado en el primer acceso)
+3. **Tipos de Trabajo disponibles**:
+   - 🏗️ Aixecament Edifici
+   - 📄 Informe  
+   - 🎨 Proposta Disseny
+   - � Decoració
+   - 📐 Avantprojecte
 
-### **✅ 2. Explorar un Proyecto Existente**
+4. **Tareas comunes**:
+   - ✏️ Dibuix Plànols
+   - � Revisió
+   - 📊 Informe
+   - 📏 Amidament
+   - 🏗️ Aixecament Edifici
 
-1. Ve a **🏗️ Proyectos**
-2. **Haz clic** en cualquier proyecto de la lista
-3. **Explora las secciones**:
-   - 📝 Datos básicos
-   - 💰 Presupuestos asociados
-   - ⏱️ Horas registradas
-   - 📊 Estado del proyecto
+### **✅ 2. Ver tus Registros de Horas**
 
-### **✅ 3. Registrar Horas de Trabajo**
+1. **Ve a "Carga de Horas"** → **"Meves Càrregues"**
+2. **Podrás ver**:
+   - 📅 Fecha de cada registro
+   - 🏗️ Proyecto trabajado
+   - ⏰ Horas registradas
+   - 📝 Observaciones
+   - ✏️ Botones para **Editar** o **Eliminar**
 
-1. Ve a **⏱️ Carga Horas**
-2. **Haz clic en "Registrar Horas"**
-3. **Completa el formulario**:
-   - 📅 Fecha del trabajo
-   - 🏗️ Proyecto
-   - 🎯 Tarea realizada
-   - ⏰ Horas trabajadas
-   - 📝 Descripción (opcional)
-4. **Guarda** el registro
+### **✅ 3. Editar Registros Existentes**
 
-## 💡 Consejos Útiles
+- **Haz clic en "Editar"** en cualquier registro
+- **Modifica** los campos necesarios
+- **Solo puedes editar** tus propios registros
+- **Guarda** los cambios
 
-### **⚡ Atajos de Teclado**
+## 🎯 Permisos Según tu Recurso
 
-- `Ctrl + K`: Abrir búsqueda rápida
-- `Ctrl + N`: Crear nuevo elemento (en listas)
-- `Esc`: Cerrar modales o formularios
-- `Tab`: Navegar entre campos de formularios
+### **👤 Recursos Internos** (Gonzalo, Sarah, Pilar, Ana García)
+- ✅ Registrar horas en cualquier proyecto asignado
+- ✅ Ver todos sus registros históricos  
+- ✅ Editar/eliminar sus propios registros
+- ✅ Acceso a reportes personales
 
-### **🎨 Personalización**
+### **🤝 Colaboradores** (Santiago, Roger)
+- ✅ Registrar horas en proyectos específicos
+- ✅ Ver solo sus registros
+- ✅ Funcionalidad limitada según asignación
 
-- **Tema**: Puedes cambiar entre modo claro/oscuro
-- **Idioma**: Sistema disponible en catalán/español
-- **Dashboard**: Personaliza qué widgets ver
+### **🌐 Recursos Externos**
+- ❌ No tienen acceso directo al sistema
+- ℹ️ Sus horas son registradas por un administrador
 
-### **📱 Uso en Móvil**
+## 💡 Consejos Prácticos
 
-- **Interface responsive**: Funciona en tablets y móviles
-- **Gestos táctiles**: Deslizar para ver más opciones
-- **Campos optimizados**: Teclados específicos para números/emails
+### **⚡ Registro Eficiente de Horas**
+
+1. **Registra diariamente**: No acumules varios días
+2. **Sé específico**: Describe brevemente qué hiciste
+3. **Revisa antes de guardar**: Verifica proyecto y horas
+4. **Usa decimales**: 1.5h (1 hora 30 min), 2.25h (2 horas 15 min)
+
+### **📱 Navegación Rápida**
+
+- **Buscar proyectos**: Usa el filtro en las listas
+- **Ordenar registros**: Haz clic en las cabeceras de columna
+- **Filtrar por fecha**: Usa los filtros disponibles
+
+### **🔍 Validación Automática**
+
+El sistema validará automáticamente:
+- ✅ Que el proyecto esté abierto
+- ✅ Que la línea de presupuesto corresponda al proyecto
+- ✅ Que tengas permisos para trabajar en ese proyecto
+- ✅ Que las horas sean un número válido
 
 ## 🚨 Situaciones Comunes
 
-### **❓ "No veo mis proyectos"**
+### **❓ "No veo proyectos para seleccionar"**
 
 **Posibles causas**:
+- Tu recurso no está asignado a ningún proyecto → Contacta a tu supervisor
+- Los proyectos están cerrados → Revisa con administración
+- Problema de permisos → Contacta al administrador del sistema
 
-- No tienes proyectos asignados → Contacta a tu supervisor
-- Filtros activos → Revisa los filtros en la parte superior
-- Permisos insuficientes → Contacta al administrador
-
-### **❓ "No puedo editar un proyecto"**
+### **❓ "No puedo editar un registro de horas"**
 
 **Posibles causas**:
+- El presupuesto está cerrado → Solo lectura
+- No es tu registro → Solo puedes editar tus propias horas
+- Restricciones temporales → Contacta al administrador
 
-- Proyecto cerrado/finalizado → Solo lectura
-- No eres el responsable → Solo el creador puede editar
-- Permisos de usuario → Contacta al administrador
-
-### **❓ "Error al generar PDF"**
+### **❓ "Error al seleccionar línea de presupuesto"**
 
 **Soluciones**:
+1. **Primero selecciona** el proyecto
+2. **Luego selecciona** el presupuesto  
+3. **Las líneas se cargarán** automáticamente
+4. **Verifica** que la línea no sea de "precio cerrado"
 
-1. **Actualiza la página** e intenta de nuevo
-2. **Verifica** que todos los campos obligatorios estén completos
-3. **Contacta soporte** si persiste el error
+## 📊 Datos de Ejemplo del Sistema
+
+### **🏗️ Proyectos Activos**
+- **Proy prueba** - Cliente: Prueba
+- **Abarset** - Cliente: Ensisa
+
+### **👥 Recursos del Equipo**
+- **Gonzalo** (Intern) - 42.60€/h
+- **Sarah** (Intern) - 19.60€/h  
+- **Pilar** (Intern) - 7.50€/h
+- **Ana García** (Intern) - 25.50€/h
+- **Santiago** (Colaborador) - Precio cerrado
+- **Roger** (Colaborador) - Precio cerrado
 
 ## 📞 ¿Necesitas Ayuda?
 
-### **🆘 Soporte Inmediato**
+### **🆘 Soporte**
 
-- **Chat interno**: Botón de ayuda en la esquina inferior
-- **Email**: soporte@ecodisseny.com
-- **Teléfono**: +376 XXX XXX (horario oficina)
+- **Administrador del sistema**: Para problemas de permisos o configuración
+- **Supervisor de proyecto**: Para dudas sobre asignaciones
+- **Soporte técnico**: Para errores del sistema
 
-### **📚 Más Documentación**
+### **📚 Documentación Relacionada**
 
-- [📊 Gestión de Proyectos](proyectos.md) - Guía completa de proyectos
-- [💰 Presupuestos](presupuestos.md) - Crear cotizaciones profesionales
-- [⏱️ Carga de Horas](carga-horas.md) - Registro detallado de tiempo
-- [📈 Reportes](reportes.md) - Generar informes
-
-### **🎓 Video Tutoriales**
-
-- 🎬 **Introducción al sistema** (5 min)
-- 🎬 **Crear tu primer proyecto** (8 min)
-- 🎬 **Registrar horas eficientemente** (6 min)
-- 🎬 **Generar presupuestos profesionales** (12 min)
+- 🔧 [Documentación de Administrador] - Solo para administradores
+- � [Reportes y Estadísticas] - Generar informes de horas
+- �️ [Gestión de Proyectos] - Información sobre proyectos
 
 ---
 
 ## 🎉 ¡Ya estás listo!
 
-Con esta guía tienes todo lo necesario para empezar a usar Ecodisseny eficientemente.
+Con esta guía tienes todo lo necesario para empezar a registrar tus horas de trabajo en Ecodisseny.
 
 **Próximos pasos recomendados**:
 
-1. ✅ Explorar la interface
-2. ✅ Crear tu primer registro de horas
-3. ✅ Familiarizarte con los proyectos existentes
-4. ✅ Leer la documentación específica de tu rol
+1. ✅ Verificar tu perfil y recurso asignado
+2. ✅ Registrar tu primera entrada de horas
+3. ✅ Familiarizarte con los proyectos disponibles
+4. ✅ Establecer una rutina diaria de registro
 
-_💡 **Recuerda**: La práctica hace la perfección. No dudes en explorar todas las funciones disponibles._
+_💡 **Recuerda**: La precisión en el registro de horas es fundamental para el seguimiento correcto de los proyectos._

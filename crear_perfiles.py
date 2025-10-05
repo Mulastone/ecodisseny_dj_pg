@@ -12,7 +12,7 @@ django.setup()
 
 from django.contrib.auth.models import User
 from maestros.models import Recurso
-from carregahores.models import PerfilUsuario
+from maestros.models import PerfilUsuario
 from django.db import transaction
 
 def crear_usuarios_y_perfiles():

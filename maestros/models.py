@@ -1,6 +1,7 @@
 from django.db import models, IntegrityError
 from phonenumber_field.modelfields import PhoneNumberField
 from django.core.exceptions import ValidationError
+from django.conf import settings
 
 
 class SafeSaveModel(models.Model):
@@ -85,7 +86,21 @@ class Recurso(SafeSaveModel):
         verbose_name_plural = "Recursos"
 
     def __str__(self):
-        return self.nom
+        tipus_badge = f" ({self.tipus_recurso.tipus})" if self.tipus_recurso else ""
+        return f"{self.nom}{tipus_badge}"
+    
+    @property
+    def es_extern(self):
+        """Determina si el recurso es externo basado en su tipo"""
+        return self.tipus_recurso and self.tipus_recurso.tipus.lower() == 'extern'
+    
+    @property
+    def necesita_usuario(self):
+        """Determina si el recurso necesita usuario (intern o colaborador)"""
+        if not self.tipus_recurso:
+            return False
+        tipus_lower = self.tipus_recurso.tipus.lower()
+        return tipus_lower in ['intern', 'colaborador']
 
 
 class Tasca(SafeSaveModel):
@@ -185,3 +200,29 @@ class PersonaContactClient(SafeSaveModel):
 
     def __str__(self):
         return self.nom_contacte
+
+
+class PerfilUsuario(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="perfil")
+    recurso = models.ForeignKey(Recurso, on_delete=models.PROTECT, related_name="usuarios", null=True, blank=True)
+    
+    class Meta:
+        verbose_name = "Perfil d'Usuari"
+        verbose_name_plural = "Perfils d'Usuaris"
+
+    def __str__(self):
+        recurso_name = self.recurso.nom if self.recurso else "Sense recurs"
+        return f"{self.user.get_full_name() or self.user.username} → {recurso_name}"
+    
+    @classmethod
+    def get_user_recurso(cls, user):
+        """Helper method para obtener el recurso de un usuario"""
+        try:
+            return user.perfil.recurso
+        except cls.DoesNotExist:
+            return None
+    
+    @classmethod
+    def is_admin(cls, user):
+        """Helper method para verificar si es admin"""
+        return user.is_superuser or user.is_staff or user.groups.filter(name='Administradores').exists()

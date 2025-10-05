@@ -7,25 +7,44 @@ from django.core.exceptions import PermissionDenied
 from .forms import CarregaHoresForm
 from .models import CarregaHores
 from pressupostos import models as pressupost_models
+from projectes.models import Projecte
 
-# Helper function para verificar si es admin
+# Helper functions simplificadas para permisos
 def is_admin(user):
-    return user.is_authenticated and user.is_superuser
+    """Verifica si el usuario es administrador - SIMPLIFICADO"""
+    return (user.is_authenticated and 
+            (user.is_superuser or user.is_staff or 
+             user.groups.filter(name='Administradores').exists()))
 
-# Helper function para verificar permisos de edición/eliminación
-def can_edit_carrega(user, carrega):
-    """
-    Determina si un usuario puede editar/eliminar una carga de horas.
-    - Administradores: pueden editar cualquier registro
-    - Usuario normal: solo puede editar sus propios registros y solo dentro de 24h
-    """
-    if user.is_superuser:
+def get_user_recurso(user):
+    """Obtiene el recurso asignado al usuario - SIMPLIFICADO"""
+    try:
+        return user.perfil.recurso
+    except:
+        return None
+
+def can_access_pressupost(user, pressupost):
+    """Verifica si un usuario puede acceder a un presupuesto - SIMPLIFICADO"""
+    if is_admin(user):
         return True
     
+    recurso = get_user_recurso(user)
+    if not recurso:
+        return False
+    
+    # Verificar que tenga líneas asignadas en este presupuesto
+    return pressupost.linies.filter(recurs=recurso).exists()
+
+def can_edit_carrega(user, carrega):
+    """Verifica permisos de edición - SIMPLIFICADO"""
+    # Admin puede todo
+    if is_admin(user):
+        return True
+    
+    # Solo el propietario puede editar (dentro de 24h)
     if carrega.usuari != user:
         return False
     
-    # Verificar que sea dentro de las 24 horas
     from django.utils import timezone
     from datetime import timedelta
     
@@ -140,17 +159,43 @@ def eliminar_carrega(request, pk):
 def meves_carregues(request):
     from django.db.models import Sum
     
-    qs = CarregaHores.objects.all()
-    if not request.user.is_superuser:
-        qs = qs.filter(usuari=request.user)
+    # 🔐 SISTEMA DE PERMISOS PARA LISTADO
+    is_admin = request.user.is_superuser or request.user.is_staff
+    
+    if is_admin:
+        # 👑 ADMIN: Ve todos los registros
+        qs = CarregaHores.objects.all()
+        title = "🔓 Totes les càrregues d'hores (Admin)"
+        help_text = "Com a administrador, pots veure totes les càrregues d'hores del sistema."
+    else:
+        # 👤 USUARIO NORMAL: Solo sus registros
+        qs = CarregaHores.objects.filter(usuari=request.user)
+        title = "🎯 Les meves càrregues d'hores"
+        help_text = f"Mostrant només les teves càrregues d'hores, {request.user.get_full_name() or request.user.username}."
+    
+    # Ordenar por fecha descendente
+    qs = qs.order_by('-data', '-creat')
     
     # Calcular total de horas
     total_hores = qs.aggregate(total=Sum('hores'))['total'] or 0
     
+    # Estadísticas adicionales para admin
+    stats = {}
+    if is_admin:
+        from django.db.models import Count
+        stats = {
+            'total_registres': qs.count(),
+            'usuaris_actius': qs.values('usuari').distinct().count(),
+            'pressupostos_actius': qs.values('pressupost').distinct().count(),
+        }
+    
     context = {
-        "items": qs,
-        "total_hores": total_hores,
-        "total_registres": qs.count()
+        'carregues': qs,
+        'total_hores': total_hores,
+        'title': title,
+        'help_text': help_text,
+        'is_admin': is_admin,
+        'stats': stats,
     }
     return render(request, "carregahores/list.html", context)
 
@@ -209,7 +254,7 @@ def estadistiques_admin(request):
     return render(request, "carregahores/admin_stats.html", context)
 
 
-# AJAX: obtener líneas válidas para un pressupost (abierto, no preu_tancat, y si user normal: de su recurso)
+# AJAX: obtener líneas válidas para un pressupost (con permisos aplicados)
 @login_required
 @require_GET
 def lineas_por_pressupost(request):
@@ -224,27 +269,188 @@ def lineas_por_pressupost(request):
     except pressupost_models.Pressupost.DoesNotExist:
         return JsonResponse({"error": "Pressupost no trobat"}, status=404)
 
+    # 🔐 APLICAR FILTROS SEGÚN PERMISOS
+    is_admin = request.user.is_superuser or request.user.is_staff
+    
     lineas = pressupost_models.PressupostLinia.objects.filter(
         pressupost_id=pressupost_id,
         preu_tancat=False,
         pressupost__tancat=False
     ).select_related('treball', 'tasca', 'recurs')
 
-    # Filtrar por recurso del usuario si no es admin
-    if not request.user.is_superuser:
+    if not is_admin:
+        # 👤 USUARIO NORMAL: Solo líneas de su recurso
         perfil = getattr(request.user, "perfil", None)
-        if not perfil or not perfil.recurso_id:
-            return JsonResponse({"error": "No tens un recurs assignat"}, status=403)
-        lineas = lineas.filter(recurs_id=perfil.recurso_id)
+        if not perfil or not perfil.recurso:
+            return JsonResponse({"error": "No tens un recurs assignat. Contacta amb l'administrador."}, status=403)
+        
+        lineas = lineas.filter(recurs=perfil.recurso)
+        
+        # Verificar que tiene acceso a este presupuesto
+        if not lineas.exists():
+            return JsonResponse({"error": "No tens línies assignades en aquest pressupost."}, status=403)
 
     # Preparar datos para el JSON
-    data = []
+    lineas_data = []
     for l in lineas:
-        data.append({
+        # Formato más claro para el dropdown
+        if is_admin:
+            detall = f"👑 {l.recurs.nom} | {l.treball.descripcio} | {l.tasca.tasca}"
+        else:
+            detall = f"{l.treball.descripcio} | {l.tasca.tasca}"
+            
+        lineas_data.append({
             "id": l.pk,
-            "label": f"{l.treball.descripcio} | {l.tasca.tasca}",
+            "detall": detall,
             "recurso": l.recurs.nom,
-            "detall": f"Recurs: {l.recurs.nom} | Treball: {l.treball.descripcio} | Tasca: {l.tasca.tasca}"
+            "treball": l.treball.descripcio,
+            "tasca": l.tasca.tasca
         })
 
-    return JsonResponse(data, safe=False)
+    return JsonResponse({"lineas": lineas_data})
+
+
+@login_required
+@require_GET
+def get_pressupostos_data(request):
+    """
+    Vista AJAX para obtener datos de presupuestos con información de cliente y proyecto
+    para el filtrado dinámico
+    """
+    try:
+        is_admin = request.user.is_superuser or request.user.is_staff
+        
+        if is_admin:
+            # 👑 ADMIN: Todos los presupuestos abiertos
+            pressupostos = pressupost_models.Pressupost.objects.filter(tancat=False).select_related(
+                'client', 'projecte'
+            )
+        else:
+            # 👤 USUARIO NORMAL: Solo presupuestos donde está asignado
+            perfil = getattr(request.user, "perfil", None)
+            if not perfil or not perfil.recurso:
+                return JsonResponse({"error": "No tens un recurs assignat"}, status=403)
+            
+            pressupostos = pressupost_models.Pressupost.objects.filter(
+                tancat=False,
+                linies__recurs=perfil.recurso
+            ).select_related('client', 'projecte').distinct()
+        
+        # Preparar datos para JavaScript
+        data = []
+        for p in pressupostos:
+            data.append({
+                "id": p.pk,
+                "nom": p.nom or f"Pressupost {p.pk}",
+                "client_id": p.client.pk if p.client else None,
+                "client_nom": p.client.nom_client if p.client else "Sense client",
+                "projecte_id": p.projecte.pk if p.projecte else None,
+                "projecte_nom": p.projecte.nom if p.projecte else "Sense projecte"
+            })
+        
+        return JsonResponse(data, safe=False)
+        
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
+
+@login_required
+@require_GET
+def get_projectes_by_client(request):
+    """
+    Vista AJAX para obtener proyectos filtrados por cliente
+    """
+    try:
+        client_id = request.GET.get('client_id')
+        if not client_id:
+            return JsonResponse({"error": "client_id requerido"}, status=400)
+        
+        is_admin = request.user.is_superuser or request.user.is_staff
+        
+        # Base queryset de proyectos del cliente
+        projectes_qs = Projecte.objects.filter(client_id=client_id)
+        
+        if not is_admin:
+            # 👤 USUARIO NORMAL: Solo proyectos donde tiene presupuestos asignados
+            perfil = getattr(request.user, "perfil", None)
+            if not perfil or not perfil.recurso:
+                return JsonResponse({"error": "No tens un recurs assignat"}, status=403)
+            
+            # Filtrar solo proyectos donde el usuario tiene presupuestos asignados
+            projectes_qs = projectes_qs.filter(
+                pressupost__tancat=False,
+                pressupost__linies__recurs=perfil.recurso
+            ).distinct()
+        
+        # Preparar datos
+        data = []
+        for p in projectes_qs:
+            data.append({
+                "id": p.pk,
+                "nom": p.nom,
+                "client_id": p.client_id
+            })
+        
+        return JsonResponse(data, safe=False)
+        
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
+
+@login_required
+@require_GET
+def get_pressupostos_by_filters(request):
+    """
+    Vista AJAX para obtener presupuestos filtrados por cliente y/o proyecto
+    """
+    try:
+        client_id = request.GET.get('client_id')
+        projecte_id = request.GET.get('projecte_id')
+        
+        is_admin = request.user.is_superuser or request.user.is_staff
+        
+        if is_admin:
+            # 👑 ADMIN: Todos los presupuestos abiertos
+            pressupostos_qs = pressupost_models.Pressupost.objects.filter(tancat=False)
+        else:
+            # 👤 USUARIO NORMAL: Solo presupuestos donde está asignado
+            perfil = getattr(request.user, "perfil", None)
+            if not perfil or not perfil.recurso:
+                return JsonResponse({"error": "No tens un recurs assignat"}, status=403)
+            
+            pressupostos_qs = pressupost_models.Pressupost.objects.filter(
+                tancat=False,
+                linies__recurs=perfil.recurso
+            ).distinct()
+        
+        # Aplicar filtros
+        if client_id:
+            pressupostos_qs = pressupostos_qs.filter(client_id=client_id)
+        
+        if projecte_id:
+            pressupostos_qs = pressupostos_qs.filter(projecte_id=projecte_id)
+        
+        # Preparar datos con información de cliente y proyecto
+        pressupostos_qs = pressupostos_qs.select_related('client', 'projecte')
+        
+        data = []
+        for p in pressupostos_qs:
+            data.append({
+                "id": p.pk,
+                "nom": p.nom or f"Pressupost {p.pk}",
+                "client_id": p.client.pk if p.client else None,
+                "client_nom": p.client.nom_client if p.client else "Sense client",
+                "projecte_id": p.projecte.pk if p.projecte else None,
+                "projecte_nom": p.projecte.nom if p.projecte else "Sense projecte"
+            })
+        
+        return JsonResponse(data, safe=False)
+        
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
+
+
+def test_ajax_view(request):
+    """Vista simple para testing AJAX"""
+    return render(request, 'test_ajax.html')

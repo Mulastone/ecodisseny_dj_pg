@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Filtros AJAX</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 20px; border: 1px solid #ccc; }
+        button { padding: 10px; margin: 5px; }
+        pre { background: #f5f5f5; padding: 10px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Test de Filtros AJAX - CarregaHores</h1>
+    
+    <div class="test-section">
+        <h2>Test 1: Obtener Proyectos por Cliente</h2>
+        <button onclick="testProjectesByClient(1)">Test Cliente ID 1 (Prueba)</button>
+        <button onclick="testProjectesByClient(2)">Test Cliente ID 2 (Ensisa)</button>
+        <pre id="result1"></pre>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 2: Obtener Presupuestos Filtrados</h2>
+        <button onclick="testPressupostsByFilters(1, null)">Test Cliente 1</button>
+        <button onclick="testPressupostsByFilters(2, null)">Test Cliente 2</button>
+        <button onclick="testPressupostsByFilters(1, 1)">Test Cliente 1 + Proyecto 1</button>
+        <pre id="result2"></pre>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 3: Todos los Presupuestos</h2>
+        <button onclick="testAllPressupostos()">Test Todos los Presupuestos</button>
+        <pre id="result3"></pre>
+    </div>
+
+    <script>
+        async function testProjectesByClient(clientId) {
+            const resultDiv = document.getElementById('result1');
+            resultDiv.textContent = 'Cargando...';
+            
+            try {
+                const response = await fetch(`/carrega-hores/ajax/projectes-by-client/?client_id=${clientId}`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const result = {
+                    status: response.status,
+                    data: response.ok ? await response.json() : await response.text()
+                };
+                
+                resultDiv.textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                resultDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+        
+        async function testPressupostsByFilters(clientId, projecteId) {
+            const resultDiv = document.getElementById('result2');
+            resultDiv.textContent = 'Cargando...';
+            
+            try {
+                let url = '/carrega-hores/ajax/pressupostos-by-filters/?';
+                const params = new URLSearchParams();
+                
+                if (clientId) params.append('client_id', clientId);
+                if (projecteId) params.append('projecte_id', projecteId);
+                
+                url += params.toString();
+                
+                const response = await fetch(url, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const result = {
+                    url: url,
+                    status: response.status,
+                    data: response.ok ? await response.json() : await response.text()
+                };
+                
+                resultDiv.textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                resultDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+        
+        async function testAllPressupostos() {
+            const resultDiv = document.getElementById('result3');
+            resultDiv.textContent = 'Cargando...';
+            
+            try {
+                const response = await fetch('/carrega-hores/ajax/pressupostos-data/', {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const result = {
+                    status: response.status,
+                    data: response.ok ? await response.json() : await response.text()
+                };
+                
+                resultDiv.textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                resultDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>

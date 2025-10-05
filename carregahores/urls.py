@@ -10,6 +10,10 @@ urlpatterns = [
     path("editar/<int:pk>/", views.editar_carrega, name="editar"),
     path("eliminar/<int:pk>/", views.eliminar_carrega, name="eliminar"),
     path("ajax/lineas/", views.lineas_por_pressupost, name="ajax_lineas"),
+    path("ajax/pressupostos-data/", views.get_pressupostos_data, name="ajax_pressupostos_data"),
+    path("ajax/projectes-by-client/", views.get_projectes_by_client, name="ajax_projectes_by_client"),
+    path("ajax/pressupostos-by-filters/", views.get_pressupostos_by_filters, name="ajax_pressupostos_by_filters"),
+    path("test-ajax/", views.test_ajax_view, name="test_ajax"),
     
     # URLs solo para administradores
     path("admin/totes/", views.totes_carregues_admin, name="admin_totes"),

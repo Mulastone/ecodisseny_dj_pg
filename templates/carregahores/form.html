@@ -51,6 +51,25 @@
           </tr>
         </thead>
         <tbody>
+        {# Filtros de Cliente y Proyecto #}
+        <tr class="table-info">
+          <td class="fw-bold" style="width:25%;">{{ form.client_filter.label_tag }}</td>
+          <td style="width:25%;">
+            {{ form.client_filter|add_class:"form-control" }}
+            {% if form.client_filter.errors %}
+              <div class="text-danger small">{{ form.client_filter.errors }}</div>
+            {% endif %}
+            <small class="text-muted">Filtra pressupostos per client</small>
+          </td>
+          <td class="fw-bold" style="width:25%;">{{ form.projecte_filter.label_tag }}</td>
+          <td style="width:25%;">
+            {{ form.projecte_filter|add_class:"form-control" }}
+            {% if form.projecte_filter.errors %}
+              <div class="text-danger small">{{ form.projecte_filter.errors }}</div>
+            {% endif %}
+            <small class="text-muted">Filtra pressupostos per projecte</small>
+          </td>
+        </tr>
         <tr>
           <td class="fw-bold" style="width:25%;">{{ form.pressupost.label_tag }}</td>
           <td style="width:75%;" colspan="3">
@@ -58,7 +77,13 @@
             {% if form.pressupost.errors %}
               <div class="text-danger small">{{ form.pressupost.errors }}</div>
             {% endif %}
-            <small class="text-muted">Selecciona primer el pressupost per veure les línies disponibles</small>
+            <small class="text-muted">
+              {% if form.pressupost.help_text %}
+                {{ form.pressupost.help_text }}
+              {% else %}
+                Selecciona primer el pressupost per veure les línies disponibles
+              {% endif %}
+            </small>
           </td>
         </tr>
         <tr>
@@ -131,5 +156,5 @@
 
 {% block scripts %}
 {{ block.super }}
-<script src="{% static 'js/carregahores.js' %}"></script>
+<script src="{% static 'js/carregahores_complete.js' %}?v=20251005-22:50"></script>
 {% endblock %}
