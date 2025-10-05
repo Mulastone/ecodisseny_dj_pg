@@ -14,7 +14,7 @@ class SafeSaveModel(models.Model):
         try:
             super().save(*args, **kwargs)
         except IntegrityError as e:
-            raise ValidationError(f"Error d'integritat: {str(e)}")
+            raise ValidationError("Error d'integritat: {}".format(str(e)))
 
 
 class Clients(SafeSaveModel):
@@ -135,7 +135,7 @@ class Desplacament(SafeSaveModel):
         verbose_name_plural = "Desplaçaments"
 
     def __str__(self):
-        return f"{self.parroquia} - {self.ubicacio} - {self.tasca}"
+        return "{} - {} - {}".format(self.parroquia, self.ubicacio, self.tasca)
 
 
 class Hores(SafeSaveModel):
@@ -160,7 +160,7 @@ class TasquesTreball(SafeSaveModel):
         verbose_name_plural = "Treballs - Tasques"
 
     def __str__(self):
-        return f"{self.tasca} - {self.treball}"
+        return "{} - {}".format(self.tasca, self.treball)
 
 
 class DepartamentClient(SafeSaveModel):

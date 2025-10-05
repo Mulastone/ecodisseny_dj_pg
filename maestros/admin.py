@@ -1,5 +1,9 @@
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
+from django.contrib import messages
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django import forms
 from .models import (
     Clients, Parroquia, Poblacio, Recurso, TipusRecurso,
     Tasca, Treball, Ubicacio, TasquesTreball, Desplacament,
@@ -158,13 +162,126 @@ class UbicacioFilter(SimpleListFilter):
         return queryset
 
 
+class IncrementHoresFilter(SimpleListFilter):
+    title = 'Increment d\'Hores'
+    parameter_name = 'increment_hores'
+
+    def lookups(self, request, model_admin):
+        # Obtener valores únicos de increment_hores de la base de datos
+        values = Desplacament.objects.values_list('increment_hores', flat=True).distinct().order_by('increment_hores')
+        choices = []
+        
+        # Añadir filtro especial para valores distintos de 0
+        choices.append(('no_zero', 'Amb increment (≠ 0)'))
+        
+        # Añadir filtros por valores exactos que existen en la BD
+        for value in values:
+            if value is not None:
+                if value == 0:
+                    choices.append((str(value), '{} hores (sense increment)'.format(value)))
+                elif value == 0.5:
+                    choices.append((str(value), '{} hores (mitja hora)'.format(value)))
+                elif value == int(value):
+                    choices.append((str(value), '{} hores'.format(int(value))))
+                else:
+                    choices.append((str(value), '{} hores'.format(value)))
+        
+        # Añadir filtros por rangos si hay suficients dades
+        if values:
+            choices.extend([
+                ('0-1', '0 - 1 hora'),
+                ('1-2', '1 - 2 hores'),
+                ('2+', 'Més de 2 hores'),
+            ])
+        
+        return choices
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if value == 'no_zero':
+            # Filtro especial: todos los valores distintos de 0
+            return queryset.exclude(increment_hores=0)
+        elif value and value.replace('.', '').replace('-', '').isdigit():
+            # Filtro por valor exacto
+            try:
+                exact_value = float(value)
+                return queryset.filter(increment_hores=exact_value)
+            except ValueError:
+                pass
+        elif value == '0-1':
+            return queryset.filter(increment_hores__gte=0, increment_hores__lt=1)
+        elif value == '1-2':
+            return queryset.filter(increment_hores__gte=1, increment_hores__lt=2)
+        elif value == '2+':
+            return queryset.filter(increment_hores__gte=2)
+        return queryset
+
+
+class UpdateIncrementHoresForm(forms.Form):
+    # Versión simplificada para debuggear
+    increment_hores = forms.DecimalField(
+        label="Nou increment d'hores",
+        max_digits=5,
+        decimal_places=2,
+        initial=0,
+        help_text="Introdueix el nou valor"
+    )
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        increment_hores = cleaned_data.get('increment_hores', 0)
+        cleaned_data['valor_final'] = increment_hores
+        return cleaned_data
+
+
+def update_increment_hores(modeladmin, request, queryset):
+    """Acció per actualitzar l'increment d'hores dels desplaçaments seleccionats"""
+    # Versión simplificada para debuggear
+    try:
+        if 'apply' in request.POST:
+            form = UpdateIncrementHoresForm(request.POST)
+            if form.is_valid():
+                increment_hores = form.cleaned_data.get('valor_final', 0)
+                count = queryset.update(increment_hores=increment_hores)
+                modeladmin.message_user(
+                    request,
+                    "Actualitzat correctament {} registres".format(count),
+                    messages.SUCCESS
+                )
+                return HttpResponseRedirect(request.get_full_path())
+        else:
+            form = UpdateIncrementHoresForm()
+
+        # Simplified context
+        context = {
+            'form': form,
+            'queryset': queryset,
+            'action_checkbox_name': '_selected_action',
+            'opts': modeladmin.model._meta,
+            'title': 'Actualitzar Increment Hores',
+        }
+        
+        return render(request, 'admin/update_increment_hores.html', context)
+        
+    except Exception as e:
+        modeladmin.message_user(
+            request,
+            "Error: {}".format(str(e)),
+            messages.ERROR
+        )
+        return HttpResponseRedirect(request.get_full_path())
+
+update_increment_hores.short_description = "Actualitzar increment d'hores"
+
+
 @admin.register(Desplacament)
 class DesplacamentAdmin(admin.ModelAdmin):
     list_display = ("mostrar_parroquia", "mostrar_ubicacio", "mostrar_tasca", "increment_hores")
-    list_filter = (ParroquiaFilter, UbicacioFilter, TascaFilter)
-    search_fields = ("parroquia__parroquia", "ubicacio__ubicacio", "tasca__tasca")
+    list_filter = (ParroquiaFilter, UbicacioFilter, TascaFilter, IncrementHoresFilter)
+    search_fields = ("parroquia__parroquia", "ubicacio__ubicacio", "tasca__tasca", "increment_hores")
     ordering = ["-data_creacio"]
     list_per_page = 10
+    actions = [update_increment_hores]
 
     @admin.display(description="Parròquia")
     def mostrar_parroquia(self, obj):
