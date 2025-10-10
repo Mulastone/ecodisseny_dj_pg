@@ -159,43 +159,42 @@ def eliminar_carrega(request, pk):
 def meves_carregues(request):
     from django.db.models import Sum
     
-    # 🔐 SISTEMA DE PERMISOS PARA LISTADO
+    # � SIEMPRE mostrar solo las cargas del usuario actual (incluso para admin)
+    # Los admin tienen otra vista específica para ver todas las cargas
+    qs = CarregaHores.objects.filter(usuari=request.user)
+    title = "🎯 Les meves càrregues d'hores"
+    help_text = f"Mostrant només les teves càrregues d'hores, {request.user.get_full_name() or request.user.username}."
+    
+    # Verificar si es admin para mostrar enlace a vista completa
     is_admin = request.user.is_superuser or request.user.is_staff
     
-    if is_admin:
-        # 👑 ADMIN: Ve todos los registros
-        qs = CarregaHores.objects.all()
-        title = "🔓 Totes les càrregues d'hores (Admin)"
-        help_text = "Com a administrador, pots veure totes les càrregues d'hores del sistema."
-    else:
-        # 👤 USUARIO NORMAL: Solo sus registros
-        qs = CarregaHores.objects.filter(usuari=request.user)
-        title = "🎯 Les meves càrregues d'hores"
-        help_text = f"Mostrant només les teves càrregues d'hores, {request.user.get_full_name() or request.user.username}."
+    # Crear formulario de filtros (sin filtro de usuario para vista personal)
+    from .filters import CarreguesFilterForm
+    filter_form = CarreguesFilterForm(request.GET, user=request.user, show_user_filter=False)
+    
+    # Aplicar filtros si el formulario es válido
+    if filter_form.is_valid():
+        filters = filter_form.get_queryset_filters()
+        qs = qs.filter(**filters)
     
     # Ordenar por fecha descendente
     qs = qs.order_by('-data', '-creat')
     
-    # Calcular total de horas
+    # Calcular total de horas del usuario
     total_hores = qs.aggregate(total=Sum('hores'))['total'] or 0
     
-    # Estadísticas adicionales para admin
-    stats = {}
-    if is_admin:
-        from django.db.models import Count
-        stats = {
-            'total_registres': qs.count(),
-            'usuaris_actius': qs.values('usuari').distinct().count(),
-            'pressupostos_actius': qs.values('pressupost').distinct().count(),
-        }
+    # Calcular estadísticas del usuario actual
+    total_registres = qs.count()
     
     context = {
         'carregues': qs,
         'total_hores': total_hores,
+        'total_registres': total_registres,
         'title': title,
         'help_text': help_text,
         'is_admin': is_admin,
-        'stats': stats,
+        'filter_form': filter_form,
+        'stats': {},  # Mantener por compatibilidad
     }
     return render(request, "carregahores/list.html", context)
 
@@ -293,16 +292,19 @@ def lineas_por_pressupost(request):
     # Preparar datos para el JSON
     lineas_data = []
     for l in lineas:
-        # Formato más claro para el dropdown
+        # Asegurar que el recurso no sea None
+        recurso_nom = l.recurs.nom if l.recurs else "Sense recurs"
+        
+        # Formato más claro para el dropdown - siempre mostrar recurso primero
         if is_admin:
-            detall = f"👑 {l.recurs.nom} | {l.treball.descripcio} | {l.tasca.tasca}"
+            detall = f"{recurso_nom} | {l.treball.descripcio} | {l.tasca.tasca}"
         else:
-            detall = f"{l.treball.descripcio} | {l.tasca.tasca}"
+            detall = f"{recurso_nom} | {l.treball.descripcio} | {l.tasca.tasca}"
             
         lineas_data.append({
             "id": l.pk,
             "detall": detall,
-            "recurso": l.recurs.nom,
+            "recurso": recurso_nom,
             "treball": l.treball.descripcio,
             "tasca": l.tasca.tasca
         })
