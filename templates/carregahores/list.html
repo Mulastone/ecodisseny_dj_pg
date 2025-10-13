@@ -6,12 +6,18 @@
 <div class="container mt-4">
   <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
     <h2 class="mb-0">
-      <i class="bi bi-clock-history"></i> Les Meves Càrregues d'Hores
+      <i class="bi bi-clock-history"></i> {{ title|default:"Les Meves Càrregues d'Hores" }}
     </h2>
     <a href="{% url 'carregahores:nova' %}" class="btn btn-dark text-white">
       <i class="bi bi-plus-circle"></i> Nova Càrrega
     </a>
   </div>
+
+  {% if help_text %}
+  <div class="alert alert-info">
+    <i class="bi bi-info-circle"></i> {{ help_text }}
+  </div>
+  {% endif %}
 
   <!-- Filtros -->
   <div class="card mb-4">
@@ -26,10 +32,12 @@
     <div class="collapse" id="filtros">
       <div class="card-body">
         <form method="get" class="row g-3">
+          {% if filter_form.recurs %}
           <div class="col-md-4">
             <label class="form-label">{{ filter_form.recurs.label }}</label>
             {{ filter_form.recurs|add_class:"form-control" }}
           </div>
+          {% endif %}
           <div class="col-md-4">
             <label class="form-label">{{ filter_form.projecte.label }}</label>
             {{ filter_form.projecte|add_class:"form-control" }}
@@ -68,7 +76,7 @@
         <thead class="table-dark text-white">
           <tr>
             <th><i class="bi bi-calendar3"></i> Data</th>
-            <th><i class="bi bi-briefcase"></i> Projecte</th>
+            <th><i class="bi bi-briefcase"></i> Pressupost</th>
             <th><i class="bi bi-tools"></i> Treball / Tasca</th>
             <th><i class="bi bi-person"></i> Recurs</th>
             <th class="text-center"><i class="bi bi-clock"></i> Hores</th>
@@ -84,8 +92,11 @@
               </td>
               <td>
                 <strong>{{ item.pressupost.nom|default:"—" }}</strong>
+                {% if item.pressupost.projecte %}
+                  <br><small class="text-muted"><i class="bi bi-folder"></i> {{ item.pressupost.projecte.nom }}</small>
+                {% endif %}
                 {% if item.pressupost.client %}
-                  <br><small class="text-muted">{{ item.pressupost.client }}</small>
+                  <br><small class="text-muted"><i class="bi bi-person-circle"></i> {{ item.pressupost.client }}</small>
                 {% endif %}
               </td>
               <td>

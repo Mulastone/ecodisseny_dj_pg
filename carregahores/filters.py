@@ -64,25 +64,27 @@ class CarreguesFilterForm(forms.Form):
     def __init__(self, *args, user=None, show_user_filter=True, **kwargs):
         super().__init__(*args, **kwargs)
         
-        # Si no es admin, ocultar filtro de usuario
+        # Si no es admin, ocultar filtro de usuario Y filtro de recurso
         if not show_user_filter:
             del self.fields['usuari']
-        
-        # Si hay usuario y no es admin, filtrar recursos por el usuario
-        if user and not (user.is_superuser or user.is_staff):
-            try:
-                # Obtener el recurso del usuario
-                user_resource = user.perfil.recurso if hasattr(user, 'perfil') and user.perfil else None
-                if user_resource:
-                    # Solo mostrar el recurso del usuario
-                    self.fields['recurs'].queryset = Recurso.objects.filter(id=user_resource.id)
-                    self.fields['recurs'].initial = user_resource
-                else:
-                    # Si no tiene recurso asignado, no mostrar ninguno
+            # En vista personal, también ocultar el filtro de recurso (ya está filtrado automáticamente)
+            del self.fields['recurs']
+        else:
+            # Solo para vista admin: Si hay usuario y no es admin, filtrar recursos por el usuario
+            if user and not (user.is_superuser or user.is_staff):
+                try:
+                    # Obtener el recurso del usuario
+                    user_resource = user.perfil.recurso if hasattr(user, 'perfil') and user.perfil else None
+                    if user_resource:
+                        # Solo mostrar el recurso del usuario
+                        self.fields['recurs'].queryset = Recurso.objects.filter(id=user_resource.id)
+                        self.fields['recurs'].initial = user_resource
+                    else:
+                        # Si no tiene recurso asignado, no mostrar ninguno
+                        self.fields['recurs'].queryset = Recurso.objects.none()
+                except:
+                    # En caso de error, no mostrar recursos
                     self.fields['recurs'].queryset = Recurso.objects.none()
-            except:
-                # En caso de error, no mostrar recursos
-                self.fields['recurs'].queryset = Recurso.objects.none()
         
         # Valores por defecto útiles
         today = datetime.now().date()
@@ -107,10 +109,10 @@ class CarreguesFilterForm(forms.Form):
                 filters['linia__recurs'] = cleaned_data['recurs']
             
             if cleaned_data.get('projecte'):
-                filters['pressupost__projecte'] = cleaned_data['projecte']
+                filters['linia__pressupost__projecte'] = cleaned_data['projecte']
             
             if cleaned_data.get('pressupost'):
-                filters['pressupost'] = cleaned_data['pressupost']
+                filters['linia__pressupost'] = cleaned_data['pressupost']
             
             if cleaned_data.get('data_desde'):
                 filters['data__gte'] = cleaned_data['data_desde']

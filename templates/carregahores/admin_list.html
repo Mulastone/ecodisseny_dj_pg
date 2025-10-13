@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
+{% load widget_tweaks %}
 
 {% block content %}
 <div class="container mt-4">
   <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
     <h2 class="mb-0">
-      <i class="bi bi-shield-check"></i> Totes les Càrregues d'Hores - Admin
+      <i class="bi bi-shield-check"></i> {{ title|default:"Totes les Càrregues d'Hores - Admin" }}
     </h2>
     <div class="d-flex gap-2">
       <a href="{% url 'carregahores:admin_stats' %}" class="btn btn-outline-dark">
@@ -17,7 +18,66 @@
     </div>
   </div>
 
-  {% if items %}
+  {% if help_text %}
+  <div class="alert alert-info">
+    <i class="bi bi-info-circle"></i> {{ help_text }}
+  </div>
+  {% endif %}
+
+  <!-- Filtros -->
+  <div class="card mb-4">
+    <div class="card-header bg-light">
+      <h5 class="mb-0">
+        <i class="bi bi-funnel"></i> Filtres
+        <button class="btn btn-outline-secondary btn-sm ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#filtros" aria-expanded="false">
+          <i class="bi bi-chevron-down"></i>
+        </button>
+      </h5>
+    </div>
+    <div class="collapse" id="filtros">
+      <div class="card-body">
+        <form method="get" class="row g-3">
+          <div class="col-md-3">
+            <label class="form-label">{{ filter_form.usuari.label }}</label>
+            {{ filter_form.usuari|add_class:"form-control" }}
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">{{ filter_form.recurs.label }}</label>
+            {{ filter_form.recurs|add_class:"form-control" }}
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">{{ filter_form.projecte.label }}</label>
+            {{ filter_form.projecte|add_class:"form-control" }}
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">{{ filter_form.pressupost.label }}</label>
+            {{ filter_form.pressupost|add_class:"form-control" }}
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">{{ filter_form.data_desde.label }}</label>
+            {{ filter_form.data_desde }}
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">{{ filter_form.data_fins.label }}</label>
+            {{ filter_form.data_fins }}
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">&nbsp;</label>
+            <div>
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-search"></i> Filtrar
+              </button>
+              <a href="{% url 'carregahores:admin_totes' %}" class="btn btn-outline-secondary">
+                <i class="bi bi-x-circle"></i> Netejar
+              </a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  {% if carregues %}
     <div class="alert alert-light border">
       <i class="bi bi-info-circle"></i> 
       <strong>Vista d'administrador:</strong> Pots veure totes les càrregues de tots els usuaris.
@@ -29,7 +89,7 @@
           <tr>
             <th><i class="bi bi-person"></i> Usuari</th>
             <th><i class="bi bi-calendar3"></i> Data</th>
-            <th><i class="bi bi-briefcase"></i> Projecte</th>
+            <th><i class="bi bi-briefcase"></i> Pressupost</th>
             <th><i class="bi bi-tools"></i> Treball / Tasca</th>
             <th><i class="bi bi-person-gear"></i> Recurs</th>
             <th class="text-center"><i class="bi bi-clock"></i> Hores</th>
@@ -38,7 +98,7 @@
           </tr>
         </thead>
         <tbody>
-          {% for item in items %}
+          {% for item in carregues %}
             <tr>
               <td>
                 <div>
@@ -51,8 +111,11 @@
               </td>
               <td>
                 <strong>{{ item.pressupost.nom|default:"—" }}</strong>
+                {% if item.pressupost.projecte %}
+                  <br><small class="text-muted"><i class="bi bi-folder"></i> {{ item.pressupost.projecte.nom }}</small>
+                {% endif %}
                 {% if item.pressupost.client %}
-                  <br><small class="text-muted">{{ item.pressupost.client }}</small>
+                  <br><small class="text-muted"><i class="bi bi-person-circle"></i> {{ item.pressupost.client }}</small>
                 {% endif %}
               </td>
               <td>
@@ -75,8 +138,11 @@
                   <a href="{% url 'carregahores:editar' item.pk %}" class="btn btn-sm btn-outline-primary" title="Editar">
                     <i class="bi bi-pencil"></i>
                   </a>
-                  <button type="button" class="btn btn-sm btn-outline-danger" title="Eliminar" 
-                          onclick="confirmarEliminacion({{ item.pk }}, '{{ item.data|date:"d/m/Y" }}', '{{ item.hores }}', '{{ item.usuari.get_full_name|default:item.usuari.username }}')">
+                  <button type="button" class="btn btn-sm btn-outline-danger delete-btn" title="Eliminar" 
+                          data-id="{{ item.pk }}" 
+                          data-data="{{ item.data|date:'d/m/Y' }}" 
+                          data-hores="{{ item.hores }}"
+                          data-usuari="{{ item.usuari.get_full_name|default:item.usuari.username }}">
                     <i class="bi bi-trash"></i>
                   </button>
                 </div>
@@ -172,6 +238,22 @@
 </div>
 
 <script>
+// Manejar eliminación con data attributes
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteButtons = document.querySelectorAll('.delete-btn');
+    
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const id = this.dataset.id;
+            const data = this.dataset.data;
+            const hores = this.dataset.hores;
+            const usuari = this.dataset.usuari || '';
+            
+            confirmarEliminacion(id, data, hores, usuari);
+        });
+    });
+});
+
 function confirmarEliminacion(id, data, hores, usuari = '') {
     // Actualizar contenido del modal
     document.getElementById('eliminar-data').textContent = data;
