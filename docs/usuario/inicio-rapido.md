@@ -6,8 +6,8 @@
 
 ### **1. Acceder al Sistema**
 
-1. **Abre tu navegador** y ve a la URL proporcionada por tu administrador
-2. **Haz clic en "Iniciar Sesión"** o ve directamente a `/accounts/login/`
+1. **Abre tu navegador** y ve a: `https://app.arasmu.net`
+2. **Haz clic en "Iniciar Sesión"** 
 3. **Introduce tus credenciales**:
    - Usuario: `tu_usuario`
    - Contraseña: `tu_contraseña_temporal`
@@ -18,174 +18,230 @@
 
 Al iniciar sesión, verifica que tu perfil esté correctamente configurado:
 
-- **Recurso asignado**: Debes tener asignado uno de estos recursos:
-  - 👤 **Intern**: Empleado interno (ej: Gonzalo, Sarah, Pilar, Ana García)
-  - 🤝 **Colaborador**: Colaborador externo (ej: Santiago, Roger)
-  - 🌐 **Extern**: Recurso externo (gestionado por admin)
-
-- **Permisos**: Según tu recurso tendrás acceso a diferentes funcionalidades
+- **Recurso asignado**: Debes tener asignado tu recurso personal (ej: Gonzalo, Sarah, Pilar)
+- **Permisos**: Según tu recurso tendrás acceso a diferentes proyectos y presupuestos
 
 ## 🧭 Navegación Principal
 
-### **📋 Funcionalidades Disponibles**
+### **📋 Menú de Navegación**
 
-| Sección                   | Descripción                    | ¿Qué puedes hacer?                               |
-| ------------------------- | ------------------------------ | ------------------------------------------------ |
-| ⏱️ **Carga de Horas**     | Registro de tiempo trabajado   | Crear, ver, editar tus registros de horas       |
-| 👤 **Mi Perfil**          | Datos personales               | Ver tu recurso asignado, cambiar contraseña     |
-| 🏗️ **Proyectos**          | Ver proyectos asignados        | Consultar proyectos en los que puedes trabajar  |
-| 💰 **Presupuestos**       | Ver presupuestos relacionados  | Consultar presupuestos de tus proyectos         |
-| 📊 **Reportes**           | Estadísticas personales        | Ver resumen de tus horas trabajadas             |
+En la barra superior encontrarás:
+
+| Sección                    | Descripción                    | ¿Qué puedes hacer?                               |
+| -------------------------- | ------------------------------ | ------------------------------------------------ |
+| 🏠 **Inici**              | Página principal               | Resumen general del sistema                      |
+| ⏱️ **Carregar Hores**     | Registrar tiempo trabajado     | Crear nuevos registros de horas                  |
+| � **Les Meves Hores**    | Ver tus registros              | Consultar y filtrar tus horas registradas       |
+| 📚 **Documentació**       | Ayuda y documentación          | Acceder a guías y manuales                       |
+| 👤 **Perfil** (esquina)   | Tu perfil personal             | Ver datos, cambiar contraseña                    |
+
+## 👤 Gestión de tu Perfil
+
+### **📋 Ver tu Información Personal**
+
+1. **Haz clic en tu nombre** (esquina superior derecha)
+2. **Selecciona "Perfil"** del menú desplegable
+3. **Podrás ver**:
+   - 📋 **Datos personales**: Nombre, apellidos, email
+   - 🏷️ **Recurso asignado**: Tu recurso de trabajo (ej: "Gonzalo (Intern)")
+   - 💰 **Precio por hora**: Tarifa asignada a tu recurso
+   - 🔧 **Tipo de recurso**: Interno, Colaborador, etc.
+
+### **🔒 Cambiar tu Contraseña**
+
+1. **Ve a tu Perfil** (clic en tu nombre → "Perfil")
+2. **Busca la sección "Seguridad"** 
+3. **Haz clic en "Cambiar Contraseña"**
+4. **Completa el formulario**:
+   - � **Contraseña actual**: Tu contraseña actual
+   - 🆕 **Nueva contraseña**: Tu nueva contraseña
+   - ✅ **Confirmar contraseña**: Repite la nueva contraseña
+5. **Haz clic en "Guardar"**
+
+> 🔒 **Consejos de Seguridad**:
+> - Usa al menos 8 caracteres
+> - Combina letras, números y símbolos
+> - No uses información personal obvia
+> - Cambia tu contraseña regularmente
 
 ## ⏱️ Carga de Horas - Funcionalidad Principal
 
 ### **✅ 1. Registrar Nuevas Horas**
 
-1. **Ve a "Carga de Horas"** → **"Nova Càrrega"**
-2. **Completa el formulario**:
-   - 📅 **Fecha**: Día en que trabajaste
-   - 🏗️ **Proyecto**: Elige entre los proyectos disponibles:
-     - "Proy prueba" - Cliente: Prueba
-     - "Abarset" - Cliente: Ensisa
-   - 💰 **Presupuesto**: Se cargarán automáticamente según el proyecto
-   - 📋 **Línea de Presupuesto**: Selecciona la línea específica
-   - ⏰ **Horas**: Cantidad de horas trabajadas (ej: 1.5, 2.25, 8)
-   - 📝 **Observaciones**: Descripción del trabajo realizado (opcional)
+1. **Ve al menú "Carregar Hores"**
+2. **Haz clic en "Nova Càrrega"**
+3. **Completa el formulario paso a paso**:
 
-3. **Tipos de Trabajo disponibles**:
-   - 🏗️ Aixecament Edifici
-   - 📄 Informe  
-   - 🎨 Proposta Disseny
-   - � Decoració
-   - 📐 Avantprojecte
+   **📅 Paso 1: Información básica**
+   - **Fecha**: Día en que trabajaste
+   - **Cliente**: Se cargará automáticamente según el proyecto
 
-4. **Tareas comunes**:
-   - ✏️ Dibuix Plànols
-   - � Revisió
-   - 📊 Informe
-   - 📏 Amidament
-   - 🏗️ Aixecament Edifici
+   **🏗️ Paso 2: Selección de proyecto (orden importante)**
+   - **Cliente**: Primero selecciona el cliente
+   - **Proyecto**: Se cargarán automáticamente los proyectos del cliente
+   - **Presupuesto**: Se cargarán los presupuestos del proyecto seleccionado
+   - **Línea**: Finalmente selecciona la línea específica de trabajo
 
-### **✅ 2. Ver tus Registros de Horas**
+   **⏰ Paso 3: Tiempo y descripción**
+   - **Horas**: Cantidad trabajada (ej: 1.5, 2.25, 8)
+   - **Observaciones**: Descripción del trabajo realizado (opcional)
 
-1. **Ve a "Carga de Horas"** → **"Meves Càrregues"**
-2. **Podrás ver**:
-   - 📅 Fecha de cada registro
-   - 🏗️ Proyecto trabajado
-   - ⏰ Horas registradas
-   - 📝 Observaciones
-   - ✏️ Botones para **Editar** o **Eliminar**
+4. **Haz clic en "Guardar"**
 
-### **✅ 3. Editar Registros Existentes**
+> � **Importante**: Sigue el orden Cliente → Proyecto → Presupuesto → Línea para que los campos se carguen correctamente.
 
-- **Haz clic en "Editar"** en cualquier registro
-- **Modifica** los campos necesarios
-- **Solo puedes editar** tus propios registros
-- **Guarda** los cambios
+### **✅ 2. Ver y Filtrar tus Registros de Horas**
 
-## 🎯 Permisos Según tu Recurso
+#### **📊 Acceder a "Les Meves Hores"**
 
-### **👤 Recursos Internos** (Gonzalo, Sarah, Pilar, Ana García)
-- ✅ Registrar horas en cualquier proyecto asignado
-- ✅ Ver todos sus registros históricos  
-- ✅ Editar/eliminar sus propios registros
-- ✅ Acceso a reportes personales
+1. **Ve al menú "Les Meves Hores"**
+2. **Verás el título**: "Les càrregues d'hores de [Tu Recurso]"
+3. **Información mostrada**: Solo las horas de tu recurso personal
 
-### **🤝 Colaboradores** (Santiago, Roger)
-- ✅ Registrar horas en proyectos específicos
-- ✅ Ver solo sus registros
-- ✅ Funcionalidad limitada según asignación
+#### **🔍 Usar los Filtros**
 
-### **🌐 Recursos Externos**
-- ❌ No tienen acceso directo al sistema
-- ℹ️ Sus horas son registradas por un administrador
+**Filtros disponibles** (haz clic en "Filtres" para expandir):
 
-## 💡 Consejos Prácticos
+- **🏗️ Projecte**: Filtrar por proyecto específico
+- **💰 Pressupost**: Filtrar por presupuesto específico
+- **📅 Data des de**: Fecha inicial del rango
+- **📅 Data fins**: Fecha final del rango
 
-### **⚡ Registro Eficiente de Horas**
+**Cómo usar los filtros**:
+1. **Haz clic en "Filtres"** para expandir
+2. **Selecciona los filtros** que necesites
+3. **Haz clic en "Filtrar"**
+4. **Para limpiar**: Haz clic en "Netejar"
 
-1. **Registra diariamente**: No acumules varios días
-2. **Sé específico**: Describe brevemente qué hiciste
-3. **Revisa antes de guardar**: Verifica proyecto y horas
-4. **Usa decimales**: 1.5h (1 hora 30 min), 2.25h (2 horas 15 min)
+#### **📋 Información de la Tabla**
 
-### **📱 Navegación Rápida**
+Cada registro muestra:
+- **📅 Data**: Fecha del trabajo
+- **💰 Pressupost**: Nombre del presupuesto
+  - � Proyecto (en gris pequeño)
+  - 👤 Cliente (en gris pequeño)
+- **🛠️ Treball / Tasca**: Tipo de trabajo realizado
+- **👤 Recurs**: Tu recurso (siempre será el tuyo)
+- **⏰ Hores**: Tiempo registrado
+- **📝 Observacions**: Notas del trabajo
+- **⚙️ Accions**: Botones para editar/eliminar
 
-- **Buscar proyectos**: Usa el filtro en las listas
-- **Ordenar registros**: Haz clic en las cabeceras de columna
-- **Filtrar por fecha**: Usa los filtros disponibles
+#### **📊 Estadísticas en Tiempo Real**
 
-### **🔍 Validación Automática**
+Al final de la lista verás:
+- **📊 Total Registres**: Número de entradas filtradas
+- **⏰ Total Hores**: Suma de horas filtradas
 
-El sistema validará automáticamente:
-- ✅ Que el proyecto esté abierto
-- ✅ Que la línea de presupuesto corresponda al proyecto
-- ✅ Que tengas permisos para trabajar en ese proyecto
-- ✅ Que las horas sean un número válido
+### **✅ 3. Editar o Eliminar Registros**
 
-## 🚨 Situaciones Comunes
+**✏️ Para Editar**:
+1. **Haz clic en el icono de lápiz** ✏️ en la columna "Accions"
+2. **Modifica** los campos necesarios
+3. **Haz clic en "Guardar"**
+
+**🗑️ Para Eliminar**:
+1. **Haz clic en el icono de papelera** 🗑️ en la columna "Accions"
+2. **Confirma** la eliminación en el modal
+3. **El registro se eliminará permanentemente**
+
+> ⚠️ **Restricciones de Edición**:
+> - Solo puedes editar tus propios registros
+> - Solo dentro de las 24 horas siguientes al registro
+> - Los administradores pueden editar siempre
+
+## 🎯 Ejemplos Prácticos
+
+### **📝 Ejemplo 1: Registrar 4 horas de trabajo en Abarset**
+
+1. Ve a "Carregar Hores" → "Nova Càrrega"
+2. Selecciona:
+   - **Fecha**: Hoy
+   - **Cliente**: Ensisa (se carga automáticamente)
+   - **Proyecto**: Abarset
+   - **Presupuesto**: Abarset
+   - **Línea**: Aixecament Edifici - Gonzalo (o tu recurso)
+   - **Horas**: 4
+   - **Observaciones**: "Relevamiento de la planta baja"
+3. Guarda
+
+### **📊 Ejemplo 2: Ver solo trabajos del proyecto Abarset**
+
+1. Ve a "Les Meves Hores"
+2. Haz clic en "Filtres"
+3. En "Projecte" selecciona "Abarset"
+4. Haz clic en "Filtrar"
+5. Verás solo tus registros del proyecto Abarset
+
+### **📅 Ejemplo 3: Ver trabajos de la última semana**
+
+1. Ve a "Les Meves Hores"
+2. Haz clic en "Filtres"
+3. En "Data des de" selecciona la fecha de hace 7 días
+4. En "Data fins" selecciona hoy
+5. Haz clic en "Filtrar"
+
+## 🔄 Flujo de Trabajo Recomendado
+
+### **� Rutina Diaria**
+1. **Al finalizar el día**: Registra tus horas trabajadas
+2. **Sé específico**: Indica qué proyecto y qué tipo de trabajo
+3. **Revisa semanalmente**: Usa "Les Meves Hores" para revisar tu actividad
+
+### **📊 Rutina Semanal**
+1. **Filtrar por semana**: Usa los filtros de fecha
+2. **Verificar total de horas**: Revisa que coincida con tu jornada
+3. **Revisar distribución**: Ve en qué proyectos has trabajado más
+
+## 🚨 Resolución de Problemas
 
 ### **❓ "No veo proyectos para seleccionar"**
+- Tu recurso no está asignado a ningún proyecto activo
+- Contacta a tu supervisor o administrador
 
-**Posibles causas**:
-- Tu recurso no está asignado a ningún proyecto → Contacta a tu supervisor
-- Los proyectos están cerrados → Revisa con administración
-- Problema de permisos → Contacta al administrador del sistema
+### **❓ "El formulario no carga las líneas"**
+1. Verifica que hayas seleccionado: Cliente → Proyecto → Presupuesto
+2. Asegúrate de que el presupuesto esté abierto
+3. Verifica que tu recurso esté asignado a ese presupuesto
 
-### **❓ "No puedo editar un registro de horas"**
+### **❓ "No puedo editar un registro"**
+- Solo puedes editar dentro de las 24 horas siguientes
+- Solo puedes editar tus propios registros
+- El presupuesto podría estar cerrado
 
-**Posibles causas**:
-- El presupuesto está cerrado → Solo lectura
-- No es tu registro → Solo puedes editar tus propias horas
-- Restricciones temporales → Contacta al administrador
+### **❓ "Los filtros no funcionan"**
+1. Verifica que hayas hecho clic en "Filtrar"
+2. Para limpiar filtros usa "Netejar"
+3. Recarga la página si persiste el problema
 
-### **❓ "Error al seleccionar línea de presupuesto"**
+## � Consejos Avanzados
 
-**Soluciones**:
-1. **Primero selecciona** el proyecto
-2. **Luego selecciona** el presupuesto  
-3. **Las líneas se cargarán** automáticamente
-4. **Verifica** que la línea no sea de "precio cerrado"
+### **⚡ Registro Eficiente**
+- **Decimales**: Usa 1.5 (1h 30min), 2.25 (2h 15min), etc.
+- **Observaciones útiles**: "Revisión planos", "Reunión cliente", etc.
+- **Registra diariamente**: No acumules varios días
 
-## 📊 Datos de Ejemplo del Sistema
+### **🔍 Uso de Filtros**
+- **Combina filtros**: Proyecto + rango de fechas
+- **Estadísticas rápidas**: El total se actualiza automáticamente
+- **Reportes mensuales**: Filtrar por mes para ver tu actividad
 
-### **🏗️ Proyectos Activos**
-- **Proy prueba** - Cliente: Prueba
-- **Abarset** - Cliente: Ensisa
-
-### **👥 Recursos del Equipo**
-- **Gonzalo** (Intern) - 42.60€/h
-- **Sarah** (Intern) - 19.60€/h  
-- **Pilar** (Intern) - 7.50€/h
-- **Ana García** (Intern) - 25.50€/h
-- **Santiago** (Colaborador) - Precio cerrado
-- **Roger** (Colaborador) - Precio cerrado
-
-## 📞 ¿Necesitas Ayuda?
-
-### **🆘 Soporte**
-
-- **Administrador del sistema**: Para problemas de permisos o configuración
-- **Supervisor de proyecto**: Para dudas sobre asignaciones
-- **Soporte técnico**: Para errores del sistema
-
-### **📚 Documentación Relacionada**
-
-- 🔧 [Documentación de Administrador] - Solo para administradores
-- � [Reportes y Estadísticas] - Generar informes de horas
-- �️ [Gestión de Proyectos] - Información sobre proyectos
+### **� Navegación Eficiente**
+- **Bookmarks**: Guarda "Les Meves Hores" como favorito
+- **Atajos**: Usa Ctrl+clic para abrir en nueva pestaña
+- **Actualización**: Los datos se actualizan automáticamente
 
 ---
 
 ## 🎉 ¡Ya estás listo!
 
-Con esta guía tienes todo lo necesario para empezar a registrar tus horas de trabajo en Ecodisseny.
+Con esta guía actualizada tienes todo lo necesario para usar eficientemente el sistema de registro de horas de Ecodisseny.
 
 **Próximos pasos recomendados**:
 
-1. ✅ Verificar tu perfil y recurso asignado
-2. ✅ Registrar tu primera entrada de horas
-3. ✅ Familiarizarte con los proyectos disponibles
-4. ✅ Establecer una rutina diaria de registro
+1. ✅ Cambiar tu contraseña temporal
+2. ✅ Verificar tu perfil y recurso asignado
+3. ✅ Registrar tu primera entrada de horas
+4. ✅ Explorar los filtros en "Les Meves Hores"
+5. ✅ Establecer una rutina diaria de registro
 
-_💡 **Recuerda**: La precisión en el registro de horas es fundamental para el seguimiento correcto de los proyectos._
+_💡 **Recuerda**: Con el nuevo sistema de filtros puedes analizar fácilmente tu tiempo de trabajo por proyecto, periodo o presupuesto._

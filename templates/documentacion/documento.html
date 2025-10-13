@@ -92,7 +92,13 @@
                     <div class="bg-white bg-opacity-25 rounded p-3">
                         <div class="mb-2">
                             <small><i class="bi bi-person"></i> Autor:</small><br>
-                            <strong>{{ documento.autor.get_full_name|default:documento.autor.username }}</strong>
+                            <strong>
+                            {% if documento.autor %}
+                                {{ documento.autor.get_full_name|default:documento.autor.username }}
+                            {% else %}
+                                Sistema
+                            {% endif %}
+                            </strong>
                         </div>
                         <div class="mb-2">
                             <small><i class="bi bi-calendar"></i> Actualizado:</small><br>

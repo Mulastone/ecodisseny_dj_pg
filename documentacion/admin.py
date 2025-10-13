@@ -104,7 +104,6 @@ class DocumentoMarkdownAdmin(admin.ModelAdmin):
     search_fields = ('titulo', 'resumen', 'palabras_clave', 'archivo_markdown')
     list_editable = ('publicado', 'destacado')
     readonly_fields = ('slug', 'fecha_creacion', 'fecha_actualizacion', 'contenido_preview', 'archivo_info')
-    raw_id_fields = ('autor',)  # Para evitar problemas con ForeignKey
     
     fieldsets = (
         ('📝 Información Principal', {
@@ -135,7 +134,7 @@ class DocumentoMarkdownAdmin(admin.ModelAdmin):
         })
     )
     
-    actions = ['marcar_como_publicado', 'marcar_como_borrador', 'verificar_archivos']
+    actions = ['marcar_como_publicado', 'marcar_como_no_publicado', 'marcar_como_destacado', 'quitar_destacado', 'verificar_archivos']
     
     def categoria_info(self, obj):
         return format_html('{} {}', obj.categoria.icono, obj.categoria.nombre)
@@ -244,13 +243,23 @@ class DocumentoMarkdownAdmin(admin.ModelAdmin):
     
     def marcar_como_publicado(self, request, queryset):
         updated = queryset.update(publicado=True)
-        self.message_user(request, f'{updated} documentos marcados como publicados.')
-    marcar_como_publicado.short_description = 'Marcar como publicado'
+        self.message_user(request, f'✅ {updated} documento(s) marcado(s) como publicado(s).')
+    marcar_como_publicado.short_description = '✅ Marcar como publicado'
     
-    def marcar_como_borrador(self, request, queryset):
+    def marcar_como_no_publicado(self, request, queryset):
         updated = queryset.update(publicado=False)
-        self.message_user(request, f'{updated} documentos marcados como borrador.')
-    marcar_como_borrador.short_description = 'Marcar como borrador'
+        self.message_user(request, f'❌ {updated} documento(s) marcado(s) como no publicado(s).')
+    marcar_como_no_publicado.short_description = '❌ Marcar como no publicado'
+    
+    def marcar_como_destacado(self, request, queryset):
+        updated = queryset.update(destacado=True)
+        self.message_user(request, f'⭐ {updated} documento(s) marcado(s) como destacado(s).')
+    marcar_como_destacado.short_description = '⭐ Marcar como destacado'
+    
+    def quitar_destacado(self, request, queryset):
+        updated = queryset.update(destacado=False)
+        self.message_user(request, f'⚪ {updated} documento(s) ya no están destacados.')
+    quitar_destacado.short_description = '⚪ Quitar destacado'
     
     def verificar_archivos(self, request, queryset):
         existentes = 0
@@ -267,6 +276,12 @@ class DocumentoMarkdownAdmin(admin.ModelAdmin):
         else:
             self.message_user(request, mensaje)
     verificar_archivos.short_description = 'Verificar archivos físicos'
+    
+    def save_model(self, request, obj, form, change):
+        # Si es un documento nuevo y no tiene autor, asignar el usuario actual
+        if not change and not obj.autor:
+            obj.autor = request.user
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(HistorialAcceso)
