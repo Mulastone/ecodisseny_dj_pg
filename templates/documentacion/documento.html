@@ -69,7 +69,7 @@
                 <ol class="breadcrumb text-white-50">
                     <li class="breadcrumb-item">
                         <a href="{% url 'documentacion:index' %}" class="text-white">
-                            <i class="bi bi-house"></i> Documentación
+                            <i class="bi bi-house"></i> Documentació
                         </a>
                     </li>
                     <li class="breadcrumb-item">
@@ -101,12 +101,12 @@
                             </strong>
                         </div>
                         <div class="mb-2">
-                            <small><i class="bi bi-calendar"></i> Actualizado:</small><br>
+                            <small><i class="bi bi-calendar"></i> Actualitzat:</small><br>
                             <strong>{{ documento.fecha_actualizacion|date:"d/m/Y" }}</strong>
                         </div>
                         {% if documento.palabras_clave %}
                         <div>
-                            <small><i class="bi bi-tags"></i> Etiquetas:</small><br>
+                            <small><i class="bi bi-tags"></i> Etiquetes:</small><br>
                             {% for palabra in documento.get_palabras_clave_lista %}
                                 <span class="badge bg-light text-dark me-1">{{ palabra }}</span>
                             {% endfor %}
@@ -128,42 +128,42 @@
 
                 <!-- Sección de Feedback -->
                 <div class="feedback-section">
-                    <h4><i class="bi bi-chat-dots"></i> ¿Te fue útil este documento?</h4>
-                    <p class="text-muted">Tu feedback nos ayuda a mejorar la documentación.</p>
+                    <h4><i class="bi bi-chat-dots"></i> T'ha estat útil aquest document?</h4>
+                    <p class="text-muted">El teu feedback ens ajuda a millorar la documentació.</p>
                     
                     <div id="feedback-buttons" class="mb-3">
                         <button class="btn btn-success btn-feedback" data-tipo="util">
                             <i class="bi bi-hand-thumbs-up"></i> Útil
                         </button>
                         <button class="btn btn-warning btn-feedback" data-tipo="mejoras">
-                            <i class="bi bi-exclamation-triangle"></i> Necesita mejoras
+                            <i class="bi bi-exclamation-triangle"></i> Necessita millores
                         </button>
                         <button class="btn btn-danger btn-feedback" data-tipo="incorrecto">
-                            <i class="bi bi-hand-thumbs-down"></i> Incorrecto
+                            <i class="bi bi-hand-thumbs-down"></i> Incorrecte
                         </button>
                         <button class="btn btn-info btn-feedback" data-tipo="sugerencia">
-                            <i class="bi bi-lightbulb"></i> Sugerencia
+                            <i class="bi bi-lightbulb"></i> Suggeriment
                         </button>
                     </div>
 
                     <div id="feedback-form" class="d-none">
                         <div class="mb-3">
-                            <label for="comentario" class="form-label">Comentario (opcional):</label>
+                            <label for="comentario" class="form-label">Comentari (opcional):</label>
                             <textarea id="comentario" class="form-control" rows="3" 
-                                      placeholder="Déjanos tus comentarios para mejorar este documento..."></textarea>
+                                      placeholder="Deixa'ns els teus comentaris per millorar aquest document..."></textarea>
                         </div>
                         <button id="enviar-feedback" class="btn btn-primary">
                             <i class="bi bi-send"></i> Enviar Feedback
                         </button>
                         <button id="cancelar-feedback" class="btn btn-secondary">
-                            Cancelar
+                            Cancel·lar
                         </button>
                     </div>
 
                     {% if feedback_usuario %}
                     <div class="alert alert-info mt-3">
                         <i class="bi bi-info-circle"></i>
-                        Ya has enviado feedback para este documento: <strong>{{ feedback_usuario.get_tipo_display }}</strong>
+                        Ja has enviat feedback per a aquest document: <strong>{{ feedback_usuario.get_tipo_display }}</strong>
                         {% if feedback_usuario.comentario %}
                             <br><small>{{ feedback_usuario.comentario }}</small>
                         {% endif %}
@@ -179,7 +179,7 @@
                 <!-- Documentos Relacionados -->
                 {% if documentos_relacionados %}
                 <div class="tabla-contenidos mb-4">
-                    <h5><i class="bi bi-bookmark"></i> Documentos Relacionados</h5>
+                    <h5><i class="bi bi-bookmark"></i> Documents Relacionats</h5>
                     <hr>
                     {% for doc in documentos_relacionados %}
                     <div class="documento-relacionado mb-2">
@@ -194,20 +194,20 @@
 
                 <!-- Navegación -->
                 <div class="tabla-contenidos">
-                    <h5><i class="bi bi-compass"></i> Navegación</h5>
+                    <h5><i class="bi bi-compass"></i> Navegació</h5>
                     <hr>
                     <div class="d-grid gap-2">
                         <a href="{% url 'documentacion:categoria' categoria.slug %}" 
                            class="btn btn-outline-primary btn-sm">
-                            <i class="bi bi-arrow-left"></i> Volver a {{ categoria.nombre }}
+                            <i class="bi bi-arrow-left"></i> Tornar a {{ categoria.nombre }}
                         </a>
                         <a href="{% url 'documentacion:index' %}" 
                            class="btn btn-outline-secondary btn-sm">
-                            <i class="bi bi-house"></i> Inicio de Documentación
+                            <i class="bi bi-house"></i> Inici de Documentació
                         </a>
                         <a href="{% url 'documentacion:busqueda' %}" 
                            class="btn btn-outline-info btn-sm">
-                            <i class="bi bi-search"></i> Buscar Documentos
+                            <i class="bi bi-search"></i> Cercar Documents
                         </a>
                     </div>
                 </div>

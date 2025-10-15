@@ -1,180 +1,180 @@
-# 🚀 Guía de Usuario - Ecodisseny
+# 🚀 Guia d'Usuari - Ecodisseny
 
-¡Bienvenido a Ecodisseny! Esta guía te ayudará a empezar a usar el sistema de registro de horas en pocos minutos.
+Benvingut a Ecodisseny! Aquesta guia t'ajudarà a començar a utilitzar el sistema de registre d'hores en pocs minuts.
 
-## 🔐 Primer Acceso
+## 🔐 Primer Accés
 
-### **Acceder al Sistema**
+### **Accedir al Sistema**
 
-1. **Abre tu navegador** y ve a: `https://app.arasmu.net`
-2. **Haz clic en "Iniciar Sesión"** 
-3. **Introduce tus credenciales**:
-   - Usuario: `tu_usuario`
-   - Contraseña: `tu_contraseña_temporal`
+1. **Obre el teu navegador** i ves a: `https://app.arasmu.net`
+2. **Fes clic a "Iniciar Sessió"** 
+3. **Introdueix les teves credencials**:
+   - Usuari: `el_teu_usuari`
+   - Contrasenya: `la_teva_contrasenya_temporal`
 
-> 💡 **Importante**: Cambia tu contraseña en el primer acceso por seguridad.
+> 💡 **Important**: Canvia la teva contrasenya en el primer accés per seguretat.
 
-## 🧭 Navegación Principal
+## 🧭 Navegació Principal
 
-En la barra superior encontrarás las opciones principales:
+A la barra superior trobaràs les opcions principals:
 
-| Sección                    | Descripción                    |
+| Secció                     | Descripció                     |
 | -------------------------- | ------------------------------ |
-| 🏠 **Inici**              | Página principal del sistema   |
-| ⏱️ **Carregar Hores**     | Registrar nuevas horas de trabajo |
-| 📊 **Les Meves Hores**    | Ver y filtrar tus registros de horas |
-| 📚 **Documentació**       | Acceder a esta guía y ayuda |
-| 👤 **Tu nombre** (esquina) | Acceder a tu perfil personal |
+| 🏠 **Inici**              | Pàgina principal del sistema   |
+| ⏱️ **Carregar Hores**     | Registrar noves hores de treball |
+| 📊 **Les Meves Hores**    | Veure i filtrar els teus registres d'hores |
+| 📚 **Documentació**       | Accedir a aquesta guia i ajuda |
+| 👤 **El teu nom** (cantonada) | Accedir al teu perfil personal |
 
 ## 👤 Perfil Personal
 
-### **📋 Acceder a tu Perfil**
+### **📋 Accedir al teu Perfil**
 
-1. **Haz clic en tu nombre** (esquina superior derecha)
+1. **Fes clic al teu nom** (cantonada superior dreta)
 2. **Selecciona "Perfil"** del menú desplegable
-3. **Podrás ver**:
-   - 📋 **Datos personales**: Nombre, apellidos, email
-   - 👤 **Tu usuario**: Información de acceso
+3. **Podràs veure**:
+   - 📋 **Dades personals**: Nom, cognoms, email
+   - 👤 **El teu usuari**: Informació d'accés
 
-### **🔒 Cambiar tu Contraseña**
+### **🔒 Canviar la teva Contrasenya**
 
-1. **Ve a tu Perfil** (clic en tu nombre → "Perfil")
-2. **Busca la sección "Seguridad"** 
-3. **Haz clic en "Cambiar Contraseña"**
-4. **Completa el formulario**:
-   - 🔐 **Contraseña actual**: Tu contraseña actual
-   - 🆕 **Nueva contraseña**: Tu nueva contraseña
-   - ✅ **Confirmar contraseña**: Repite la nueva contraseña
-5. **Haz clic en "Guardar"**
+1. **Ves al teu Perfil** (clic al teu nom → "Perfil")
+2. **Busca la secció "Seguretat"** 
+3. **Fes clic a "Canviar Contrasenya"**
+4. **Completa el formulari**:
+   - 🔐 **Contrasenya actual**: La teva contrasenya actual
+   - 🆕 **Nova contrasenya**: La teva nova contrasenya
+   - ✅ **Confirmar contrasenya**: Repeteix la nova contrasenya
+5. **Fes clic a "Desar"**
 
-> 🔒 **Consejos de Seguridad**:
-> - Usa al menos 8 caracteres
-> - Combina letras, números y símbolos
-> - No uses información personal obvia
-> - Cambia tu contraseña regularmente
+> 🔒 **Consells de Seguretat**:
+> - Utilitza almenys 8 caràcters
+> - Combina lletres, números i símbols
+> - No utilitzis informació personal òbvia
+> - Canvia la teva contrasenya regularment
 
 ## ⏱️ Carregar Hores
 
-### **✅ Registrar Nuevas Horas**
+### **✅ Registrar Noves Hores**
 
-1. **Haz clic en "Carregar Hores"** en el menú superior
-2. **Desde la página principal, haz clic en "Carregar Hores"**
-3. **Completa el formulario paso a paso**:
+1. **Fes clic a "Carregar Hores"** al menú superior
+2. **Des de la pàgina principal, fes clic a "Carregar Hores"**
+3. **Completa el formulari pas a pas**:
 
-   **📅 Información básica**
-   - **Fecha**: Día en que trabajaste
+   **📅 Informació bàsica**
+   - **Data**: Dia en què vas treballar
 
-   **🏗️ Selección de trabajo (orden importante)**
-   - **Cliente**: Primero selecciona el cliente
-   - **Proyecto**: Se cargarán automáticamente los proyectos disponibles
-   - **Presupuesto**: Se cargarán los presupuestos del proyecto seleccionado
-   - **Línea**: Finalmente selecciona la línea específica de trabajo
+   **🏗️ Selecció de treball (ordre important)**
+   - **Client**: Primer selecciona el client
+   - **Projecte**: Es carregaran automàticament els projectes disponibles
+   - **Pressupost**: Es carregaran els pressupostos del projecte seleccionat
+   - **Línia**: Finalment selecciona la línia específica de treball
 
-   **⏰ Tiempo y descripción**
-   - **Horas**: Cantidad trabajada (ej: 1.5, 2.25, 8)
-   - **Observaciones**: Descripción del trabajo realizado (opcional)
+   **⏰ Temps i descripció**
+   - **Hores**: Quantitat treballada (ex: 1.5, 2.25, 8)
+   - **Observacions**: Descripció del treball realitzat (opcional)
 
-4. **Haz clic en "Guardar"**
+4. **Fes clic a "Desar"**
 
-> 💡 **Importante**: Sigue el orden Cliente → Proyecto → Presupuesto → Línea para que los campos se carguen correctamente.
+> 💡 **Important**: Segueix l'ordre Client → Projecte → Pressupost → Línia perquè els camps es carreguin correctament.
 
 ## 📊 Les Meves Hores
 
-### **📋 Ver tus Registros de Horas**
+### **📋 Veure els teus Registres d'Hores**
 
-1. **Haz clic en "Les Meves Hores"** en el menú superior
-2. **O desde la página principal, haz clic en "Veure Hores"**
-3. **Verás una tabla con todos tus registros**
+1. **Fes clic a "Les Meves Hores"** al menú superior
+2. **O des de la pàgina principal, fes clic a "Veure Hores"**
+3. **Veuràs una taula amb tots els teus registres**
 
-### **🔍 Usar los Filtros**
+### **🔍 Utilitzar els Filtres**
 
-**Filtros disponibles** (haz clic en "Filtres" para expandir):
+**Filtres disponibles** (fes clic a "Filtres" per expandir):
 
-- **🏗️ Projecte**: Filtrar por proyecto específico
-- **💰 Pressupost**: Filtrar por presupuesto específico
-- **📅 Data des de**: Fecha inicial del rango
-- **📅 Data fins**: Fecha final del rango
+- **🏗️ Projecte**: Filtrar per projecte específic
+- **💰 Pressupost**: Filtrar per pressupost específic
+- **📅 Data des de**: Data inicial del rang
+- **📅 Data fins**: Data final del rang
 
-**Cómo usar los filtros**:
-1. **Haz clic en "Filtres"** para expandir la sección
-2. **Selecciona los filtros** que necesites
-3. **Haz clic en "Filtrar"**
-4. **Para limpiar todos los filtros**: Haz clic en "Netejar"
+**Com utilitzar els filtres**:
+1. **Fes clic a "Filtres"** per expandir la secció
+2. **Selecciona els filtres** que necessitis
+3. **Fes clic a "Filtrar"**
+4. **Per netejar tots els filtres**: Fes clic a "Netejar"
 
-### **📋 Información de la Tabla**
+### **📋 Informació de la Taula**
 
-Cada registro muestra:
-- **📅 Data**: Fecha del trabajo
-- **💰 Pressupost**: Nombre del presupuesto, proyecto y cliente
-- **🛠️ Treball / Tasca**: Tipo de trabajo realizado
-- **👤 Recurs**: Tu nombre de usuario
-- **⏰ Hores**: Tiempo registrado
-- **📝 Observacions**: Notas del trabajo
-- **⚙️ Accions**: (Solo lectura - no puedes editar registros)
+Cada registre mostra:
+- **📅 Data**: Data del treball
+- **💰 Pressupost**: Nom del pressupost, projecte i client
+- **🛠️ Treball / Tasca**: Tipus de treball realitzat
+- **👤 Recurs**: El teu nom d'usuari
+- **⏰ Hores**: Temps registrat
+- **📝 Observacions**: Notes del treball
+- **⚙️ Accions**: (Només lectura - no pots editar registres)
 
-### **📊 Estadísticas**
+### **📊 Estadístiques**
 
-Al final de la lista verás:
-- **📊 Total Registres**: Número de entradas mostradas
-- **⏰ Total Hores**: Suma total de horas
+Al final de la llista veuràs:
+- **📊 Total Registres**: Nombre d'entrades mostrades
+- **⏰ Total Hores**: Suma total d'hores
 
-> 📋 **Nota**: Los registros de horas son de solo lectura una vez guardados. Si necesitas hacer cambios, contacta con tu supervisor.
+> 📋 **Nota**: Els registres d'hores són de només lectura un cop desats. Si necessites fer canvis, contacta amb el teu supervisor.
 
-## 🎯 Ejemplos Prácticos
+## 🎯 Exemples Pràctics
 
-### **📝 Registrar horas de trabajo**
+### **📝 Registrar hores de treball**
 
-1. Ve a "Carregar Hores"
-2. Completa el formulario:
-   - **Fecha**: Selecciona el día trabajado
-   - **Cliente**: Selecciona el cliente (ej: Ensisa)
-   - **Proyecto**: Selecciona el proyecto (ej: Abarset)
-   - **Presupuesto**: Se carga automáticamente
-   - **Línea**: Selecciona el tipo de trabajo (ej: Aixecament Edifici)
-   - **Horas**: Ingresa las horas (ej: 1.50, 2.00, 3.00)
-   - **Observaciones**: Describe el trabajo realizado (opcional)
-3. Haz clic en "Guardar"
+1. Ves a "Carregar Hores"
+2. Completa el formulari:
+   - **Data**: Selecciona el dia treballat
+   - **Client**: Selecciona el client (ex: Ensisa)
+   - **Projecte**: Selecciona el projecte (ex: Abarset)
+   - **Pressupost**: Es carrega automàticament
+   - **Línia**: Selecciona el tipus de treball (ex: Aixecament Edifici)
+   - **Hores**: Introdueix les hores (ex: 1.50, 2.00, 3.00)
+   - **Observacions**: Descriu el treball realitzat (opcional)
+3. Fes clic a "Desar"
 
-### **📊 Ver trabajos de un proyecto específico**
+### **📊 Veure treballs d'un projecte específic**
 
-1. Ve a "Les Meves Hores"
-2. Haz clic en "Filtres" para expandir
-3. En "Projecte" selecciona el proyecto deseado
-4. Haz clic en "Filtrar"
-5. Verás solo los registros de ese proyecto
+1. Ves a "Les Meves Hores"
+2. Fes clic a "Filtres" per expandir
+3. A "Projecte" selecciona el projecte desitjat
+4. Fes clic a "Filtrar"
+5. Veuràs només els registres d'aquest projecte
 
-### **📅 Ver trabajos de la última semana**
+### **📅 Veure treballs de l'última setmana**
 
-1. Ve a "Les Meves Hores"
-2. Haz clic en "Filtres" para expandir
-3. En "Data des de" selecciona la fecha de hace 7 días
-4. En "Data fins" selecciona hoy
-5. Haz clic en "Filtrar"
-6. Verás el resumen: Total Registres y Total Hores del período
+1. Ves a "Les Meves Hores"
+2. Fes clic a "Filtres" per expandir
+3. A "Data des de" selecciona la data de fa 7 dies
+4. A "Data fins" selecciona avui
+5. Fes clic a "Filtrar"
+6. Veuràs el resum: Total Registres i Total Hores del període
 
-## 💡 Consejos Prácticos
+## 💡 Consells Pràctics
 
-### **⚡ Registro Eficiente**
-- **Registra diariamente**: No acumules varios días
-- **Usa decimales**: 1.5 (1h 30min), 2.25 (2h 15min), etc.
-- **Sé descriptivo**: En observaciones explica brevemente qué hiciste
+### **⚡ Registre Eficient**
+- **Registra diàriament**: No acumulis diversos dies
+- **Utilitza decimals**: 1.5 (1h 30min), 2.25 (2h 15min), etc.
+- **Sigues descriptiu**: A observacions explica breument què vas fer
 
-### **🔍 Uso de Filtros**
-- **Combina filtros**: Proyecto + rango de fechas para análisis específicos
-- **Revisa estadísticas**: El total de horas se actualiza automáticamente
-- **Limpia filtros**: Usa "Netejar" para ver todos los registros nuevamente
+### **🔍 Ús de Filtres**
+- **Combina filtres**: Projecte + rang de dates per a anàlisis específiques
+- **Revisa estadístiques**: El total d'hores s'actualitza automàticament
+- **Neteja filtres**: Utilitza "Netejar" per veure tots els registres novament
 
 ---
 
-## 🎉 ¡Ya estás listo!
+## 🎉 Ja estàs llest!
 
-Con esta guía tienes todo lo necesario para usar el sistema de registro de horas de Ecodisseny.
+Amb aquesta guia tens tot el necessari per utilitzar el sistema de registre d'hores d'Ecodisseny.
 
-**Próximos pasos recomendados**:
+**Següents passos recomanats**:
 
-1. ✅ Cambiar tu contraseña temporal
-2. ✅ Registrar tu primera entrada de horas
-3. ✅ Explorar los filtros en "Les Meves Hores"
-4. ✅ Establecer una rutina diaria de registro
+1. ✅ Canviar la teva contrasenya temporal
+2. ✅ Registrar la teva primera entrada d'hores
+3. ✅ Explorar els filtres a "Les Meves Hores"
+4. ✅ Establir una rutina diària de registre
 
-_💡 **Recuerda**: La precisión en el registro de horas te ayudará a llevar un mejor control de tu trabajo._
+_💡 **Recorda**: La precisió en el registre d'hores t'ajudarà a portar un millor control del teu treball._

@@ -9,31 +9,31 @@ class CategoriaDocumentacion(models.Model):
     """Categorías de documentación según tipo de usuario"""
     
     TIPOS_CATEGORIA = [
-        ('usuario', '👤 Usuario'),
+        ('usuario', '👤 Usuari'),
         ('admin', '🔧 Administrador'), 
-        ('dev', '🛠️ Desarrollador'),
+        ('dev', '🛠️ Desenvolupador'),
         ('general', '📚 General'),
     ]
     
-    nombre = models.CharField(max_length=100, verbose_name="Nombre")
+    nombre = models.CharField(max_length=100, verbose_name="Nom")
     slug = models.SlugField(unique=True, verbose_name="URL amigable")
-    tipo = models.CharField(max_length=20, choices=TIPOS_CATEGORIA, verbose_name="Tipo")
-    descripcion = models.TextField(blank=True, verbose_name="Descripción")
-    icono = models.CharField(max_length=50, default="📚", verbose_name="Icono")
-    orden = models.PositiveIntegerField(default=0, verbose_name="Orden")
+    tipo = models.CharField(max_length=20, choices=TIPOS_CATEGORIA, verbose_name="Tipus")
+    descripcion = models.TextField(blank=True, verbose_name="Descripció")
+    icono = models.CharField(max_length=50, default="📚", verbose_name="Icona")
+    orden = models.PositiveIntegerField(default=0, verbose_name="Ordre")
     activa = models.BooleanField(default=True, verbose_name="Activa")
     
-    # Permisos de acceso
+    # Permisos d'accés
     grupos_permitidos = models.ManyToManyField(
         Group, 
         blank=True, 
-        verbose_name="Grupos con acceso",
-        help_text="Si no se especifica, todos los usuarios autenticados tienen acceso"
+        verbose_name="Grups amb accés",
+        help_text="Si no s'especifica, tots els usuaris autenticats tenen accés"
     )
     
     class Meta:
-        verbose_name = "Categoría de Documentación"
-        verbose_name_plural = "Categorías de Documentación"
+        verbose_name = "Categoria de Documentació"
+        verbose_name_plural = "Categories de Documentació"
         ordering = ['tipo', 'orden', 'nombre']
     
     def __str__(self):
@@ -43,27 +43,27 @@ class CategoriaDocumentacion(models.Model):
 class DocumentoMarkdown(models.Model):
     """Documento de documentación en formato Markdown"""
     
-    titulo = models.CharField(max_length=200, verbose_name="Título")
+    titulo = models.CharField(max_length=200, verbose_name="Títol")
     slug = models.SlugField(verbose_name="URL amigable")
     categoria = models.ForeignKey(
         CategoriaDocumentacion, 
         on_delete=models.CASCADE,
         related_name='documentos',
-        verbose_name="Categoría"
+        verbose_name="Categoria"
     )
     
-    # Contenido
+    # Contingut
     archivo_markdown = models.CharField(
         max_length=500, 
-        verbose_name="Ruta del archivo .md",
-        help_text="Ejemplo: docs/usuario/inicio-rapido.md"
+        verbose_name="Ruta de l'arxiu .md",
+        help_text="Exemple: docs/usuari/inici-rapid.md"
     )
-    resumen = models.TextField(blank=True, verbose_name="Resumen")
+    resumen = models.TextField(blank=True, verbose_name="Resum")
     
-    # Metadatos
-    orden = models.PositiveIntegerField(default=0, verbose_name="Orden")
-    fecha_creacion = models.DateTimeField(auto_now_add=True, verbose_name="Creado")
-    fecha_actualizacion = models.DateTimeField(auto_now=True, verbose_name="Actualizado")
+    # Metadades
+    orden = models.PositiveIntegerField(default=0, verbose_name="Ordre")
+    fecha_creacion = models.DateTimeField(auto_now_add=True, verbose_name="Creat")
+    fecha_actualizacion = models.DateTimeField(auto_now=True, verbose_name="Actualitzat")
     autor = models.ForeignKey(
         User, 
         on_delete=models.SET_NULL, 
@@ -72,21 +72,21 @@ class DocumentoMarkdown(models.Model):
         verbose_name="Autor"
     )
     
-    # Configuración
-    publicado = models.BooleanField(default=True, verbose_name="Publicado")
-    destacado = models.BooleanField(default=False, verbose_name="Destacado")
+    # Configuració
+    publicado = models.BooleanField(default=True, verbose_name="Publicat")
+    destacado = models.BooleanField(default=False, verbose_name="Destacat")
     
-    # SEO y búsqueda
+    # SEO i cerca
     palabras_clave = models.CharField(
         max_length=500, 
         blank=True, 
-        verbose_name="Palabras clave",
-        help_text="Separadas por comas"
+        verbose_name="Paraules clau",
+        help_text="Separades per comes"
     )
     
     class Meta:
-        verbose_name = "Documento"
-        verbose_name_plural = "Documentos"
+        verbose_name = "Document"
+        verbose_name_plural = "Documents"
         ordering = ['categoria__tipo', 'categoria__orden', 'orden', 'titulo']
         unique_together = ['categoria', 'slug']
     
@@ -157,20 +157,20 @@ class HistorialAcceso(models.Model):
         DocumentoMarkdown, 
         on_delete=models.CASCADE,
         related_name='accesos',
-        verbose_name="Documento"
+        verbose_name="Document"
     )
     usuario = models.ForeignKey(
         User, 
         on_delete=models.CASCADE,
-        verbose_name="Usuario"
+        verbose_name="Usuari"
     )
-    fecha_acceso = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de acceso")
+    fecha_acceso = models.DateTimeField(auto_now_add=True, verbose_name="Data d'accés")
     ip_address = models.GenericIPAddressField(verbose_name="IP")
     user_agent = models.TextField(blank=True, verbose_name="User Agent")
     
     class Meta:
-        verbose_name = "Historial de Acceso"
-        verbose_name_plural = "Historial de Accesos"
+        verbose_name = "Historial d'Accés"
+        verbose_name_plural = "Historials d'Accés"
         ordering = ['-fecha_acceso']
     
     def __str__(self):
@@ -180,34 +180,34 @@ class HistorialAcceso(models.Model):
 class FeedbackDocumentacion(models.Model):
     """Sistema de feedback para mejorar la documentación"""
     
-    TIPOS_FEEDBACK = [
+    TIPUS_FEEDBACK = [
         ('util', '👍 Útil'),
         ('no_util', '👎 No útil'),
-        ('incorrecto', '❌ Información incorrecta'),
-        ('falta_info', '❓ Falta información'),
-        ('sugerencia', '💡 Sugerencia'),
+        ('incorrecte', '❌ Informació incorrecta'),
+        ('falta_info', '❓ Falta informació'),
+        ('suggeriment', '💡 Suggeriment'),
     ]
     
     documento = models.ForeignKey(
         DocumentoMarkdown, 
         on_delete=models.CASCADE,
-        verbose_name="Documento"
+        verbose_name="Document"
     )
     usuario = models.ForeignKey(
         User, 
         on_delete=models.CASCADE,
-        verbose_name="Usuario"
+        verbose_name="Usuari"
     )
-    tipo = models.CharField(max_length=20, choices=TIPOS_FEEDBACK, verbose_name="Tipo")
-    comentario = models.TextField(blank=True, verbose_name="Comentario")
-    fecha = models.DateTimeField(auto_now_add=True, verbose_name="Fecha")
-    procesado = models.BooleanField(default=False, verbose_name="Procesado")
+    tipo = models.CharField(max_length=20, choices=TIPUS_FEEDBACK, verbose_name="Tipus")
+    comentario = models.TextField(blank=True, verbose_name="Comentari")
+    fecha = models.DateTimeField(auto_now_add=True, verbose_name="Data")
+    procesado = models.BooleanField(default=False, verbose_name="Processat")
     
     class Meta:
         verbose_name = "Feedback"
         verbose_name_plural = "Feedback"
         ordering = ['-fecha']
-        unique_together = ['documento', 'usuario']  # Un feedback por usuario por documento
+        unique_together = ['documento', 'usuario']  # Un feedback per usuari per document
     
     def __str__(self):
         return f"{self.get_tipo_display()} - {self.documento.titulo} por {self.usuario.username}"

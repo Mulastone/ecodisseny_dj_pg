@@ -71,10 +71,10 @@ class CategoriaDocumentacionAdmin(admin.ModelAdmin):
     save_on_top = True
     
     fieldsets = (
-        ('📝 Información Básica', {
+        ('📝 Informació Bàsica', {
             'fields': ('nombre', 'slug', 'descripcion', 'icono')
         }),
-        ('🎯 Configuración', {
+        ('🎯 Configuració', {
             'fields': ('tipo', 'orden', 'activa')
         }),
         ('🔐 Permisos', {
@@ -85,7 +85,7 @@ class CategoriaDocumentacionAdmin(admin.ModelAdmin):
     
     def icono_nombre(self, obj):
         return format_html('{} {}', obj.icono, obj.nombre)
-    icono_nombre.short_description = 'Categoría'
+    icono_nombre.short_description = 'Categoria'
     
     def documentos_count(self, obj):
         count = obj.documentos.count()
@@ -93,7 +93,7 @@ class CategoriaDocumentacionAdmin(admin.ModelAdmin):
             url = reverse('admin:documentacion_documentomarkdown_changelist')
             return format_html('<a href="{}?categoria__id__exact={}">{} docs</a>', url, obj.id, count)
         return '0 docs'
-    documentos_count.short_description = 'Documentos'
+    documentos_count.short_description = 'Documents'
 
 
 @admin.register(DocumentoMarkdown)
@@ -106,29 +106,29 @@ class DocumentoMarkdownAdmin(admin.ModelAdmin):
     readonly_fields = ('slug', 'fecha_creacion', 'fecha_actualizacion', 'contenido_preview', 'archivo_info')
     
     fieldsets = (
-        ('📝 Información Principal', {
+        ('📝 Informació Principal', {
             'fields': ('titulo', 'slug', 'categoria', 'resumen')
         }),
-        ('📁 Archivo', {
+        ('📁 Arxiu', {
             'fields': ('archivo_markdown', 'archivo_info'),
-            'description': 'Ruta relativa desde la raíz del proyecto'
+            'description': 'Ruta relativa des de l’arrel del projecte'
         }),
-        ('✏️ Editor de Contenido', {
+        ('✏️ Editor de Contingut', {
             'fields': ('contenido_markdown',),
-            'description': 'Edita el contenido markdown directamente desde aquí'
+            'description': 'Edita el contingut markdown directament des d’aquí'
         }),
-        ('🎯 Configuración', {
+        ('🎯 Configuració', {
             'fields': ('orden', 'publicado', 'destacado', 'autor')
         }),
-        ('🔍 SEO y Búsqueda', {
+        ('🔍 SEO i Cerca', {
             'fields': ('palabras_clave',),
             'classes': ('collapse',)
         }),
-        ('📊 Metadatos', {
+        ('📊 Metadades', {
             'fields': ('fecha_creacion', 'fecha_actualizacion'),
             'classes': ('collapse',)
         }),
-        ('👁️ Vista Previa', {
+        ('👁️ Vista Prèvia', {
             'fields': ('contenido_preview',),
             'classes': ('collapse',)
         })
@@ -138,7 +138,7 @@ class DocumentoMarkdownAdmin(admin.ModelAdmin):
     
     def categoria_info(self, obj):
         return format_html('{} {}', obj.categoria.icono, obj.categoria.nombre)
-    categoria_info.short_description = 'Categoría'
+    categoria_info.short_description = 'Categoria'
     
     def archivo_status(self, obj):
         if os.path.exists(obj.archivo_markdown):
@@ -150,7 +150,7 @@ class DocumentoMarkdownAdmin(admin.ModelAdmin):
             )
         else:
             return format_html('<span style="color: red;">❌ No existe</span>')
-    archivo_status.short_description = 'Archivo'
+    archivo_status.short_description = 'Arxiu'
     
     def accesos_count(self, obj):
         count = obj.accesos.count()
@@ -187,7 +187,7 @@ class DocumentoMarkdownAdmin(admin.ModelAdmin):
                     obj.archivo_markdown
                 )
         return 'No especificado'
-    archivo_info.short_description = 'Información del Archivo'
+    archivo_info.short_description = 'Informació de l’Arxiu'
     
     def contenido_preview(self, obj):
         try:
@@ -239,27 +239,27 @@ class DocumentoMarkdownAdmin(admin.ModelAdmin):
             return 'No se pudo cargar el contenido'
         except Exception as e:
             return format_html('<div style="color: red; padding: 10px;">❌ Error: {}</div>', str(e))
-    contenido_preview.short_description = 'Vista Previa del Contenido'
+    contenido_preview.short_description = 'Vista Prèvia del Contingut'
     
     def marcar_como_publicado(self, request, queryset):
         updated = queryset.update(publicado=True)
         self.message_user(request, f'✅ {updated} documento(s) marcado(s) como publicado(s).')
-    marcar_como_publicado.short_description = '✅ Marcar como publicado'
+    marcar_como_publicado.short_description = '✅ Marcar com a publicat'
     
     def marcar_como_no_publicado(self, request, queryset):
         updated = queryset.update(publicado=False)
         self.message_user(request, f'❌ {updated} documento(s) marcado(s) como no publicado(s).')
-    marcar_como_no_publicado.short_description = '❌ Marcar como no publicado'
+    marcar_como_no_publicado.short_description = '❌ Marcar com a no publicat'
     
     def marcar_como_destacado(self, request, queryset):
         updated = queryset.update(destacado=True)
         self.message_user(request, f'⭐ {updated} documento(s) marcado(s) como destacado(s).')
-    marcar_como_destacado.short_description = '⭐ Marcar como destacado'
+    marcar_como_destacado.short_description = '⭐ Marcar com a destacat'
     
     def quitar_destacado(self, request, queryset):
         updated = queryset.update(destacado=False)
         self.message_user(request, f'⚪ {updated} documento(s) ya no están destacados.')
-    quitar_destacado.short_description = '⚪ Quitar destacado'
+    quitar_destacado.short_description = '⚪ Treure destacat'
     
     def verificar_archivos(self, request, queryset):
         existentes = 0
@@ -269,13 +269,13 @@ class DocumentoMarkdownAdmin(admin.ModelAdmin):
                 existentes += 1
             else:
                 faltantes += 1
-        
-        mensaje = f'Verificación: {existentes} archivos existen, {faltantes} no encontrados.'
+
+        mensaje = f'Verificación: {existentes} archivos existents, {faltantes} no trobats.'
         if faltantes > 0:
             self.message_user(request, mensaje, level='WARNING')
         else:
             self.message_user(request, mensaje)
-    verificar_archivos.short_description = 'Verificar archivos físicos'
+    verificar_archivos.short_description = 'Verificar arxius físics'
     
     def save_model(self, request, obj, form, change):
         # Si es un documento nuevo y no tiene autor, asignar el usuario actual
@@ -298,7 +298,7 @@ class HistorialAccesoAdmin(admin.ModelAdmin):
     def documento_link(self, obj):
         url = reverse('admin:documentacion_documentomarkdown_change', args=[obj.documento.id])
         return format_html('<a href="{}">{}</a>', url, obj.documento.titulo)
-    documento_link.short_description = 'Documento'
+    documento_link.short_description = 'Document'
     
     def user_agent_short(self, obj):
         if obj.user_agent:
@@ -309,6 +309,6 @@ class HistorialAccesoAdmin(admin.ModelAdmin):
 
 
 # Personalizar el admin site
-admin.site.site_header = "📚 Ecodisseny - Administración de Documentación"
-admin.site.site_title = "Documentación Admin"
-admin.site.index_title = "Gestión de Documentación"
+admin.site.site_header = "📚 Ecodisseny - Administració de Documentació"
+admin.site.site_title = "Documentació Admin"
+admin.site.index_title = "Gestió de Documentació"

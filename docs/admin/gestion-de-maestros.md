@@ -1,164 +1,105 @@
-# 🏗️ Gestión de Maestros
+# 🏗️ Gestió de Mestres
 
-La gestión de datos maestros es fundamental para el correcto funcionamiento del sistema Ecodisseny. Aquí se configuran todos los elementos base que utilizarán los usuarios.
+La gestió de dades mestres és fonamental per al correcte funcionament del sistema Ecodisseny. Aquí es configuren tots els elements base que utilitzaran els usuaris.
 
-## 📋 Tipos de Datos Maestros
+## ⚙️ **Administració de Mestres**
+
+### 🔧 **Accés al Panell**
+
+```
+1. Iniciar sessió com a administrador
+2. Anar al Panell d'Administració
+3. Seleccionar secció "Mestres"
+4. Triar tipus de dada a gestionar
+```
+
+### ➕ **Crear Nous Elements**
+
+```
+1. Seleccionar "Afegir nou"
+2. Completar formulari
+3. Validar informació
+4. Desar canvis
+```
+
+### ✏️ **Modificar Elements Existents**
+
+```
+1. Buscar element a la llista
+2. Seleccionar "Editar"
+3. Realitzar modificacions
+4. Confirmar canvis
+```
+
+### 🗑️ **Eliminar Elements**
+
+```
+⚠️ PRECAUCIÓ: Només eliminar elements no utilitzats
+1. Verificar que no estigui en ús
+2. Seleccionar element
+3. Confirmar eliminació
+```
+
+## 📋 Tipus de Dades Mestres
 
 ### 🏢 **Recursos**
 
-Gestión de recursos humanos y materiales del sistema.
+Gestió de recursos humans interns i externs.
 
-#### Recursos Humanos
+#### Tipus Recursos 
 
-- **Técnicos**: Personal que realiza trabajos técnicos
-- **Administradores**: Personal administrativo
-- **Gestores**: Responsables de proyectos
+- **Interns**: Personal fix d'ecodisseny amb preu per hora tancat i usuari per carregar hores
+- **Col·laborador**: Personal col·laborador d'ecodisseny normalment preu tancat. Puc optar per preu per hora i carregar hores
+- **Extern**: Preu tancat per treball. Empreses externes o autònoms.
 
-#### Recursos Materiales
+#### Recursos 
 
-- **Herramientas**: Equipos y herramientas necesarias
-- **Vehículos**: Transporte para desplazamientos
-- **Equipos**: Maquinaria especializada
+- **Tipus**: Es defineix quin tipus de recurs estic donant d'alta
+- **Preu Tancat**: Defineix si el recurs té preu tancat o va per hores
+- **Preu Hora**: Si va per hores s'assigna el preu hora al recurs.
 
-### 📍 **Ubicaciones**
+#### Perfils d'usuaris
 
-Configuración de ubicaciones de trabajo.
+Indiquem el perfil d'usuari associat a cada recurs, cada usuari que hagi de carregar hores haurà de tenir aquesta relació d'usuari - recurs
 
-#### Tipos de Ubicaciones
 
-- **Oficinas**: Sedes de trabajo administrativo
-- **Obras**: Lugares de trabajo en campo
-- **Almacenes**: Espacios de almacenamiento
+### 📍 **Ubicacions**
 
-#### Gestión de Ubicaciones
+Configuració d'ubicacions de treball.
 
-```
-1. Acceder a Admin > Maestros > Ubicaciones
-2. Crear nueva ubicación
-3. Definir nombre, dirección y tipo
-4. Asignar recursos disponibles
-5. Configurar horarios de trabajo
-```
+- **Muntanya** 
+- **Pobles**
+- **Nucli Urbà**
 
-### 📝 **Tareas**
+### 📝 **Tasques**
 
-Definición de tipos de tareas del sistema.
+Definició de tipus de tasques del sistema.
 
-#### Categorías de Tareas
+#### exemple Tasques
 
-- **Administrativas**: Gestión y administración
-- **Técnicas**: Trabajos especializados
-- **Mantenimiento**: Conservación y reparación
+- **Amidament**
+- **Aixecament edifici**
+- **Informe**
 
-#### Configuración de Tareas
+#### Configuració de Tasques
 
 ```
-1. Ir a Admin > Maestros > Tareas
-2. Definir categoría de tarea
-3. Establecer duración estimada
-4. Asignar recursos necesarios
-5. Configurar facturación
+1. Anar a Admin > Mestres > Tasques
+2. Definir tasca
 ```
 
-## ⚙️ **Administración de Maestros**
+## 🎯 **Millors Pràctiques**
 
-### 🔧 **Acceso al Panel**
+### ✅ **Recomanacions**
 
-```
-1. Iniciar sesión como administrador
-2. Ir a Panel de Administración
-3. Seleccionar sección "Maestros"
-4. Elegir tipo de dato a gestionar
-```
-
-### ➕ **Crear Nuevos Elementos**
-
-```
-1. Seleccionar "Agregar nuevo"
-2. Completar formulario
-3. Validar información
-4. Guardar cambios
-```
-
-### ✏️ **Modificar Elementos Existentes**
-
-```
-1. Buscar elemento en la lista
-2. Seleccionar "Editar"
-3. Realizar modificaciones
-4. Confirmar cambios
-```
-
-### 🗑️ **Eliminar Elementos**
-
-```
-⚠️ PRECAUCIÓN: Solo eliminar elementos no utilizados
-1. Verificar que no esté en uso
-2. Seleccionar elemento
-3. Confirmar eliminación
-```
-
-## 🔄 **Sincronización y Actualizaciones**
-
-### 📊 **Importación Masiva**
-
-Para cargar grandes cantidades de datos:
-
-```
-1. Preparar archivo CSV con formato correcto
-2. Ir a Admin > Importar datos
-3. Seleccionar archivo
-4. Mapear columnas
-5. Ejecutar importación
-```
-
-### 📤 **Exportación de Datos**
-
-```
-1. Seleccionar tipo de datos
-2. Aplicar filtros si es necesario
-3. Elegir formato de exportación
-4. Descargar archivo
-```
-
-## 🎯 **Mejores Prácticas**
-
-### ✅ **Recomendaciones**
-
-- Mantener nomenclatura consistente
-- Revisar datos regularmente
-- Realizar backups antes de cambios masivos
-- Documentar configuraciones especiales
+- Mantenir nomenclatura consistent
+- Revisar dades regularment
 
 ### ❌ **Evitar**
 
-- Duplicar entradas
-- Eliminar datos en uso
-- Modificar IDs manualmente
-- Crear dependencias circulares
+- Duplicar entrades
+- Eliminar dades en ús
+- Modificar IDs manualment
+- Crear dependències circulars
 
-## 🆘 **Solución de Problemas**
-
-### 🐛 **Problemas Comunes**
-
-**Error: "Elemento en uso"**
-
-- Verificar referencias en proyectos activos
-- Revisar asignaciones de recursos
-- Consultar historial de uso
-
-**Datos duplicados**
-
-- Usar herramienta de detección de duplicados
-- Fusionar registros similares
-- Establecer reglas de validación
-
-## 📚 **Recursos Adicionales**
-
-- [Configuración del Sistema](/documentacion/admin/configuracion-del-sistema/)
-- [Gestión de Usuarios](/documentacion/admin/gestion-de-usuarios/)
-- [Seguridad](/documentacion/admin/seguridad/)
-
----
-
-_💡 **Tip**: Mantén los datos maestros organizados y actualizados para garantizar la eficiencia del sistema._
+_💡 **Consell**: Mantén les dades mestres organitzades i actualitzades per garantir l'eficiència del sistema._

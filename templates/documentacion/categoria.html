@@ -58,7 +58,7 @@
                 <div class="col-md-4 text-end">
                     <div class="d-inline-block bg-white bg-opacity-25 rounded p-3">
                         <i class="bi bi-file-earmark-text fs-1"></i>
-                        <div class="fw-bold">{{ documentos.count }} Documento{{ documentos.count|pluralize }}</div>
+                        <div class="fw-bold">{{ documentos.count }} Document{{ documentos.count|pluralize }}</div>
                         <small>{{ categoria.get_tipo_display }}</small>
                     </div>
                 </div>
@@ -67,16 +67,16 @@
     </div>
 
     <div class="container">
-        <!-- Barra de Búsqueda -->
+    <!-- Barra de Cerca -->
         <div class="row mb-4">
             <div class="col-md-8 mx-auto">
                 <div class="search-box">
                     <form method="get" class="d-flex">
                         <input type="text" name="q" class="form-control me-2" 
-                               placeholder="Buscar en {{ categoria.nombre|lower }}..." 
+                               placeholder="Cercar a {{ categoria.nombre|lower }}..." 
                                value="{{ busqueda }}" autofocus>
                         <button class="btn btn-primary" type="submit">
-                            <i class="bi bi-search"></i> Buscar
+                            <i class="bi bi-search"></i> Cercar
                         </button>
                         {% if busqueda %}
                         <a href="{% url 'documentacion:categoria' categoria.slug %}" 
@@ -90,8 +90,8 @@
                     <div class="mt-2">
                         <small class="text-muted">
                             <i class="bi bi-search"></i>
-                            Resultados para: <strong>"{{ busqueda }}"</strong>
-                            ({{ documentos.count }} encontrado{{ documentos.count|pluralize }})
+                            Resultats per a: <strong>"{{ busqueda }}"</strong>
+                            ({{ documentos.count }} trobat{{ documentos.count|pluralize }})
                         </small>
                     </div>
                     {% endif %}
@@ -99,7 +99,7 @@
             </div>
         </div>
 
-        <!-- Lista de Documentos -->
+    <!-- Llista de Documents -->
         {% if documentos %}
             <div class="row">
                 {% for documento in documentos %}
@@ -142,7 +142,7 @@
                                 {% if documento.fecha_creacion != documento.fecha_actualizacion %}
                                 <small class="text-muted">
                                     <i class="bi bi-clock-history"></i>
-                                    Actualizado: {{ documento.fecha_actualizacion|date:"d/m/Y" }}
+                                    Actualitzat: {{ documento.fecha_actualizacion|date:"d/m/Y" }}
                                 </small>
                                 {% endif %}
                             </div>
@@ -151,7 +151,7 @@
                         <div class="card-footer bg-transparent">
                             <a href="{% url 'documentacion:documento' categoria.slug documento.slug %}" 
                                class="btn btn-primary btn-sm w-100">
-                                <i class="bi bi-eye"></i> Leer Documento
+                                <i class="bi bi-eye"></i> Llegir Document
                             </a>
                         </div>
                     </div>
@@ -159,8 +159,8 @@
                 {% endfor %}
             </div>
 
-            <!-- Paginación (si fuera necesaria en el futuro) -->
-            <!-- Se puede implementar si hay muchos documentos -->
+            <!-- Paginació (si fos necessària en el futur) -->
+            <!-- Es pot implementar si hi ha molts documents -->
             
         {% else %}
             <div class="row">
@@ -168,19 +168,19 @@
                     {% if busqueda %}
                         <div class="alert alert-warning text-center">
                             <i class="bi bi-search"></i>
-                            <h5>No se encontraron resultados</h5>
-                            <p>No hay documentos que coincidan con "<strong>{{ busqueda }}</strong>" en esta categoría.</p>
+                            <h5>No s'han trobat resultats</h5>
+                            <p>No hi ha documents que coincideixin amb "<strong>{{ busqueda }}</strong>" en aquesta categoria.</p>
                             <a href="{% url 'documentacion:categoria' categoria.slug %}" class="btn btn-primary">
-                                <i class="bi bi-arrow-left"></i> Ver todos los documentos
+                                <i class="bi bi-arrow-left"></i> Veure tots els documents
                             </a>
                         </div>
                     {% else %}
                         <div class="alert alert-info text-center">
                             <i class="bi bi-info-circle"></i>
-                            <h5>Sin documentos disponibles</h5>
-                            <p>Esta categoría aún no tiene documentos publicados.</p>
+                            <h5>Sense documents disponibles</h5>
+                            <p>Aquesta categoria encara no té documents publicats.</p>
                             <a href="{% url 'documentacion:index' %}" class="btn btn-primary">
-                                <i class="bi bi-arrow-left"></i> Volver a Documentación
+                                <i class="bi bi-arrow-left"></i> Tornar a Documentació
                             </a>
                         </div>
                     {% endif %}
@@ -188,15 +188,15 @@
             </div>
         {% endif %}
 
-        <!-- Enlaces de Navegación -->
+    <!-- Enllaços de Navegació -->
         <div class="row mt-5">
             <div class="col-12">
                 <div class="d-flex justify-content-between">
                     <a href="{% url 'documentacion:index' %}" class="btn btn-outline-secondary">
-                        <i class="bi bi-arrow-left"></i> Volver a Documentación
+                        <i class="bi bi-arrow-left"></i> Tornar a Documentació
                     </a>
                     <a href="{% url 'documentacion:busqueda' %}" class="btn btn-outline-primary">
-                        <i class="bi bi-search"></i> Búsqueda Global
+                        <i class="bi bi-search"></i> Cerca Global
                     </a>
                 </div>
             </div>

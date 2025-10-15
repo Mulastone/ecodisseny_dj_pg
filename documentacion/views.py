@@ -49,9 +49,9 @@ def index_documentacion(request):
     
     context = {
         'categorias': categorias_permitidas,
-        'documentos_destacados': documentos_destacados[:6],  # Máximo 6 total
-        'total_documentos': total_documentos,
-        'titulo_pagina': 'Centro de Documentación',
+        'documentos_destacats': documentos_destacados[:6],  # Màxim 6 total
+        'total_documents': total_documentos,
+        'titulo_pagina': 'Centre de Documentació',
     }
     
     return render(request, 'documentacion/index.html', context)
@@ -68,7 +68,7 @@ def lista_categoria(request, categoria_slug):
         if not categoria.grupos_permitidos.filter(
             id__in=request.user.groups.values_list('id', flat=True)
         ).exists():
-            messages.error(request, 'No tienes permisos para acceder a esta sección.')
+            messages.error(request, 'No tens permisos per accedir a aquesta secció.')
             return redirect('documentacion:index')
     
     # Obtener documentos con búsqueda opcional
@@ -90,7 +90,7 @@ def lista_categoria(request, categoria_slug):
         'categoria': categoria,
         'documentos': documentos,
         'busqueda': busqueda,
-        'titulo_pagina': f'Documentación - {categoria.nombre}',
+        'titulo_pagina': f'Documentació - {categoria.nombre}',
     }
     
     return render(request, 'documentacion/categoria.html', context)
@@ -110,7 +110,7 @@ def detalle_documento(request, categoria_slug, documento_slug):
     
     # Verificar permisos
     if not documento.puede_acceder(request.user):
-        messages.error(request, 'No tienes permisos para acceder a este documento.')
+        messages.error(request, 'No tens permisos per accedir a aquest document.')
         return redirect('documentacion:categoria', categoria_slug=categoria_slug)
     
     # Registrar acceso para analytics
@@ -146,7 +146,7 @@ def detalle_documento(request, categoria_slug, documento_slug):
         'documento': documento,
         'contenido_html': documento.get_contenido_html(),
         'feedback_usuario': feedback_usuario,
-        'documentos_relacionados': documentos_relacionados,
+        'documentos_relacionats': documentos_relacionados,
         'titulo_pagina': documento.titulo,
     }
     
@@ -161,13 +161,13 @@ def feedback_documento(request, documento_id):
     documento = get_object_or_404(DocumentoMarkdown, id=documento_id, publicado=True)
     
     if not documento.puede_acceder(request.user):
-        return JsonResponse({'error': 'Sin permisos'}, status=403)
+        return JsonResponse({'error': 'Sense permisos'}, status=403)
     
     tipo = request.POST.get('tipo')
     comentario = request.POST.get('comentario', '').strip()
     
-    if tipo not in dict(FeedbackDocumentacion.TIPOS_FEEDBACK):
-        return JsonResponse({'error': 'Tipo de feedback inválido'}, status=400)
+    if tipo not in dict(FeedbackDocumentacion.TIPUS_FEEDBACK):
+        return JsonResponse({'error': 'Tipus de feedback invàlid'}, status=400)
     
     # Crear o actualizar feedback
     feedback, created = FeedbackDocumentacion.objects.update_or_create(
@@ -180,11 +180,11 @@ def feedback_documento(request, documento_id):
         }
     )
     
-    action = 'creado' if created else 'actualizado'
+    accio = 'creat' if created else 'actualitzat'
     
     return JsonResponse({
         'success': True,
-        'message': f'Feedback {action} correctamente',
+        'message': f'Feedback {accio} correctament',
         'tipo': feedback.get_tipo_display()
     })
 
@@ -219,9 +219,9 @@ def busqueda_global(request):
     
     context = {
         'query': query,
-        'resultados': resultados,
-        'total_resultados': len(resultados),
-        'titulo_pagina': f'Búsqueda: {query}' if query else 'Búsqueda',
+        'resultats': resultados,
+        'total_resultats': len(resultados),
+        'titulo_pagina': f'Cerca: {query}' if query else 'Cerca',
     }
     
     return render(request, 'documentacion/busqueda.html', context)
@@ -264,10 +264,10 @@ class AnalyticsDocumentacion(ListView):
         ).filter(activa=True)
         
         context.update({
-            'documentos_populares': documentos_populares,
-            'feedback_reciente': feedback_reciente,
-            'stats_categorias': stats_categorias,
-            'titulo_pagina': 'Analytics - Documentación',
+            'documents_populars': documentos_populares,
+            'feedback_recent': feedback_reciente,
+            'stats_categories': stats_categorias,
+            'titulo_pagina': 'Analytics - Documentació',
         })
         
         return context

@@ -59,13 +59,13 @@
                     <h1 class="display-5 mb-2">
                         <i class="bi bi-search"></i> Búsqueda en Documentación
                     </h1>
-                    <p class="lead mb-0">Encuentra la información que necesitas</p>
+                    <p class="lead mb-0">Troba la informació que necessites</p>
                 </div>
                 <div class="col-md-4 text-end">
                     <div class="d-inline-block bg-white bg-opacity-25 rounded p-3">
                         <i class="bi bi-file-earmark-text fs-1"></i>
-                        <div class="fw-bold">{{ total_resultados }} Resultado{{ total_resultados|pluralize }}</div>
-                        {% if query %}<small>para "{{ query }}"</small>{% endif %}
+                        <div class="fw-bold">{{ total_resultados }} Resultat{{ total_resultados|pluralize }}</div>
+                        {% if query %}<small>per a "{{ query }}"</small>{% endif %}
                     </div>
                 </div>
             </div>
@@ -73,21 +73,21 @@
     </div>
 
     <div class="container">
-        <!-- Formulario de Búsqueda Principal -->
+    <!-- Formulari de Cerca Principal -->
         <div class="row mb-4">
             <div class="col-md-8 mx-auto">
                 <form method="get" class="card p-4">
                     <div class="input-group input-group-lg">
                         <input type="text" name="q" class="form-control" 
-                               placeholder="Buscar documentos, títulos, contenido..." 
+                               placeholder="Cercar documents, títols, contingut..." 
                                value="{{ query }}" autofocus required>
                         <button class="btn btn-primary" type="submit">
-                            <i class="bi bi-search"></i> Buscar
+                            <i class="bi bi-search"></i> Cercar
                         </button>
                     </div>
                     <small class="text-muted mt-2">
                         <i class="bi bi-info-circle"></i>
-                        Tip: Usa palabras clave específicas para mejores resultados. Mínimo 3 caracteres.
+                        Consell: Utilitza paraules clau específiques per a millors resultats. Mínim 3 caràcters.
                     </small>
                 </form>
             </div>
@@ -99,16 +99,16 @@
                 <div class="row">
                     <div class="col-md-8">
                         <h5 class="mb-1">
-                            <i class="bi bi-graph-up"></i> Resultados de búsqueda
+                            <i class="bi bi-graph-up"></i> Resultats de cerca
                         </h5>
                         <p class="mb-0">
-                            Se encontraron <strong>{{ total_resultados }}</strong> resultado{{ total_resultados|pluralize }} 
-                            para "<strong>{{ query }}</strong>"
+                            S'han trobat <strong>{{ total_resultados }}</strong> resultat{{ total_resultados|pluralize }} 
+                            per a "<strong>{{ query }}</strong>"
                         </p>
                     </div>
                     <div class="col-md-4 text-end">
                         <a href="{% url 'documentacion:busqueda' %}" class="btn btn-outline-secondary">
-                            <i class="bi bi-arrow-clockwise"></i> Nueva búsqueda
+                            <i class="bi bi-arrow-clockwise"></i> Nova cerca
                         </a>
                     </div>
                 </div>
@@ -134,7 +134,7 @@
                                         </h5>
                                         
                                         <p class="card-text">
-                                            {{ documento.resumen|default:"Sin resumen disponible"|truncatewords:30 }}
+                                            {{ documento.resumen|default:"Sense resum disponible"|truncatewords:30 }}
                                         </p>
                                         
                                         <div class="mb-2">
@@ -161,11 +161,11 @@
                                         <div class="d-grid gap-2">
                                             <a href="{% url 'documentacion:documento' documento.categoria.slug documento.slug %}" 
                                                class="btn btn-primary">
-                                                <i class="bi bi-eye"></i> Ver Documento
+                                                <i class="bi bi-eye"></i> Veure Document
                                             </a>
                                             <a href="{% url 'documentacion:categoria' documento.categoria.slug %}" 
                                                class="btn btn-outline-secondary btn-sm">
-                                                <i class="bi bi-folder"></i> Ver Categoría
+                                                <i class="bi bi-folder"></i> Veure Categoria
                                             </a>
                                         </div>
                                     </div>
@@ -181,22 +181,22 @@
                     <div class="col-12">
                         <div class="alert alert-warning text-center">
                             <i class="bi bi-search fs-1 text-muted"></i>
-                            <h4 class="mt-3">No se encontraron resultados</h4>
-                            <p>No hay documentos que coincidan con "<strong>{{ query }}</strong>".</p>
+                            <h4 class="mt-3">No s'han trobat resultats</h4>
+                            <p>No hi ha documents que coincideixin amb "<strong>{{ query }}</strong>".</p>
                             
                             <div class="mt-4">
-                                <h6>Sugerencias para mejorar tu búsqueda:</h6>
+                                <h6>Suggeriments per millorar la teva cerca:</h6>
                                 <ul class="list-unstyled">
-                                    <li><i class="bi bi-arrow-right"></i> Verifica la ortografía de las palabras</li>
-                                    <li><i class="bi bi-arrow-right"></i> Intenta con palabras más generales</li>
-                                    <li><i class="bi bi-arrow-right"></i> Usa sinónimos o términos relacionados</li>
-                                    <li><i class="bi bi-arrow-right"></i> Reduce el número de palabras de búsqueda</li>
+                                    <li><i class="bi bi-arrow-right"></i> Verifica l'ortografia de les paraules</li>
+                                    <li><i class="bi bi-arrow-right"></i> Intenta amb paraules més generals</li>
+                                    <li><i class="bi bi-arrow-right"></i> Utilitza sinònims o termes relacionats</li>
+                                    <li><i class="bi bi-arrow-right"></i> Redueix el nombre de paraules de cerca</li>
                                 </ul>
                             </div>
                             
                             <div class="mt-3">
                                 <a href="{% url 'documentacion:index' %}" class="btn btn-primary me-2">
-                                    <i class="bi bi-house"></i> Ir a Inicio
+                                    <i class="bi bi-house"></i> Anar a Inici
                                 </a>
                                 <a href="{% url 'documentacion:busqueda' %}" class="btn btn-outline-secondary">
                                     <i class="bi bi-arrow-clockwise"></i> Nueva Búsqueda
@@ -212,22 +212,22 @@
                 <div class="col-md-8 mx-auto">
                     <div class="search-tips text-center">
                         <i class="bi bi-lightbulb fs-1 text-primary"></i>
-                        <h4 class="mt-3">Tips de Búsqueda</h4>
+                        <h4 class="mt-3">Consells de Cerca</h4>
                         <div class="row mt-4">
                             <div class="col-md-6">
-                                <h6><i class="bi bi-search"></i> Búsqueda Básica</h6>
+                                <h6><i class="bi bi-search"></i> Cerca Bàsica</h6>
                                 <ul class="list-unstyled text-start">
-                                    <li>• Usa palabras clave específicas</li>
-                                    <li>• Mínimo 3 caracteres</li>
-                                    <li>• No distingue mayúsculas</li>
+                                    <li>• Utilitza paraules clau específiques</li>
+                                    <li>• Mínim 3 caràcters</li>
+                                    <li>• No distingeix majúscules</li>
                                 </ul>
                             </div>
                             <div class="col-md-6">
-                                <h6><i class="bi bi-bullseye"></i> Mejores Resultados</h6>
+                                <h6><i class="bi bi-bullseye"></i> Millors Resultats</h6>
                                 <ul class="list-unstyled text-start">
-                                    <li>• Combina 2-3 palabras clave</li>
-                                    <li>• Usa términos técnicos específicos</li>
-                                    <li>• Busca por nombre de autor</li>
+                                    <li>• Combina 2-3 paraules clau</li>
+                                    <li>• Utilitza termes tècnics específics</li>
+                                    <li>• Cerca per nom d'autor</li>
                                 </ul>
                             </div>
                         </div>
@@ -239,23 +239,23 @@
             <div class="row mt-5">
                 <div class="col-12">
                     <h4 class="text-center mb-4">
-                        <i class="bi bi-grid-3x3"></i> O explora por categorías
+                        <i class="bi bi-grid-3x3"></i> O explora per categories
                     </h4>
                     <div class="d-flex justify-content-center">
                         <a href="{% url 'documentacion:index' %}" class="btn btn-outline-primary btn-lg">
-                            <i class="bi bi-folder"></i> Ver Todas las Categorías
+                            <i class="bi bi-folder"></i> Veure Totes les Categories
                         </a>
                     </div>
                 </div>
             </div>
         {% endif %}
 
-        <!-- Enlaces de Navegación -->
+    <!-- Enllaços de Navegació -->
         <div class="row mt-5">
             <div class="col-12">
                 <div class="d-flex justify-content-center">
                     <a href="{% url 'documentacion:index' %}" class="btn btn-secondary">
-                        <i class="bi bi-arrow-left"></i> Volver a Documentación
+                        <i class="bi bi-arrow-left"></i> Tornar a Documentació
                     </a>
                 </div>
             </div>
