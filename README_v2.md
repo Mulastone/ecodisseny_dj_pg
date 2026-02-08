@@ -480,10 +480,6 @@ La documentación completa está disponible en la carpeta [`docs/`](docs/):
 - **[🎨 Personalización](docs/dev/personalizacion.md)** - Modificar interface
 - **[🐛 Debugging](docs/dev/debugging.md)** - Solución de problemas
 
-#### **🆘 Soporte**
-
-- **[🚨 Troubleshooting](docs/troubleshooting.md)** - Resolución de problemas comunes
-
 ### **🎯 Inicio Rápido por Rol**
 
 | Tu Rol                  | Empezar Aquí                                         | Objetivo                         |
@@ -528,16 +524,6 @@ El sistema incluye endpoints de autocompletado para:
 - **Tareas**: `/maestros/tasca-autocomplete/`
 - **Ubicaciones**: `/maestros/ubicacio-autocomplete/`
 
-## 🤝 Contribución
-
-### **🔄 Workflow de Desarrollo**
-
-1. **Fork** del repositorio
-2. **Crear rama** para tu feature: `git checkout -b feature/nueva-funcionalidad`
-3. **Desarrollar** en la rama `docker`
-4. **Commit** con mensajes descriptivos
-5. **Push** y crear **Pull Request**
-
 ### **🧪 Testing**
 
 ```bash
@@ -564,7 +550,7 @@ Este proyecto está bajo la licencia MIT. Ver el archivo `LICENSE` para más det
 
 <div align="center">
 
-**🏗️ Desarrollado con ❤️ para Ecodisseny**
+**🏗️ Desarrollado por Axel Rasmussen para Ecodisseny**
 
 _Sistema de gestión integral para proyectos de construcción y diseño_
 
@@ -574,57 +560,4 @@ _Sistema de gestión integral para proyectos de construcción y diseño_
 
 </div>
 
-## 🆘 Soporte
-
-### **🐛 Reportar Problemas**
-
-Si encuentras algún bug o tienes sugerencias:
-
-1. **Busca** en [Issues existentes](../../issues)
-2. **Crea un nuevo Issue** con:
-   - Descripción clara del problema
-   - Pasos para reproducirlo
-   - Logs relevantes
-   - Información del entorno
-
-### **💬 Contacto**
-
-- **Email**: mulastone@hotmail.com
-- **Documentación**: [Wiki del proyecto](../../wiki)
-- **Roadmap**: [Próximas funcionalidades](../../projects)
-
-### **🔧 Troubleshooting Común**
-
-**Error de conexión a PostgreSQL:**
-
-```bash
-# Verificar que el contenedor está ejecutándose
-docker-compose ps
-
-# Revisar logs de la base de datos
-docker-compose logs db
-```
-
-**Problemas con permisos:**
-
-```bash
-# Verificar permisos en volúmenes
-docker-compose exec web ls -la /app/media/
-
-# Cambiar propietario si es necesario
-sudo chown -R $USER:$USER ./media/
-```
-
-**Error 500 en producción:**
-
-```bash
-# Ver logs detallados
-docker-compose -f docker-compose.prod.yml logs web
-
-# Verificar configuración
-docker-compose -f docker-compose.prod.yml exec web python manage.py check --deploy
-```
-
 ---
-
-_¡Gracias por usar Ecodisseny! 🎉_

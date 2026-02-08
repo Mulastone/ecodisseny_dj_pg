@@ -121,3 +121,207 @@ PressupostPDFVersion
 | `/get_increment_hores/?params...` | Canvi parroquia+ubicació+tasca    |
 
 ---
+
+## 📊 Diagramas del Sistema
+
+### 🗄️ Diagrama de Relaciones de Base de Datos
+
+```mermaid
+erDiagram
+    Clients ||--o{ Projectes : "té"
+    Clients ||--o{ Pressupostos : "sol·licita"
+    Clients ||--o{ PersonaContactClient : "té contactes"
+    Parroquia ||--o{ Poblacio : "conté"
+    Parroquia ||--o{ Clients : "ubicat a"
+    Poblacio ||--o{ Clients : "ubicat a"
+    
+    Projectes ||--o{ Pressupostos : "genera"
+    Projectes }o--|| DepartamentClient : "assignat a"
+    Projectes }o--|| PersonaContactClient : "contacte"
+    Projectes }o--|| Parroquia : "ubicació"
+    Projectes }o--|| Ubicacio : "lloc"
+    
+    Pressupostos ||--o{ PressupostosLineas : "conté línies"
+    Pressupostos ||--o{ PressupostPDFVersion : "versions PDF"
+    
+    PressupostosLineas }o--|| Treballs : "tipus treball"
+    PressupostosLineas }o--|| Tasca : "tasca específica"
+    PressupostosLineas }o--|| Recurso : "recurs utilitzat"
+    PressupostosLineas }o--|| Hores : "hores aplicades"
+    
+    Treballs ||--o{ TasquesTreball : "té tasques"
+    Tasca ||--o{ TasquesTreball : "per a treballs"
+    
+    Tipusrecurso ||--o{ Recurso : "classifica"
+    
+    Desplacaments }o--|| Parroquia : "des de"
+    Desplacaments }o--|| Ubicacio : "fins a"
+    Desplacaments }o--|| Tasca : "per tasca"
+    
+    Clients {
+        int id_client PK
+        string nom_client
+        string r_social
+        string nrt
+        string telefon
+        string mail
+    }
+    
+    Projectes {
+        int id_projecte PK
+        string nom_projecte
+        date data_peticio
+        int id_client FK
+        bool tancat
+    }
+    
+    Pressupostos {
+        int id_pressupost PK
+        string nom_pressupost
+        date data_pressupost
+        int id_projecte FK
+        bool tancat
+    }
+    
+    PressupostosLineas {
+        int id_pressupost_linea PK
+        int id_pressupost FK
+        float quantitat
+        decimal subtotal_linea
+        decimal benefici_linea
+        decimal total_linea
+    }
+```
+
+### 🔄 Flujo de Creación de Presupuesto
+
+```mermaid
+flowchart TD
+    Start([📋 Iniciar Pressupost]) --> SelectClient[👤 Seleccionar Client]
+    SelectClient --> LoadProjects{Té projectes?}
+    
+    LoadProjects -->|Sí| SelectProject[🏢 Seleccionar Projecte]
+    LoadProjects -->|No| CreateProject[➕ Crear Projecte Nou]
+    CreateProject --> SelectProject
+    
+    SelectProject --> FillBasicData[📝 Omplir Dades Bàsiques<br/>Nom, Data, Ubicació]
+    FillBasicData --> AddLine[➕ Afegir Línia]
+    
+    AddLine --> SelectWork[🔨 Seleccionar Treball]
+    SelectWork --> LoadTasks[⚙️ Carregar Tasques AJAX]
+    LoadTasks --> SelectTask[✓ Seleccionar Tasca]
+    
+    SelectTask --> SelectResource[🛠️ Seleccionar Recurs]
+    SelectResource --> LoadResourceData[💰 Carregar Preu/Hores AJAX]
+    LoadResourceData --> CalcDisplacement[📍 Calcular Increment<br/>Desplaçament AJAX]
+    
+    CalcDisplacement --> CalcTotals[🧮 Calcular Totals<br/>Subtotal + Benefici]
+    CalcTotals --> MoreLines{Més línies?}
+    
+    MoreLines -->|Sí| AddLine
+    MoreLines -->|No| SaveBudget[(💾 Guardar Pressupost)]
+    
+    SaveBudget --> GeneratePDF[📄 Generar PDF]
+    GeneratePDF --> VersionControl[📚 Guardar Versió PDF]
+    VersionControl --> End([✅ Pressupost Completat])
+    
+    style Start fill:#e1f5ff
+    style End fill:#e1ffe1
+    style SaveBudget fill:#ffe1ff
+    style GeneratePDF fill:#fff4e1
+    style LoadTasks fill:#ffe1e1
+    style LoadResourceData fill:#ffe1e1
+    style CalcDisplacement fill:#ffe1e1
+```
+
+### 🔌 Secuencia de Interacciones AJAX
+
+```mermaid
+sequenceDiagram
+    participant U as 👤 Usuario
+    participant F as 📝 Formulario
+    participant A as ⚡ AJAX Handler
+    participant S as 🖥️ Servidor Django
+    participant D as 🗄️ Base de Datos
+    
+    U->>F: Selecciona Client
+    F->>A: onChange event
+    A->>S: GET /get_projectes/<id_client>/
+    S->>D: Query Projectes
+    D-->>S: Lista de Projectes
+    S-->>A: JSON response
+    A->>F: Actualitzar dropdown Projectes
+    
+    U->>F: Selecciona Treball
+    F->>A: onChange event
+    A->>S: GET /get_tasques/<id_treball>/
+    S->>D: Query Tasques per Treball
+    D-->>S: Lista de Tasques
+    S-->>A: JSON response
+    A->>F: Actualitzar dropdown Tasques
+    
+    U->>F: Selecciona Recurs
+    F->>A: onChange event
+    A->>S: GET /get_recurso/<id_recurso>/
+    S->>D: Query Dades Recurs
+    D-->>S: Preu, Hores, Tipus
+    S-->>A: JSON response
+    A->>F: Omplir camps Preu i Hores
+    
+    U->>F: Selecciona Parroquia + Ubicació + Tasca
+    F->>A: onChange events
+    A->>S: GET /get_increment_hores/?params
+    S->>D: Query Desplaçaments
+    D-->>S: Increment Hores
+    S-->>A: JSON response
+    A->>F: Aplicar increment
+    A->>F: Recalcular totals (JS)
+    F->>U: Mostrar totals actualitzats
+    
+    U->>F: Guardar Pressupost
+    F->>S: POST /pressupostos/form/
+    S->>D: INSERT pressupost + línies
+    D-->>S: Success
+    S-->>F: Redirect + Message
+    F->>U: Confirmació
+```
+
+### 📦 Módulos y Dependencias
+
+```mermaid
+graph LR
+    subgraph "Apps Django"
+        A[maestros<br/>📚 Dades Mestres]
+        B[projectes<br/>🏢 Projectes]
+        C[pressupostos<br/>💰 Pressupostos]
+        D[carregahores<br/>⏱️ Càrrega Hores]
+        E[accounts<br/>👤 Usuaris]
+        F[documentacion<br/>📄 Docs]
+    end
+    
+    subgraph "Models Maestros"
+        A --> A1[Clients]
+        A --> A2[Treballs]
+        A --> A3[Recursos]
+        A --> A4[Ubicacions]
+    end
+    
+    B --> A1
+    B --> A4
+    C --> B
+    C --> A1
+    C --> A2
+    C --> A3
+    C --> A4
+    D --> B
+    D --> A3
+    
+    style A fill:#e1f5ff
+    style B fill:#ffe1e1
+    style C fill:#e1ffe1
+    style D fill:#fff4e1
+    style E fill:#ffe1ff
+    style F fill:#f0f0f0
+```
+
+---
