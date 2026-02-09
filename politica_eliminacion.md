@@ -201,6 +201,10 @@ Totes les relacions usen **PROTECT**:
 | `parroquia` | Parroquia | **PROTECT** | No pots eliminar una parròquia si té pressupostos |
 | `ubicacio`  | Ubicacio  | **PROTECT** | No pots eliminar una ubicació si té pressupostos  |
 
+⚠️ **Protegit per:**
+
+- CarregaHores (PROTECT) - No pots eliminar un pressupost si té hores carregades
+
 ✅ **Eliminació en cascada de:**
 
 - PressupostLinia (CASCADE) - Totes les línies del pressupost
@@ -208,7 +212,8 @@ Totes les relacions usen **PROTECT**:
 
 💡 **Per eliminar un Pressupost:**
 
-- Simplement elimina'l. Les seves línies i versions PDF (registres + arxius físics) s'eliminaran automàticament.
+1. **Si té hores carregades**: Elimina primer els registres de CarregaHores associats
+2. **Elimina el pressupost**: Les seves línies i versions PDF (registres + arxius físics) s'eliminaran automàticament
 
 ---
 
@@ -236,16 +241,30 @@ Totes les relacions usen **PROTECT**:
 - Quan s'elimina un `PressupostPDFVersion`, també s'elimina automàticament el **fitxer PDF físic** del servidor
 - Això s'aplica tant si elimines el PDF directament com si elimines el Pressupost pare (cascada)
 - Els arxius es troben a: `media/pdfs_pressupostos/`
+- Utilitza el mètode `arxiu.delete(save=False)` de Django per garantir l'eliminació correcta
+- Si hi ha errors de permisos, es registra un warning però continua l'eliminació del registre
+
+⚙️ **Permisos necessaris:**
+
+- El directori `/app/media` i subdirectoris han de pertànyer a l'usuari `ecodisseny:ecodisseny`
+- Permisos: `drwxr-xr-x` (755) per als directoris
+- Si cal corregir permisos: `docker-compose exec -u root web chown -R ecodisseny:ecodisseny /app/media`
+  | `pressupost` | Pressupost | **PROTECT** | No pots eliminar un pressupost si té hores carregades |
+  | `linia` | PressupostLinia | **PROTECT** | No pots eliminar una línia de pressupost si té hores carregades |
+
+💡 **Per eliminar registres d'hores:**
+
+- Simplement elimina'ls. No tenen relacions amb CASCADE, per tant no s'elimina res més automàticament.
+
+⚠️ **Important:**
+
+- Aquest mòdul **protegeix** els pressupostos i les seves línies d'eliminació accidental
+- Abans d'eliminar un pressupost, cal eliminar primer totes les seves hores carregades
 
 ---
 
-## 🔄 Fluxos d'Eliminació Comuns
-
-### ❌ Eliminar un Client
-
-**Ordre correcte:**
-
 1. **Elimina Pressupostos del client**
+   - Primer: Elimina les hores carregades de cada pressupost (si n'hi ha)
    - Les línies de pressupost s'eliminen automàticament (CASCADE)
    - Les versions PDF (registres) s'eliminen automàticament (CASCADE)
    - Els arxius PDF físics s'eliminen automàticament del servidor
@@ -270,6 +289,7 @@ Totes les relacions usen **PROTECT**:
 **Ordre correcte:**
 
 1. **Elimina tots els Pressupostos del projecte**
+   - Primer: Elimina les hores carregades de cada pressupost (si n'hi ha)
    - Les línies de pressupost s'eliminen automàticament (CASCADE)
    - Els registres PDF i arxius físics s'eliminen automàticament
 
@@ -285,10 +305,25 @@ Totes les relacions usen **PROTECT**:
 
 ### ❌ Eliminar un Pressupost
 
-**Simple:**
+**Ordre correcte:**
+
+1. **Si té hores carregades, elimina-les primer:**
+
+   ```python
+   from carregahores.models import CarregaHores
+   CarregaHores.objects.filter(pressupost=pressupost).delete()
+   ```
+
+2. **Elimina el pressupost:**
+   ```python
+   # Les línies, versions PDF (registres) i arxius físics s'eliminen automàticament
+   pressupost.delete()
+   ```
+
+**Alternativa ràpida:**
 
 ```python
-# Les línies, versions PDF (registres) i arxius físics s'eliminen automàticament
+# Si no té hores carregades, elimina directament:
 pressupost.delete()
 ```
 
@@ -382,6 +417,69 @@ PressupostLinia
 ├── PROTECT → Recurso
 └── PROTECT → Hores
 ```
+
+---
+
+## ⚠️ Errors Comuns i Solucions
+
+### Error: No es pot eliminar el pressupost (té hores carregades)
+
+**Simptoma:**
+
+```
+No es pot eliminar aquest pressupost perquè té X registre(s) d'hores carregades associat(s).
+```
+
+**Causa:** El pressupost té registres del mòdul CarregaHores amb política PROTECT.
+
+**Solució:**
+
+1. Ves a **Carregar Hores** (menu principal o `/carregahores/list/`)
+2. Filtra o busca els registres del pressupost
+3. Elimina els registres d'hores
+4. Torna a Pressupostos i elimina el pressupost
+
+**Alternativa (Python shell):**
+
+```python
+from pressupostos.models import Pressupost
+from carregahores.models import CarregaHores
+
+pressupost = Pressupost.objects.get(id=X)
+CarregaHores.objects.filter(pressupost=pressupost).delete()
+pressupost.delete()  # Ara funcionarà
+```
+
+---
+
+### Error: Permission denied al eliminar pressupostos amb PDFs
+
+**Simptoma:**
+
+```
+[Errno 13] Permission denied: '/app/media/pdfs_pressupostos/pressupost_X_vY.pdf'
+```
+
+**Causa:** El directori `media` pertany a un usuari diferent del que executa Django.
+
+**Solució:**
+
+```bash
+# Corregir permisos del directori media
+docker-compose exec -u root web chown -R ecodisseny:ecodisseny /app/media
+
+# Verificar permisos
+docker-compose exec web ls -ld /app/media /app/media/pdfs_pressupostos
+```
+
+**Resultat esperat:**
+
+```
+drwxr-xr-x 4 ecodisseny ecodisseny 4096 ... /app/media
+drwxr-xr-x 2 ecodisseny ecodisseny 4096 ... /app/media/pdfs_pressupostos
+```
+
+**Nota:** Encara que hi hagi error de permisos, el registre de la base de dades s'elimina igualment. Només l'arxiu PDF pot quedar al servidor.
 
 ---
 

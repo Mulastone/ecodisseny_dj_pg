@@ -72,15 +72,26 @@ class PressupostAdmin(admin.ModelAdmin):
     
     def delete_model(self, request, obj):
         try:
+            # Verificar si tiene horas cargadas
+            from carregahores.models import CarregaHores
+            horas_count = CarregaHores.objects.filter(pressupost=obj).count()
+            
+            if horas_count > 0:
+                messages.error(
+                    request,
+                    f"No es pot eliminar el pressupost '{obj.nom}' perquè té {horas_count} registre(s) "
+                    f"d'hores carregades associat(s). Elimina primer les hores carregades."
+                )
+                return
+            
             nom = obj.nom
             obj.delete()
             messages.success(request, f"S'ha eliminat el pressupost '{nom}' correctament.")
         except ProtectedError as e:
-            messages.error(
-                request,
-                f"No es pot eliminar el pressupost '{obj.nom}' perquè està protegit per altres elements. "
-                "Verifica les relacions abans d'eliminar."
-            )
+            protected = list(e.protected_objects)[:3]
+            msg = f"No es pot eliminar el pressupost '{obj.nom}'. Objectes protegits: "
+            msg += ", ".join([f"{o._meta.verbose_name}: {str(o)}" for o in protected])
+            messages.error(request, msg)
             return
         except Exception as e:
             messages.error(request, f"Error inesperat en eliminar '{obj.nom}': {str(e)}")
@@ -88,6 +99,23 @@ class PressupostAdmin(admin.ModelAdmin):
     
     def delete_queryset(self, request, queryset):
         try:
+            # Verificar si alguno tiene horas cargadas
+            from carregahores.models import CarregaHores
+            
+            pressupostos_con_horas = []
+            for pressupost in queryset:
+                horas_count = CarregaHores.objects.filter(pressupost=pressupost).count()
+                if horas_count > 0:
+                    pressupostos_con_horas.append(f"{pressupost.nom} ({horas_count} hores)")
+            
+            if pressupostos_con_horas:
+                messages.error(
+                    request,
+                    f"No es poden eliminar els següents pressupostos perquè tenen hores carregades: "
+                    f"{', '.join(pressupostos_con_horas)}. Elimina primer les hores carregades."
+                )
+                return
+            
             count = queryset.count()
             queryset.delete()
             messages.success(request, f"S'han eliminat {count} pressupost(s) correctament.")

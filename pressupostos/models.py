@@ -1,9 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-from django.db.models.signals import post_delete, pre_delete
-from django.dispatch import receiver
-import os
 
 from maestros.models import (
     Clients, Treball, Tasca, Recurso, Hores,
@@ -75,15 +72,12 @@ class PressupostPDFVersion(SafeSaveModel):
     def delete(self, *args, **kwargs):
         """Elimina el archivo físico antes de eliminar el registro"""
         if self.arxiu:
-            if os.path.isfile(self.arxiu.path):
-                os.remove(self.arxiu.path)
+            try:
+                # Usar el método de Django para eliminar archivos
+                self.arxiu.delete(save=False)
+            except (OSError, PermissionError) as e:
+                # Si hay error de permisos, continuar con la eliminación del registro
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.warning(f"No s'ha pogut eliminar l'arxiu PDF {self.arxiu.name}: {str(e)}")
         super().delete(*args, **kwargs)
-
-
-@receiver(pre_delete, sender=PressupostPDFVersion)
-def eliminar_arxiu_pdf(sender, instance, **kwargs):
-    """Señal para eliminar el archivo PDF cuando se elimina el registro"""
-    if instance.arxiu:
-        if os.path.isfile(instance.arxiu.path):
-            os.remove(instance.arxiu.path)
-

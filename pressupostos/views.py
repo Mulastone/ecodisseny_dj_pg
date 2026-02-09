@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.http import require_http_methods, require_POST
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import Q, ProtectedError
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.timezone import now
 from django.urls import reverse
@@ -266,10 +266,51 @@ def get_recurso_by_id(request, recurs_id):
 
 @require_POST
 @user_passes_test(is_admin, login_url='/admin/login/')
+@require_POST
 def eliminar_pressupost_ajax(request, pk):
     try:
         pressupost = Pressupost.objects.get(pk=pk)
+        nom_pressupost = pressupost.nom or f"Pressupost #{pk}"
+        
+        # Verificar si tiene horas cargadas
+        from carregahores.models import CarregaHores
+        horas_count = CarregaHores.objects.filter(pressupost=pressupost).count()
+        
+        if horas_count > 0:
+            return JsonResponse({
+                "success": False,
+                "error": f"No es pot eliminar aquest pressupost perquè té {horas_count} registre(s) d'hores carregades associat(s). Elimina primer les hores carregades."
+            }, status=400)
+        
         pressupost.delete()
-        return JsonResponse({"success": True})
+        return JsonResponse({
+            "success": True, 
+            "message": f"S'ha eliminat el pressupost '{nom_pressupost}' correctament."
+        })
     except Pressupost.DoesNotExist:
-        return JsonResponse({"success": False, "error": "Pressupost no trobat."}, status=404)
+        return JsonResponse({
+            "success": False, 
+            "error": "Pressupost no trobat."
+        }, status=404)
+    except ProtectedError as e:
+        # Analizar qué está causando la protección
+        protected_objects = e.protected_objects
+        error_msg = "No es pot eliminar aquest pressupost per les següents relacions:\n"
+        
+        for obj in list(protected_objects)[:5]:  # Mostrar máximo 5
+            error_msg += f"- {obj._meta.verbose_name}: {str(obj)}\n"
+        
+        if len(protected_objects) > 5:
+            error_msg += f"... i {len(protected_objects) - 5} més"
+            
+        return JsonResponse({
+            "success": False,
+            "error": error_msg
+        }, status=400)
+    except Exception as e:
+        import traceback
+        return JsonResponse({
+            "success": False,
+            "error": f"Error inesperat: {str(e)}",
+            "traceback": traceback.format_exc()
+        }, status=500)
