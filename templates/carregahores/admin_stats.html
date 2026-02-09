@@ -1,28 +1,26 @@
-{% extends "base.html" %}
-{% load static %}
-
-{% block extra_head %}
+{% extends "base.html" %} {% load static %} {% block extra_head %}
 <style>
-/* Usar el mismo color del navbar para las cabeceras y elementos principales */
-.navbar-color {
-  background-color: #343a40 !important;
-  color: white !important;
-}
-.badge-navbar-color {
-  background-color: #343a40 !important;
-  color: white !important;
-}
+  /* Usar el mismo color del navbar para las cabeceras y elementos principales */
+  .navbar-color {
+    background-color: #343a40 !important;
+    color: white !important;
+  }
+  .badge-navbar-color {
+    background-color: #343a40 !important;
+    color: white !important;
+  }
 </style>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <div class="container mt-4">
-  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
-    <h2 class="mb-0">
-      <i class="bi bi-graph-up"></i> Estadístiques - Admin
-    </h2>
+  <div
+    class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4"
+  >
+    <h2 class="mb-0"><i class="bi bi-graph-up"></i> Estadístiques - Admin</h2>
     <div class="d-flex gap-2">
-      <a href="{% url 'carregahores:admin_totes' %}" class="btn btn-outline-secondary">
+      <a
+        href="{% url 'carregahores:admin_totes' %}"
+        class="btn btn-outline-secondary"
+      >
         <i class="bi bi-list"></i> Totes les Càrregues
       </a>
       <a href="{% url 'carregahores:meves' %}" class="btn btn-outline-primary">
@@ -31,13 +29,107 @@
     </div>
   </div>
 
+  <!-- Formulario de filtros -->
+  <div class="card mb-4">
+    <div class="card-header navbar-color text-white">
+      <h5 class="mb-0"><i class="bi bi-funnel"></i> Filtres</h5>
+    </div>
+    <div class="card-body">
+      <form method="get" id="filterForm">
+        <div class="row g-3">
+          <div class="col-md-2">
+            <label for="{{ filter_form.any.id_for_label }}" class="form-label"
+              >{{ filter_form.any.label }}</label
+            >
+            {{ filter_form.any }}
+          </div>
+          <div class="col-md-2">
+            <label for="{{ filter_form.mes.id_for_label }}" class="form-label"
+              >{{ filter_form.mes.label }}</label
+            >
+            {{ filter_form.mes }}
+          </div>
+          <div class="col-md-2">
+            <label
+              for="{{ filter_form.client.id_for_label }}"
+              class="form-label"
+              >{{ filter_form.client.label }}</label
+            >
+            {{ filter_form.client }}
+          </div>
+          <div class="col-md-2">
+            <label
+              for="{{ filter_form.projecte.id_for_label }}"
+              class="form-label"
+              >{{ filter_form.projecte.label }}</label
+            >
+            {{ filter_form.projecte }}
+          </div>
+          <div class="col-md-2">
+            <label
+              for="{{ filter_form.pressupost.id_for_label }}"
+              class="form-label"
+              >{{ filter_form.pressupost.label }}</label
+            >
+            {{ filter_form.pressupost }}
+          </div>
+          <div class="col-md-2">
+            <label
+              for="{{ filter_form.recurs.id_for_label }}"
+              class="form-label"
+              >{{ filter_form.recurs.label }}</label
+            >
+            {{ filter_form.recurs }}
+          </div>
+          <div class="col-md-2">
+            <label
+              for="{{ filter_form.usuari.id_for_label }}"
+              class="form-label"
+              >{{ filter_form.usuari.label }}</label
+            >
+            {{ filter_form.usuari }}
+          </div>
+          <div class="col-md-10 d-flex align-items-end gap-2">
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-search"></i> Aplicar Filtres
+            </button>
+            <a
+              href="{% url 'carregahores:admin_stats' %}"
+              class="btn btn-secondary"
+            >
+              <i class="bi bi-x-circle"></i> Netejar Filtres
+            </a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Resum general -->
   <div class="row mb-4">
-    <div class="col-12">
+    <div class="col-md-6">
       <div class="card navbar-color text-white">
         <div class="card-body text-center">
-          <h3><i class="bi bi-clock-fill"></i> {{ total_general }} hores totals</h3>
-          <p class="mb-0">Registrades en tot el sistema</p>
+          <h3>
+            <i class="bi bi-clock-fill"></i> {{ total_general }} hores totals
+          </h3>
+          <p class="mb-0">
+            Registrades{% if filter_form.is_bound %} (amb filtres aplicats){%
+            endif %}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card navbar-color text-white">
+        <div class="card-body text-center">
+          <h3>
+            <i class="bi bi-list-check"></i> {{ total_registres }} registres
+          </h3>
+          <p class="mb-0">
+            Total de càrregues{% if filter_form.is_bound %} (filtrades){% endif
+            %}
+          </p>
         </div>
       </div>
     </div>
@@ -52,40 +144,42 @@
         </div>
         <div class="card-body">
           {% if stats_per_user %}
-            <div class="table-responsive">
-              <table class="table table-sm">
-                <thead>
-                  <tr>
-                    <th>Usuari</th>
-                    <th class="text-center">Hores</th>
-                    <th class="text-center">Registres</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for stat in stats_per_user %}
-                    <tr>
-                      <td>
-                        <strong>
-                          {% if stat.usuari__first_name %}
-                            {{ stat.usuari__first_name }} {{ stat.usuari__last_name }}
-                          {% else %}
-                            {{ stat.usuari__username }}
-                          {% endif %}
-                        </strong>
-                      </td>
-                      <td class="text-center">
-                        <span class="badge badge-navbar-color">{{ stat.total_hores|default:0 }} h</span>
-                      </td>
-                      <td class="text-center">
-                        <span class="badge bg-secondary">{{ stat.total_registres }}</span>
-                      </td>
-                    </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-            </div>
+          <div class="table-responsive">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Usuari</th>
+                  <th class="text-center">Hores</th>
+                  <th class="text-center">Registres</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for stat in stats_per_user %}
+                <tr>
+                  <td>
+                    <strong>
+                      {% if stat.usuari__first_name %} {{
+                      stat.usuari__first_name }} {{ stat.usuari__last_name }} {%
+                      else %} {{ stat.usuari__username }} {% endif %}
+                    </strong>
+                  </td>
+                  <td class="text-center">
+                    <span class="badge badge-navbar-color"
+                      >{{ stat.total_hores|default:0 }} h</span
+                    >
+                  </td>
+                  <td class="text-center">
+                    <span class="badge bg-secondary"
+                      >{{ stat.total_registres }}</span
+                    >
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
           {% else %}
-            <p class="text-muted">No hi ha dades disponibles</p>
+          <p class="text-muted">No hi ha dades disponibles</p>
           {% endif %}
         </div>
       </div>
@@ -99,32 +193,36 @@
         </div>
         <div class="card-body">
           {% if stats_per_recurso %}
-            <div class="table-responsive">
-              <table class="table table-sm">
-                <thead>
-                  <tr>
-                    <th>Recurs</th>
-                    <th class="text-center">Hores</th>
-                    <th class="text-center">Registres</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for stat in stats_per_recurso %}
-                    <tr>
-                      <td><strong>{{ stat.recurso__nom }}</strong></td>
-                      <td class="text-center">
-                        <span class="badge badge-navbar-color">{{ stat.total_hores|default:0 }} h</span>
-                      </td>
-                      <td class="text-center">
-                        <span class="badge bg-secondary">{{ stat.total_registres }}</span>
-                      </td>
-                    </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-            </div>
+          <div class="table-responsive">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Recurs</th>
+                  <th class="text-center">Hores</th>
+                  <th class="text-center">Registres</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for stat in stats_per_recurso %}
+                <tr>
+                  <td><strong>{{ stat.recurso__nom }}</strong></td>
+                  <td class="text-center">
+                    <span class="badge badge-navbar-color"
+                      >{{ stat.total_hores|default:0 }} h</span
+                    >
+                  </td>
+                  <td class="text-center">
+                    <span class="badge bg-secondary"
+                      >{{ stat.total_registres }}</span
+                    >
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
           {% else %}
-            <p class="text-muted">No hi ha dades disponibles</p>
+          <p class="text-muted">No hi ha dades disponibles</p>
           {% endif %}
         </div>
       </div>
@@ -133,55 +231,245 @@
 
   <!-- Estadístiques per mes -->
   <div class="row">
-    <div class="col-12">
+    <div class="col-12 mb-4">
       <div class="card">
         <div class="card-header navbar-color text-white">
           <h5 class="mb-0"><i class="bi bi-calendar-month"></i> Per Mes</h5>
         </div>
         <div class="card-body">
           {% if stats_per_month %}
-            <div class="table-responsive">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Mes</th>
-                    <th class="text-center">Hores</th>
-                    <th class="text-center">Registres</th>
-                    <th class="text-center">Mitjana per Registre</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for stat in stats_per_month %}
-                    <tr>
-                      <td>
-                        <strong>{{ stat.mes|date:"F Y" }}</strong>
-                      </td>
-                      <td class="text-center">
-                        <span class="badge badge-navbar-color fs-6">{{ stat.total_hores|default:0 }} h</span>
-                      </td>
-                      <td class="text-center">
-                        <span class="badge bg-secondary fs-6">{{ stat.total_registres }}</span>
-                      </td>
-                      <td class="text-center">
-                        {% if stat.total_registres > 0 %}
-                          <span class="badge badge-navbar-color fs-6">
-                            {% widthratio stat.total_hores stat.total_registres 1 %} h
-                          </span>
-                        {% else %}
-                          <span class="badge bg-secondary fs-6">0 h</span>
-                        {% endif %}
-                      </td>
-                    </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-            </div>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Mes</th>
+                  <th class="text-center">Hores</th>
+                  <th class="text-center">Registres</th>
+                  <th class="text-center">Mitjana per Registre</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for stat in stats_per_month %}
+                <tr>
+                  <td>
+                    <strong>{{ stat.mes|date:"F Y" }}</strong>
+                  </td>
+                  <td class="text-center">
+                    <span class="badge badge-navbar-color fs-6"
+                      >{{ stat.total_hores|default:0 }} h</span
+                    >
+                  </td>
+                  <td class="text-center">
+                    <span class="badge bg-secondary fs-6"
+                      >{{ stat.total_registres }}</span
+                    >
+                  </td>
+                  <td class="text-center">
+                    {% if stat.total_registres > 0 %}
+                    <span class="badge badge-navbar-color fs-6">
+                      {% widthratio stat.total_hores stat.total_registres 1 %} h
+                    </span>
+                    {% else %}
+                    <span class="badge bg-secondary fs-6">0 h</span>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
           {% else %}
-            <p class="text-muted">No hi ha dades disponibles</p>
+          <p class="text-muted">No hi ha dades disponibles</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estadístiques per client i projecte -->
+  <div class="row">
+    <!-- Estadístiques per client -->
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-header navbar-color text-white">
+          <h5 class="mb-0"><i class="bi bi-building"></i> Per Client</h5>
+        </div>
+        <div class="card-body">
+          {% if stats_per_client %}
+          <div class="table-responsive">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Client</th>
+                  <th class="text-center">Hores</th>
+                  <th class="text-center">Registres</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for stat in stats_per_client %}
+                <tr>
+                  <td>
+                    <strong
+                      >{{ stat.pressupost__client__nom_client|default:"Sense
+                      client" }}</strong
+                    >
+                  </td>
+                  <td class="text-center">
+                    <span class="badge badge-navbar-color"
+                      >{{ stat.total_hores|default:0 }} h</span
+                    >
+                  </td>
+                  <td class="text-center">
+                    <span class="badge bg-secondary"
+                      >{{ stat.total_registres }}</span
+                    >
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <p class="text-muted">No hi ha dades disponibles</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Estadístiques per projecte -->
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-header navbar-color text-white">
+          <h5 class="mb-0"><i class="bi bi-folder"></i> Per Projecte</h5>
+        </div>
+        <div class="card-body">
+          {% if stats_per_projecte %}
+          <div class="table-responsive">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Projecte</th>
+                  <th class="text-center">Hores</th>
+                  <th class="text-center">Registres</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for stat in stats_per_projecte %}
+                <tr>
+                  <td>
+                    <strong
+                      >{{ stat.pressupost__projecte__nom|default:"Sense
+                      projecte" }}</strong
+                    >
+                  </td>
+                  <td class="text-center">
+                    <span class="badge badge-navbar-color"
+                      >{{ stat.total_hores|default:0 }} h</span
+                    >
+                  </td>
+                  <td class="text-center">
+                    <span class="badge bg-secondary"
+                      >{{ stat.total_registres }}</span
+                    >
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <p class="text-muted">No hi ha dades disponibles</p>
           {% endif %}
         </div>
       </div>
     </div>
   </div>
 </div>
+{% endblock %} {% block extra_scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const clientSelect = document.getElementById("id_client");
+    const projecteSelect = document.getElementById("id_projecte");
+    const pressupostSelect = document.getElementById("id_pressupost");
+
+    if (!clientSelect || !projecteSelect || !pressupostSelect) {
+      console.log("Filtros no encontrados");
+      return;
+    }
+
+    // Guardar opciones originales
+    const originalProjectes = Array.from(projecteSelect.options);
+    const originalPressupostos = Array.from(pressupostSelect.options);
+
+    // Cuando cambia el cliente
+    clientSelect.addEventListener("change", function () {
+      const clientId = this.value;
+
+      if (!clientId) {
+        // Restaurar todos los proyectos
+        projecteSelect.innerHTML = "";
+        originalProjectes.forEach((opt) =>
+          projecteSelect.add(opt.cloneNode(true)),
+        );
+        projecteSelect.value = "";
+        projecteSelect.disabled = false;
+
+        // Restaurar presupuestos
+        pressupostSelect.innerHTML = "";
+        originalPressupostos.forEach((opt) =>
+          pressupostSelect.add(opt.cloneNode(true)),
+        );
+        pressupostSelect.value = "";
+        return;
+      }
+
+      // Cargar proyectos del cliente
+      fetch(`/carrega-hores/ajax/stats/projectes/?client_id=${clientId}`)
+        .then((response) => response.json())
+        .then((projectes) => {
+          projecteSelect.innerHTML =
+            '<option value="">Tots els projectes</option>';
+          projectes.forEach((p) => {
+            const option = new Option(p.nom, p.id);
+            projecteSelect.add(option);
+          });
+          projecteSelect.disabled = false;
+
+          // Limpiar presupuesto
+          pressupostSelect.innerHTML =
+            '<option value="">Tots els pressupostos</option>';
+          pressupostSelect.value = "";
+        })
+        .catch((err) => console.error("Error cargando proyectos:", err));
+    });
+
+    // Cuando cambia el proyecto
+    projecteSelect.addEventListener("change", function () {
+      const projecteId = this.value;
+
+      if (!projecteId) {
+        // Restaurar presupuestos
+        pressupostSelect.innerHTML = "";
+        originalPressupostos.forEach((opt) =>
+          pressupostSelect.add(opt.cloneNode(true)),
+        );
+        pressupostSelect.value = "";
+        return;
+      }
+
+      // Cargar presupuestos del proyecto
+      fetch(`/carrega-hores/ajax/stats/pressupostos/?projecte_id=${projecteId}`)
+        .then((response) => response.json())
+        .then((pressupostos) => {
+          pressupostSelect.innerHTML =
+            '<option value="">Tots els pressupostos</option>';
+          pressupostos.forEach((p) => {
+            const option = new Option(p.nom || `Pressupost #${p.id}`, p.id);
+            pressupostSelect.add(option);
+          });
+        })
+        .catch((err) => console.error("Error cargando presupuestos:", err));
+    });
+  });
+</script>
 {% endblock %}

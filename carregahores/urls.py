@@ -13,6 +13,8 @@ urlpatterns = [
     path("ajax/pressupostos-data/", views.get_pressupostos_data, name="ajax_pressupostos_data"),
     path("ajax/projectes-by-client/", views.get_projectes_by_client, name="ajax_projectes_by_client"),
     path("ajax/pressupostos-by-filters/", views.get_pressupostos_by_filters, name="ajax_pressupostos_by_filters"),
+    path("ajax/stats/projectes/", views.get_projectes_for_stats, name="ajax_stats_projectes"),
+    path("ajax/stats/pressupostos/", views.get_pressupostos_for_stats, name="ajax_stats_pressupostos"),
     path("test-ajax/", views.test_ajax_view, name="test_ajax"),
     
     # URLs solo para administradores

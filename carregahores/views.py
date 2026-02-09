@@ -258,34 +258,87 @@ def totes_carregues_admin(request):
 # Vista solo para administradores - estadísticas
 @user_passes_test(is_admin, login_url='/admin/login/')
 def estadistiques_admin(request):
-    from django.db.models import Sum, Count
+    from django.db.models import Sum, Count, Q
     from django.db.models.functions import TruncMonth
+    from .forms import EstadistiquesFilterForm
     
-    # Estadísticas por usuario
-    stats_per_user = CarregaHores.objects.values('usuari__username', 'usuari__first_name', 'usuari__last_name').annotate(
+    # Crear formulario de filtros
+    filter_form = EstadistiquesFilterForm(request.GET or None)
+    
+    # Base queryset
+    queryset = CarregaHores.objects.all()
+    
+    #Aplicar filtros si el formulario es válido
+    if filter_form.is_valid():
+        # Filtro por año
+        if filter_form.cleaned_data.get('any'):
+            queryset = queryset.filter(data__year=filter_form.cleaned_data['any'])
+        
+        # Filtro por mes
+        if filter_form.cleaned_data.get('mes'):
+            queryset = queryset.filter(data__month=filter_form.cleaned_data['mes'])
+        
+        # Filtro por cliente
+        if filter_form.cleaned_data.get('client'):
+            queryset = queryset.filter(pressupost__client=filter_form.cleaned_data['client'])
+        
+        # Filtro por proyecto
+        if filter_form.cleaned_data.get('projecte'):
+            queryset = queryset.filter(pressupost__projecte=filter_form.cleaned_data['projecte'])
+        
+        # Filtro por presupuesto
+        if filter_form.cleaned_data.get('pressupost'):
+            queryset = queryset.filter(pressupost=filter_form.cleaned_data['pressupost'])
+        
+        # Filtro por recurso
+        if filter_form.cleaned_data.get('recurs'):
+            queryset = queryset.filter(linia__recurs=filter_form.cleaned_data['recurs'])
+        
+        # Filtro por usuario
+        if filter_form.cleaned_data.get('usuari'):
+            queryset = queryset.filter(usuari=filter_form.cleaned_data['usuari'].user)
+    
+    # Estadísticas por usuario (con filtros aplicados)
+    stats_per_user = queryset.values('usuari__username', 'usuari__first_name', 'usuari__last_name').annotate(
         total_hores=Sum('hores'),
         total_registres=Count('id')
     ).order_by('-total_hores')
     
-    # Estadísticas por mes
-    stats_per_month = CarregaHores.objects.annotate(
+    # Estadísticas por mes (con filtros aplicados)
+    stats_per_month = queryset.annotate(
         mes=TruncMonth('data')
     ).values('mes').annotate(
         total_hores=Sum('hores'),
         total_registres=Count('id')
     ).order_by('-mes')
     
-    # Estadísticas por recurso
-    stats_per_recurso = CarregaHores.objects.values('linia__recurs__nom').annotate(
+    # Estadísticas por recurso (con filtros aplicados)
+    stats_per_recurso = queryset.values('linia__recurs__nom').annotate(
+        total_hores=Sum('hores'),
+        total_registres=Count('id')
+    ).order_by('-total_hores')
+    
+    # Estadísticas por cliente (con filtros aplicados)
+    stats_per_client = queryset.values('pressupost__client__nom_client').annotate(
+        total_hores=Sum('hores'),
+        total_registres=Count('id')
+    ).order_by('-total_hores')
+    
+    # Estadísticas por proyecto (con filtros aplicados)
+    stats_per_projecte = queryset.values('pressupost__projecte__nom').annotate(
         total_hores=Sum('hores'),
         total_registres=Count('id')
     ).order_by('-total_hores')
     
     context = {
+        "filter_form": filter_form,
         "stats_per_user": stats_per_user,
         "stats_per_month": stats_per_month,
         "stats_per_recurso": stats_per_recurso,
-        "total_general": CarregaHores.objects.aggregate(total=Sum('hores'))['total'] or 0
+        "stats_per_client": stats_per_client,
+        "stats_per_projecte": stats_per_projecte,
+        "total_general": queryset.aggregate(total=Sum('hores'))['total'] or 0,
+        "total_registres": queryset.count()
     }
     return render(request, "carregahores/admin_stats.html", context)
 
@@ -488,6 +541,47 @@ def get_pressupostos_by_filters(request):
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
 
+
+@login_required
+@require_GET
+def get_projectes_for_stats(request):
+    """
+    Vista AJAX para obtener proyectos por cliente en estadísticas
+    """
+    try:
+        client_id = request.GET.get('client_id')
+        
+        if client_id:
+            projectes = Projecte.objects.filter(client_id=client_id).values('id', 'nom').order_by('nom')
+        else:
+            projectes = Projecte.objects.all().values('id', 'nom').order_by('nom')
+        
+        return JsonResponse(list(projectes), safe=False)
+        
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
+
+@login_required
+@require_GET
+def get_pressupostos_for_stats(request):
+    """
+    Vista AJAX para obtener presupuestos por proyecto en estadísticas
+    """
+    try:
+        projecte_id = request.GET.get('projecte_id')
+        
+        if projecte_id:
+            from pressupostos.models import Pressupost
+            pressupostos = Pressupost.objects.filter(projecte_id=projecte_id).values('id', 'nom').order_by('-data')
+        else:
+            from pressupostos.models import Pressupost
+            pressupostos = Pressupost.objects.all().values('id', 'nom').order_by('-data')
+        
+        return JsonResponse(list(pressupostos), safe=False)
+        
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
 
 
 def test_ajax_view(request):

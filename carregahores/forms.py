@@ -255,3 +255,83 @@ class CarregaHoresForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+
+
+class EstadistiquesFilterForm(forms.Form):
+    """Formulari per filtrar les estadístiques"""
+    from datetime import datetime
+    from maestros.models import Recurso
+    
+    # Filtros de fecha
+    any = forms.ChoiceField(
+        label="Any",
+        required=False,
+        choices=[('', 'Tots els anys')],
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    mes = forms.ChoiceField(
+        label="Mes",
+        required=False,
+        choices=[
+            ('', 'Tots els mesos'),
+            ('1', 'Gener'), ('2', 'Febrer'), ('3', 'Març'),
+            ('4', 'Abril'), ('5', 'Maig'), ('6', 'Juny'),
+            ('7', 'Juliol'), ('8', 'Agost'), ('9', 'Setembre'),
+            ('10', 'Octubre'), ('11', 'Novembre'), ('12', 'Desembre'),
+        ],
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    
+    # Filtros de relaciones
+    client = forms.ModelChoiceField(
+        label="Client",
+        queryset=Clients.objects.all().order_by('nom_client'),
+        required=False,
+        empty_label="Tots els clients",
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    projecte = forms.ModelChoiceField(
+        label="Projecte",
+        queryset=Projecte.objects.all().order_by('nom'),
+        required=False,
+        empty_label="Tots els projectes",
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    pressupost = forms.ModelChoiceField(
+        label="Pressupost",
+        queryset=pressupost_models.Pressupost.objects.all().order_by('-data'),
+        required=False,
+        empty_label="Tots els pressupostos",
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    recurs = forms.ModelChoiceField(
+        label="Recurs",
+        queryset=Recurso.objects.all().order_by('nom'),
+        required=False,
+        empty_label="Tots els recursos",
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    usuari = forms.ModelChoiceField(
+        label="Usuari",
+        queryset=PerfilUsuario.objects.select_related('user').all(),
+        required=False,
+        empty_label="Tots els usuaris",
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Generar opciones de años dinámicamente
+        from django.db.models import Min, Max
+        from datetime import datetime
+        
+        years_range = CarregaHores.objects.aggregate(
+            min_year=Min('data__year'),
+            max_year=Max('data__year')
+        )
+        
+        if years_range['min_year'] and years_range['max_year']:
+            year_choices = [('', 'Tots els anys')]
+            for year in range(years_range['max_year'], years_range['min_year'] - 1, -1):
+                year_choices.append((str(year), str(year)))
+            self.fields['any'].choices = year_choices
