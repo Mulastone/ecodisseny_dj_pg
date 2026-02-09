@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
 from django.contrib import messages
+from django.db.models import ProtectedError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django import forms
@@ -16,6 +17,7 @@ from .admin_utils import SafeDeleteAdmin
 @admin.register(Clients)
 class ClientsAdmin(admin.ModelAdmin):
     form = ClientAdminForm
+    change_form_template = 'admin/maestros/clients_change_form.html'
     list_display = ("nom_client", "mail", "telefon", "nrt")
     search_fields = ("nom_client", "mail", "nrt")
     fieldsets = (
@@ -27,6 +29,27 @@ class ClientsAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
         }),
     )
+    
+    def delete_model(self, request, obj):
+        try:
+            obj.delete()
+        except ProtectedError as e:
+            messages.error(
+                request,
+                f"No es pot eliminar el client '{obj.nom_client}' perquè té projectes o pressupostos associats. "
+                "Elimina primer els elements relacionats."
+            )
+            return
+    
+    def delete_queryset(self, request, queryset):
+        try:
+            queryset.delete()
+        except ProtectedError as e:
+            messages.error(
+                request,
+                "No es poden eliminar alguns clients perquè tenen projectes o pressupostos associats. "
+                "Elimina primer els elements relacionats."
+            )
 
 
 @admin.register(Parroquia)

@@ -295,4 +295,5 @@ else:
     SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin'
     SECURE_REFERRER_POLICY = 'same-origin'
     SECURE_CONTENT_TYPE_NOSNIFF = True
-    X_FRAME_OPTIONS = 'DENY'
+    # SAMEORIGIN permite iframes del mismo dominio (necesario para popups del admin)
+    X_FRAME_OPTIONS = 'SAMEORIGIN'

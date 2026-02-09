@@ -2,7 +2,8 @@
 
 ## 📋 Resumen Ejecutivo
 
-El sistema Ecodisseny utiliza un **modelo unificado de permisos** basado en grupos de Django que controla el acceso tanto al sistema de documentación como al módulo CarregaHores. Esta arquitectura garantiza consistencia, mantenibilidad y seguridad en toda la aplicación.
+El sistema Ecodisseny utiliza un **modelo unificado de permisos** basado en grupos de Django que controla el acceso tanto al sistema de documentación como al módulo CarregaHores. 
+Esta arquitectura garantiza consistencia, mantenibilidad y seguridad en toda la aplicación.
 
 ## 🏗️ Arquitectura del Sistema
 

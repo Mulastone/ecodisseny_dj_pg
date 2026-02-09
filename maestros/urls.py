@@ -26,13 +26,22 @@ class PersonaContactAutocomplete(autocomplete.Select2QuerySetView):
             return PersonaContactClient.objects.none()
 
         qs = PersonaContactClient.objects.all()
-        client_id = self.forwarded.get('client')
+        
+        # Obtener el ID del cliente desde forward
+        client_id = self.forwarded.get('client', None)
+        
+        # Debug: imprimir en consola
+        import sys
+        print(f"[DEBUG PersonaContactAutocomplete] client_id recibido: {client_id}", file=sys.stderr)
+        print(f"[DEBUG PersonaContactAutocomplete] forwarded completo: {self.forwarded}", file=sys.stderr)
 
         if client_id:
             qs = qs.filter(client_id=client_id)
+            print(f"[DEBUG PersonaContactAutocomplete] Filtrando por client_id={client_id}, resultados: {qs.count()}", file=sys.stderr)
 
         if self.q:
             qs = qs.filter(nom_contacte__icontains=self.q)
+            print(f"[DEBUG PersonaContactAutocomplete] Filtrando por búsqueda '{self.q}', resultados: {qs.count()}", file=sys.stderr)
 
         return qs.order_by("nom_contacte")
 

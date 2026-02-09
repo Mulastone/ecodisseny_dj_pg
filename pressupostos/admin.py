@@ -1,5 +1,6 @@
 from django.contrib import admin
-from django.db.models import Sum
+from django.contrib import messages
+from django.db.models import Sum, ProtectedError
 from .models import Pressupost, PressupostLinia
 from .forms import PressupostForm
 
@@ -68,3 +69,35 @@ class PressupostAdmin(admin.ModelAdmin):
     @admin.display(description="Client")
     def mostrar_client(self, obj):
         return obj.client.nom_client if obj.client else "-"
+    
+    def delete_model(self, request, obj):
+        try:
+            nom = obj.nom
+            obj.delete()
+            messages.success(request, f"S'ha eliminat el pressupost '{nom}' correctament.")
+        except ProtectedError as e:
+            messages.error(
+                request,
+                f"No es pot eliminar el pressupost '{obj.nom}' perquè està protegit per altres elements. "
+                "Verifica les relacions abans d'eliminar."
+            )
+            return
+        except Exception as e:
+            messages.error(request, f"Error inesperat en eliminar '{obj.nom}': {str(e)}")
+            return
+    
+    def delete_queryset(self, request, queryset):
+        try:
+            count = queryset.count()
+            queryset.delete()
+            messages.success(request, f"S'han eliminat {count} pressupost(s) correctament.")
+        except ProtectedError as e:
+            messages.error(
+                request,
+                "No es poden eliminar alguns pressupostos perquè estan protegits per altres elements. "
+                "Verifica les relacions abans d'eliminar."
+            )
+            return
+        except Exception as e:
+            messages.error(request, f"Error inesperat en eliminar: {str(e)}")
+            return

@@ -22,8 +22,8 @@ class Clients(SafeSaveModel):
     nom_client = models.CharField("Nom del Client", max_length=100)
     rao_social = models.CharField("Raó Social", max_length=100, blank=True, null=True)
     nrt = models.CharField("NRT", max_length=100, blank=True, null=True)
-    parroquia = models.ForeignKey('Parroquia', models.DO_NOTHING, blank=True, null=True, verbose_name="Parròquia")
-    poblacio = models.ForeignKey('Poblacio', models.DO_NOTHING, blank=True, null=True, verbose_name="Població")
+    parroquia = models.ForeignKey('Parroquia', models.SET_NULL, blank=True, null=True, verbose_name="Parròquia")
+    poblacio = models.ForeignKey('Poblacio', models.SET_NULL, blank=True, null=True, verbose_name="Població")
     carrer = models.CharField("Carrer", max_length=100, blank=True, null=True)
     numero = models.CharField("Número", max_length=50, blank=True, null=True)
     escala = models.CharField("Escala", max_length=50, blank=True, null=True)
@@ -52,7 +52,7 @@ class Parroquia(SafeSaveModel):
 
 
 class Poblacio(SafeSaveModel):
-    parroquia = models.ForeignKey(Parroquia, models.DO_NOTHING, verbose_name="Parròquia")
+    parroquia = models.ForeignKey(Parroquia, models.PROTECT, verbose_name="Parròquia")
     poblacio = models.CharField("Població", max_length=100)
     codi_postal = models.CharField("Codi Postal", max_length=100)
 
@@ -77,7 +77,7 @@ class TipusRecurso(SafeSaveModel):
 
 class Recurso(SafeSaveModel):
     nom = models.CharField("Nom", max_length=100)
-    tipus_recurso = models.ForeignKey(TipusRecurso, models.DO_NOTHING)
+    tipus_recurso = models.ForeignKey(TipusRecurso, models.PROTECT)
     preu_tancat = models.IntegerField("Preu Tancat")
     preu_hora = models.DecimalField("Preu Hora", max_digits=10, decimal_places=2)
 
@@ -139,9 +139,9 @@ class Ubicacio(SafeSaveModel):
 
 
 class Desplacament(SafeSaveModel):
-    parroquia = models.ForeignKey(Parroquia, models.DO_NOTHING)
-    ubicacio = models.ForeignKey(Ubicacio, models.DO_NOTHING)
-    tasca = models.ForeignKey(Tasca, models.DO_NOTHING)
+    parroquia = models.ForeignKey(Parroquia, models.PROTECT)
+    ubicacio = models.ForeignKey(Ubicacio, models.PROTECT)
+    tasca = models.ForeignKey(Tasca, models.PROTECT)
     increment_hores = models.DecimalField("Increment Hores", max_digits=5, decimal_places=2)
     observacions = models.TextField(blank=True, null=True)
 
@@ -165,8 +165,8 @@ class Hores(SafeSaveModel):
 
 
 class TasquesTreball(SafeSaveModel):
-    tasca = models.ForeignKey(Tasca, models.DO_NOTHING)
-    treball = models.ForeignKey(Treball, models.DO_NOTHING)
+    tasca = models.ForeignKey(Tasca, models.CASCADE)
+    treball = models.ForeignKey(Treball, models.CASCADE)
     observacions = models.CharField(max_length=300, blank=True, null=True)
 
     class Meta:
@@ -190,7 +190,7 @@ class DepartamentClient(SafeSaveModel):
 
 
 class PersonaContactClient(SafeSaveModel):
-    client = models.ForeignKey(Clients, models.DO_NOTHING, verbose_name="Client")
+    client = models.ForeignKey(Clients, models.CASCADE, verbose_name="Client")
     nom_contacte = models.CharField("Contacte Client", max_length=100)
     telefon = PhoneNumberField("Telèfon", blank=True, null=True)
 
