@@ -19,7 +19,7 @@ class SafeSaveModel(models.Model):
 
 
 class Clients(SafeSaveModel):
-    nom_client = models.CharField("Nom del Client", max_length=100)
+    nom_client = models.CharField("Nom del Client", max_length=100, unique=True)
     rao_social = models.CharField("Raó Social", max_length=100, blank=True, null=True)
     nrt = models.CharField("NRT", max_length=100, blank=True, null=True)
     parroquia = models.ForeignKey('Parroquia', models.SET_NULL, blank=True, null=True, verbose_name="Parròquia")
@@ -88,12 +88,12 @@ class Recurso(SafeSaveModel):
     def __str__(self):
         tipus_badge = f" ({self.tipus_recurso.tipus})" if self.tipus_recurso else ""
         return f"{self.nom}{tipus_badge}"
-    
+
     @property
     def es_extern(self):
         """Determina si el recurso es externo basado en su tipo"""
         return self.tipus_recurso and self.tipus_recurso.tipus.lower() == 'extern'
-    
+
     @property
     def necesita_usuario(self):
         """Determina si el recurso necesita usuario (intern o colaborador)"""
@@ -205,7 +205,7 @@ class PersonaContactClient(SafeSaveModel):
 class PerfilUsuario(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="perfil")
     recurso = models.ForeignKey(Recurso, on_delete=models.PROTECT, related_name="usuarios", null=True, blank=True)
-    
+
     class Meta:
         verbose_name = "Perfil d'Usuari"
         verbose_name_plural = "Perfils d'Usuaris"
@@ -213,7 +213,7 @@ class PerfilUsuario(models.Model):
     def __str__(self):
         recurso_name = self.recurso.nom if self.recurso else "Sense recurs"
         return f"{self.user.get_full_name() or self.user.username} → {recurso_name}"
-    
+
     @classmethod
     def get_user_recurso(cls, user):
         """Helper method para obtener el recurso de un usuario"""
@@ -221,7 +221,7 @@ class PerfilUsuario(models.Model):
             return user.perfil.recurso
         except cls.DoesNotExist:
             return None
-    
+
     @classmethod
     def is_admin(cls, user):
         """Helper method para verificar si es admin"""

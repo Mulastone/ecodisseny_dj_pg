@@ -29,7 +29,23 @@ class ClientsAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
         }),
     )
-    
+
+    def save_model(self, request, obj, form, change):
+        from django.db import IntegrityError
+        try:
+            super().save_model(request, obj, form, change)
+        except IntegrityError as e:
+            if 'nom_client' in str(e) and 'unique' in str(e).lower():
+                messages.error(
+                    request,
+                    f"❌ Ja existeix un client amb el nom '{obj.nom_client}'. "
+                    "Els noms de client han de ser únics."
+                )
+            else:
+                messages.error(request, f"Error d'integritat: {str(e)}")
+            # No guardar si hay error
+            return
+
     def delete_model(self, request, obj):
         try:
             obj.delete()
@@ -40,7 +56,7 @@ class ClientsAdmin(admin.ModelAdmin):
                 "Elimina primer els elements relacionats."
             )
             return
-    
+
     def delete_queryset(self, request, queryset):
         try:
             queryset.delete()
@@ -111,7 +127,7 @@ class RecursoAdmin(admin.ModelAdmin):
     @admin.display(description="Tipus", ordering="tipus_recurso__tipus")
     def mostrar_tipus(self, obj):
         return obj.tipus_recurso.tipus if obj.tipus_recurso else "-"
-    
+
     @admin.display(description="Necessita Usuari", boolean=True)
     def necessita_usuari(self, obj):
         return obj.necesita_usuario
@@ -197,10 +213,10 @@ class IncrementHoresFilter(SimpleListFilter):
         # Obtener valores únicos de increment_hores de la base de datos
         values = Desplacament.objects.values_list('increment_hores', flat=True).distinct().order_by('increment_hores')
         choices = []
-        
+
         # Añadir filtro especial para valores distintos de 0
         choices.append(('no_zero', 'Amb increment (≠ 0)'))
-        
+
         # Añadir filtros por valores exactos que existen en la BD
         for value in values:
             if value is not None:
@@ -212,7 +228,7 @@ class IncrementHoresFilter(SimpleListFilter):
                     choices.append((str(value), '{} hores'.format(int(value))))
                 else:
                     choices.append((str(value), '{} hores'.format(value)))
-        
+
         # Añadir filtros por rangos si hay suficients dades
         if values:
             choices.extend([
@@ -220,7 +236,7 @@ class IncrementHoresFilter(SimpleListFilter):
                 ('1-2', '1 - 2 hores'),
                 ('2+', 'Més de 2 hores'),
             ])
-        
+
         return choices
 
     def queryset(self, request, queryset):
@@ -253,7 +269,7 @@ class UpdateIncrementHoresForm(forms.Form):
         initial=0,
         help_text="Introdueix el nou valor"
     )
-    
+
     def clean(self):
         cleaned_data = super().clean()
         increment_hores = cleaned_data.get('increment_hores', 0)
@@ -287,9 +303,9 @@ def update_increment_hores(modeladmin, request, queryset):
             'opts': modeladmin.model._meta,
             'title': 'Actualitzar Increment Hores',
         }
-        
+
         return render(request, 'admin/update_increment_hores.html', context)
-        
+
     except Exception as e:
         modeladmin.message_user(
             request,
@@ -387,7 +403,7 @@ class PerfilUsuarioInline(admin.StackedInline):
 class UserAdmin(BaseUserAdmin):
     """Admin de usuarios extendido con perfil inline"""
     inlines = (PerfilUsuarioInline,)
-    
+
     def get_inline_instances(self, request, obj=None):
         if not obj:
             return []
@@ -405,12 +421,12 @@ class PerfilUsuarioAdmin(admin.ModelAdmin):
     list_filter = ("recurso", "user__is_staff", "user__is_superuser")
     search_fields = ("user__username", "user__first_name", "user__last_name", "recurso__nom")
     raw_id_fields = ("user",)
-    
+
     @admin.display(description="Usuari", ordering="user__username")
     def mostrar_usuario(self, obj):
         name = obj.user.get_full_name() or obj.user.username
         return f"{name} (@{obj.user.username})"
-    
+
     @admin.display(description="Recurs Assignat")
     def mostrar_recurso(self, obj):
         if obj.recurso:
@@ -420,11 +436,11 @@ class PerfilUsuarioAdmin(admin.ModelAdmin):
             else:
                 return f"👤 {obj.recurso.nom} {tipus_info}"
         return "❌ Sense recurs"
-    
+
     @admin.display(description="Admin", boolean=True)
     def es_admin(self, obj):
         return obj.user.is_superuser or obj.user.is_staff
-    
+
     fieldsets = (
         (None, {
             'fields': ('user', 'recurso'),
