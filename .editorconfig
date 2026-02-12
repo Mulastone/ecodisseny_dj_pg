@@ -1,0 +1,47 @@
+# EditorConfig - Configuración para evitar que formatters automáticos rompan templates Django
+
+root = true
+
+# Configuración general
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Archivos Python
+[*.py]
+indent_style = space
+indent_size = 4
+max_line_length = 120
+
+# Templates Django - NO formatear automáticamente
+# IMPORTANTE: Los formatters automáticos rompen los tags {% %} dividiéndolos en múltiples líneas
+[*.html]
+indent_style = space
+indent_size = 2
+# Deshabilitar formatters automáticos para templates
+max_line_length = off
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# JavaScript
+[*.js]
+indent_style = space
+indent_size = 2
+max_line_length = 120
+
+# CSS
+[*.css]
+indent_style = space
+indent_size = 2
+
+# JSON, YAML
+[*.{json,yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# Markdown
+[*.md]
+trim_trailing_whitespace = false
+max_line_length = off

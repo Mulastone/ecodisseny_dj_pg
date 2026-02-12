@@ -1,0 +1,37 @@
+{
+  "semi": true,
+  "singleQuote": false,
+  "tabWidth": 2,
+  "trailingComma": "es5",
+  "printWidth": 120,
+  "arrowParens": "always",
+  "overrides": [
+    {
+      "files": [
+        "*.html"
+      ],
+      "options": {
+        "parser": "html",
+        "printWidth": 999999
+      }
+    },
+    {
+      "files": [
+        "**/templates/**/*.html",
+        "**/*_stats.html"
+      ],
+      "options": {
+        "parser": "html",
+        "printWidth": 999999
+      }
+    },
+    {
+      "files": [
+        "*.py"
+      ],
+      "options": {
+        "tabWidth": 4
+      }
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+# ==========================================
+# Prettier - Ignorar archivos Django
+# ==========================================
+# IMPORTANTE: Los formatters automáticos rompen los tags Django {% %}
+# dividiéndolos en múltiples líneas, causando errores de sintaxis
+
+# Templates Django - NO FORMATEAR NUNCA
+templates/
+**/templates/
+*.html
+**/*.html
+
+# Archivos generados
+staticfiles/
+*.pyc
+__pycache__/
+*.egg-info/
+dist/
+build/
+
+# Dependencias
+node_modules/
+venv/
+env/
+
+# Backups
+*.backup
+*.bak
+
+# Archivos de medios
+media/
+
+# Migraciones (generadas automáticamente)
+**/migrations/*.py
+!**/migrations/__init__.py
