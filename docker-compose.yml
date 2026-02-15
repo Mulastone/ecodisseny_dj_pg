@@ -1,20 +1,18 @@
-#version: '3.8'
-
 services:
   db:
     image: postgres:15
     restart: always
     environment:
-      POSTGRES_DB: ecodisseny_db
-      POSTGRES_USER: ecodisseny_user
-      POSTGRES_PASSWORD: ecodisseny_password123
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
     ports:
       - "5432:5432"
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ecodisseny_user -d ecodisseny_db" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -29,21 +27,29 @@ services:
       - static_volume:/app/staticfiles
       - media_volume:/app/media
     environment:
-      - DEBUG=False
-      - ALLOWED_HOSTS=161.97.147.142,app.arasmu.net
+      - ENVIRONMENT=${ENVIRONMENT}
+      - DEBUG=${DEBUG}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
       - DB_HOST=db
-      - DB_NAME=ecodisseny_db
-      - DB_USER=ecodisseny_user
-      - DB_PASSWORD=ecodisseny_password123
-      - DB_PORT=5432
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_PORT=${DB_PORT}
       - STATIC_ROOT=/app/staticfiles
     depends_on:
       db:
         condition: service_healthy
     command: >
-      sh -c "python manage.py migrate &&
-             python manage.py collectstatic --noinput &&
-             gunicorn ecodisseny.wsgi:application --bind 0.0.0.0:8000"
+      sh -c "
+      python manage.py migrate &&
+      if [ \"$ENVIRONMENT\" = 'prod' ]; then
+          python manage.py collectstatic --noinput &&
+          gunicorn ecodisseny.wsgi:application --bind 0.0.0.0:8000;
+      else
+          python manage.py runserver 0.0.0.0:8000;
+      fi
+      "
+
 
 volumes:
   postgres_data:

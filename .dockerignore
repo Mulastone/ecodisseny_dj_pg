@@ -41,6 +41,8 @@ venv_postgres/
 ENV/
 env/
 .env
+.env.dev
+.env.prod
 
 # IDEs
 .vscode/
