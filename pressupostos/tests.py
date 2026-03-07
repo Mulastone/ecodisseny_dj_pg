@@ -1,4 +1,5 @@
 from decimal import Decimal
+from datetime import date
 
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission
@@ -457,9 +458,349 @@ class InformeHoresPermissionsAndDataTests(TestCase):
         self.assertEqual(response.context["totals_previstes"], Decimal("8.00"))
         self.assertEqual(response.context["totals_reals"], Decimal("5.50"))
         self.assertEqual(response.context["totals_desviacio"], Decimal("-2.50"))
+        self.assertContains(response, "Treball Report")
+
+    def test_informe_hores_filter_by_treball(self):
+        self.client.force_login(self.superuser)
+        response = self.client.get(
+            reverse("pressupostos:informe_hores"),
+            {"treball_id": self.treball.id},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["totals_previstes"], Decimal("8.00"))
+        self.assertEqual(response.context["filters"]["treball_id"], str(self.treball.id))
 
     def test_informe_hores_csv_requires_permission(self):
         self.client.force_login(self.user_no_perm)
         response = self.client.get(reverse("pressupostos:informe_hores_csv"))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("/admin/login/", response["Location"])
+
+
+class InformeRentabilitatPermissionsAndDataTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.superuser = User.objects.create_superuser(
+            username="admin_rent",
+            email="admin_rent@example.com",
+            password="pass1234",
+        )
+        cls.user_no_perm = User.objects.create_user(username="user_no_rent_perm", password="pass1234")
+        cls.user_with_perm = User.objects.create_user(username="user_with_rent_perm", password="pass1234")
+        perm = Permission.objects.get(codename="view_rentabilitat_report")
+        cls.user_with_perm.user_permissions.add(perm)
+
+        cls.parroquia = Parroquia.objects.create(parroquia="Canillo")
+        cls.ubicacio = Ubicacio.objects.create(ubicacio="Nord")
+        cls.client_obj = Clients.objects.create(nom_client="Client Rent", telefon="+376888111")
+        cls.departament = DepartamentClient.objects.create(nom="Departament Rent")
+        cls.persona_contacte = PersonaContactClient.objects.create(
+            client=cls.client_obj,
+            nom_contacte="Contacte Rent",
+            telefon="+376888222",
+        )
+        cls.projecte = Projecte.objects.create(
+            nom="Projecte Rent",
+            client=cls.client_obj,
+            departament=cls.departament,
+            persona_contacte=cls.persona_contacte,
+            parroquia=cls.parroquia,
+            ubicacio=cls.ubicacio,
+        )
+        cls.tasca = Tasca.objects.create(tasca="Tasca Rent")
+        cls.treball = Treball.objects.create(descripcio="Treball Rent")
+        TasquesTreball.objects.create(tasca=cls.tasca, treball=cls.treball)
+        cls.tipus_recurs = TipusRecurso.objects.create(tipus="intern")
+        cls.recurs = Recurso.objects.create(
+            nom="Recurs Rent",
+            tipus_recurso=cls.tipus_recurs,
+            preu_tancat=0,
+            preu_hora=Decimal("30.00"),
+        )
+        cls.hora = Hores.objects.create(hores=Decimal("1.00"))
+
+        cls.pressupost = Pressupost.objects.create(
+            client=cls.client_obj,
+            projecte=cls.projecte,
+            parroquia=cls.parroquia,
+            ubicacio=cls.ubicacio,
+            nom="Pressupost Rent",
+        )
+        cls.linia = PressupostLinia.objects.create(
+            pressupost=cls.pressupost,
+            treball=cls.treball,
+            tasca=cls.tasca,
+            quantitat=1,
+            recurs=cls.recurs,
+            preu_tancat=False,
+            hora=cls.hora,
+            increment_hores=Decimal("0.00"),
+            hores_totals=Decimal("5.00"),
+            cost_hores=Decimal("20.00"),
+            cost_hores_totals=Decimal("100.00"),
+            subtotal=Decimal("100.00"),
+            benefici=Decimal("20.00"),
+            total=Decimal("120.00"),
+        )
+        CarregaHores.objects.create(
+            usuari=cls.superuser,
+            pressupost=cls.pressupost,
+            linia=cls.linia,
+            hores=Decimal("4.00"),
+        )
+
+    def test_informe_rentabilitat_denies_user_without_permission(self):
+        self.client.force_login(self.user_no_perm)
+        response = self.client.get(reverse("pressupostos:informe_rentabilitat"))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("/admin/login/", response["Location"])
+
+    def test_informe_rentabilitat_allows_user_with_permission(self):
+        self.client.force_login(self.user_with_perm)
+        response = self.client.get(reverse("pressupostos:informe_rentabilitat"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Informe Rentabilitat")
+
+    def test_informe_rentabilitat_calculates_expected_totals(self):
+        self.client.force_login(self.superuser)
+        response = self.client.get(reverse("pressupostos:informe_rentabilitat"))
+        self.assertEqual(response.status_code, 200)
+        totals = response.context["totals"]
+        self.assertEqual(totals["ingres_previst"], Decimal("120.00"))
+        self.assertEqual(totals["cost_previst"], Decimal("100.00"))
+        self.assertEqual(totals["cost_real"], Decimal("80.00"))
+        self.assertEqual(totals["marge_previst"], Decimal("20.00"))
+        self.assertEqual(totals["marge_real"], Decimal("40.00"))
+
+    def test_informe_rentabilitat_csv_requires_permission(self):
+        self.client.force_login(self.user_no_perm)
+        response = self.client.get(reverse("pressupostos:informe_rentabilitat_csv"))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("/admin/login/", response["Location"])
+
+
+class InformeProductivitatPermissionsAndDataTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.superuser = User.objects.create_superuser(
+            username="admin_prod",
+            email="admin_prod@example.com",
+            password="pass1234",
+        )
+        cls.user_no_perm = User.objects.create_user(username="user_no_prod_perm", password="pass1234")
+        cls.user_with_perm = User.objects.create_user(username="user_with_prod_perm", password="pass1234")
+        perm = Permission.objects.get(codename="view_productivitat_report")
+        cls.user_with_perm.user_permissions.add(perm)
+
+        cls.parroquia = Parroquia.objects.create(parroquia="Sant Julia")
+        cls.ubicacio = Ubicacio.objects.create(ubicacio="Sud")
+        cls.client_obj = Clients.objects.create(nom_client="Client Prod", telefon="+376777111")
+        cls.departament = DepartamentClient.objects.create(nom="Departament Prod")
+        cls.persona_contacte = PersonaContactClient.objects.create(
+            client=cls.client_obj,
+            nom_contacte="Contacte Prod",
+            telefon="+376777222",
+        )
+        cls.projecte = Projecte.objects.create(
+            nom="Projecte Prod",
+            client=cls.client_obj,
+            departament=cls.departament,
+            persona_contacte=cls.persona_contacte,
+            parroquia=cls.parroquia,
+            ubicacio=cls.ubicacio,
+        )
+        cls.tasca_a = Tasca.objects.create(tasca="Tasca Prod A")
+        cls.tasca_b = Tasca.objects.create(tasca="Tasca Prod B")
+        cls.treball = Treball.objects.create(descripcio="Treball Prod")
+        TasquesTreball.objects.create(tasca=cls.tasca_a, treball=cls.treball)
+        TasquesTreball.objects.create(tasca=cls.tasca_b, treball=cls.treball)
+        cls.tipus_recurs = TipusRecurso.objects.create(tipus="intern")
+        cls.recurs = Recurso.objects.create(
+            nom="Recurs Prod",
+            tipus_recurso=cls.tipus_recurs,
+            preu_tancat=0,
+            preu_hora=Decimal("30.00"),
+        )
+        cls.hora = Hores.objects.create(hores=Decimal("1.00"))
+
+        cls.pressupost = Pressupost.objects.create(
+            client=cls.client_obj,
+            projecte=cls.projecte,
+            parroquia=cls.parroquia,
+            ubicacio=cls.ubicacio,
+            nom="Pressupost Prod",
+        )
+        cls.linia_a = PressupostLinia.objects.create(
+            pressupost=cls.pressupost,
+            treball=cls.treball,
+            tasca=cls.tasca_a,
+            quantitat=1,
+            recurs=cls.recurs,
+            preu_tancat=False,
+            hora=cls.hora,
+            increment_hores=Decimal("0.00"),
+            hores_totals=Decimal("10.00"),
+            cost_hores=Decimal("20.00"),
+            cost_hores_totals=Decimal("200.00"),
+            subtotal=Decimal("200.00"),
+            benefici=Decimal("10.00"),
+            total=Decimal("220.00"),
+        )
+        cls.linia_b = PressupostLinia.objects.create(
+            pressupost=cls.pressupost,
+            treball=cls.treball,
+            tasca=cls.tasca_b,
+            quantitat=1,
+            recurs=cls.recurs,
+            preu_tancat=False,
+            hora=cls.hora,
+            increment_hores=Decimal("0.00"),
+            hores_totals=Decimal("4.00"),
+            cost_hores=Decimal("0.00"),
+            cost_hores_totals=Decimal("0.00"),
+            subtotal=Decimal("0.00"),
+            benefici=Decimal("0.00"),
+            total=Decimal("0.00"),
+        )
+        CarregaHores.objects.create(
+            usuari=cls.superuser,
+            pressupost=cls.pressupost,
+            linia=cls.linia_a,
+            hores=Decimal("6.00"),
+        )
+        CarregaHores.objects.create(
+            usuari=cls.superuser,
+            pressupost=cls.pressupost,
+            linia=cls.linia_b,
+            hores=Decimal("2.00"),
+        )
+
+    def test_informe_productivitat_denies_user_without_permission(self):
+        self.client.force_login(self.user_no_perm)
+        response = self.client.get(reverse("pressupostos:informe_productivitat"))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("/admin/login/", response["Location"])
+
+    def test_informe_productivitat_allows_user_with_permission(self):
+        self.client.force_login(self.user_with_perm)
+        response = self.client.get(reverse("pressupostos:informe_productivitat"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Informe Productivitat")
+
+    def test_informe_productivitat_calculates_expected_totals(self):
+        self.client.force_login(self.superuser)
+        response = self.client.get(reverse("pressupostos:informe_productivitat"))
+        self.assertEqual(response.status_code, 200)
+        totals = response.context["totals"]
+        self.assertEqual(totals["total_hores"], Decimal("8.00"))
+        self.assertEqual(totals["hores_facturables"], Decimal("6.00"))
+        self.assertEqual(totals["hores_no_facturables"], Decimal("2.00"))
+
+    def test_informe_productivitat_csv_requires_permission(self):
+        self.client.force_login(self.user_no_perm)
+        response = self.client.get(reverse("pressupostos:informe_productivitat_csv"))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("/admin/login/", response["Location"])
+
+
+class InformeExecutiuPermissionsAndDataTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.superuser = User.objects.create_superuser(
+            username="admin_exec",
+            email="admin_exec@example.com",
+            password="pass1234",
+        )
+        cls.user_no_perm = User.objects.create_user(username="user_no_exec_perm", password="pass1234")
+        cls.user_with_perm = User.objects.create_user(username="user_with_exec_perm", password="pass1234")
+        perm = Permission.objects.get(codename="view_executiu_report")
+        cls.user_with_perm.user_permissions.add(perm)
+
+        cls.parroquia = Parroquia.objects.create(parroquia="Encamp")
+        cls.ubicacio = Ubicacio.objects.create(ubicacio="Centre")
+        cls.client_obj = Clients.objects.create(nom_client="Client Exec", telefon="+376666111")
+        cls.departament = DepartamentClient.objects.create(nom="Departament Exec")
+        cls.persona_contacte = PersonaContactClient.objects.create(
+            client=cls.client_obj,
+            nom_contacte="Contacte Exec",
+            telefon="+376666222",
+        )
+        cls.projecte = Projecte.objects.create(
+            nom="Projecte Exec",
+            client=cls.client_obj,
+            departament=cls.departament,
+            persona_contacte=cls.persona_contacte,
+            parroquia=cls.parroquia,
+            ubicacio=cls.ubicacio,
+        )
+        cls.tasca = Tasca.objects.create(tasca="Tasca Exec")
+        cls.treball = Treball.objects.create(descripcio="Treball Exec")
+        TasquesTreball.objects.create(tasca=cls.tasca, treball=cls.treball)
+        cls.tipus_recurs = TipusRecurso.objects.create(tipus="intern")
+        cls.recurs = Recurso.objects.create(
+            nom="Recurs Exec",
+            tipus_recurso=cls.tipus_recurs,
+            preu_tancat=0,
+            preu_hora=Decimal("25.00"),
+        )
+        cls.hora = Hores.objects.create(hores=Decimal("1.00"))
+
+        cls.pressupost = Pressupost.objects.create(
+            client=cls.client_obj,
+            projecte=cls.projecte,
+            parroquia=cls.parroquia,
+            ubicacio=cls.ubicacio,
+            nom="Pressupost Exec",
+            data=date(2026, 3, 3),
+            tancat=False,
+        )
+        cls.linia = PressupostLinia.objects.create(
+            pressupost=cls.pressupost,
+            treball=cls.treball,
+            tasca=cls.tasca,
+            quantitat=1,
+            recurs=cls.recurs,
+            preu_tancat=False,
+            hora=cls.hora,
+            increment_hores=Decimal("0.00"),
+            hores_totals=Decimal("7.00"),
+            cost_hores=Decimal("20.00"),
+            cost_hores_totals=Decimal("140.00"),
+            subtotal=Decimal("140.00"),
+            benefici=Decimal("10.00"),
+            total=Decimal("154.00"),
+        )
+        CarregaHores.objects.create(
+            usuari=cls.superuser,
+            pressupost=cls.pressupost,
+            linia=cls.linia,
+            data=date(2026, 3, 10),
+            hores=Decimal("5.00"),
+        )
+
+    def test_informe_executiu_denies_user_without_permission(self):
+        self.client.force_login(self.user_no_perm)
+        response = self.client.get(reverse("pressupostos:informe_executiu_mensual"))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("/admin/login/", response["Location"])
+
+    def test_informe_executiu_allows_user_with_permission(self):
+        self.client.force_login(self.user_with_perm)
+        response = self.client.get(reverse("pressupostos:informe_executiu_mensual"), {"mes": "2026-03"})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Informe Executiu Mensual")
+
+    def test_informe_executiu_calculates_expected_totals(self):
+        self.client.force_login(self.superuser)
+        response = self.client.get(reverse("pressupostos:informe_executiu_mensual"), {"mes": "2026-03"})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["totals"]["hores_planificades"], Decimal("7.00"))
+        self.assertEqual(response.context["totals"]["hores_reals"], Decimal("5.00"))
+        self.assertEqual(response.context["estat"]["total_pressupostos"], 1)
+        self.assertEqual(response.context["estat"]["total_oberts"], 1)
+
+    def test_informe_executiu_csv_requires_permission(self):
+        self.client.force_login(self.user_no_perm)
+        response = self.client.get(reverse("pressupostos:informe_executiu_mensual_csv"))
         self.assertEqual(response.status_code, 302)
         self.assertIn("/admin/login/", response["Location"])

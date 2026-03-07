@@ -142,9 +142,58 @@
                   <li class="nav-item">
                     <a class="nav-link" href="{% url 'documentacion:index' %}">Documentació</a>
                   </li>
-                  {% if request.user.is_superuser or perms.pressupostos.view_hores_report %}
-                    <li class="nav-item">
-                      <a class="nav-link" href="{% url 'pressupostos:informe_hores' %}">Informe Hores</a>
+                  {% if request.user.is_superuser or perms.pressupostos.view_hores_report or perms.pressupostos.view_rentabilitat_report or perms.pressupostos.view_productivitat_report or perms.pressupostos.view_executiu_report %}
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Informes
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li>
+                          <a class="dropdown-item" href="{% url 'pressupostos:informe_hores' %}">
+                            <i class="bi bi-clock-history me-2"></i>Hores Previstes vs Reals
+                          </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        {% if request.user.is_superuser or perms.pressupostos.view_rentabilitat_report %}
+                          <li>
+                            <a class="dropdown-item" href="{% url 'pressupostos:informe_rentabilitat' %}">
+                              <i class="bi bi-cash-coin me-2"></i>Rentabilitat per Pressupost
+                            </a>
+                          </li>
+                        {% else %}
+                          <li>
+                            <span class="dropdown-item-text text-muted">
+                              <i class="bi bi-cash-coin me-2"></i>Rentabilitat per Pressupost
+                            </span>
+                          </li>
+                        {% endif %}
+                        {% if request.user.is_superuser or perms.pressupostos.view_productivitat_report %}
+                          <li>
+                            <a class="dropdown-item" href="{% url 'pressupostos:informe_productivitat' %}">
+                              <i class="bi bi-people me-2"></i>Productivitat per Recurs
+                            </a>
+                          </li>
+                        {% else %}
+                          <li>
+                            <span class="dropdown-item-text text-muted">
+                              <i class="bi bi-people me-2"></i>Productivitat per Recurs
+                            </span>
+                          </li>
+                        {% endif %}
+                        {% if request.user.is_superuser or perms.pressupostos.view_executiu_report %}
+                          <li>
+                            <a class="dropdown-item" href="{% url 'pressupostos:informe_executiu_mensual' %}">
+                              <i class="bi bi-bar-chart-line me-2"></i>Informe Executiu Mensual
+                            </a>
+                          </li>
+                        {% else %}
+                          <li>
+                            <span class="dropdown-item-text text-muted">
+                              <i class="bi bi-bar-chart-line me-2"></i>Informe Executiu Mensual
+                            </span>
+                          </li>
+                        {% endif %}
+                      </ul>
                     </li>
                   {% endif %}
                   {% if request.user.is_superuser %}

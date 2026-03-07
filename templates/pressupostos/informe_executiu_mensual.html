@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Informe Executiu Mensual</h2>
+    <div>
+      <a href="{% url 'pressupostos:informe_executiu_mensual_csv' %}{% if query_string %}?{{ query_string }}{% endif %}" class="btn btn-outline-dark">
+        <i class="bi bi-download"></i> CSV
+      </a>
+    </div>
+  </div>
+
+  <form method="get" class="card card-body mb-3">
+    <div class="row g-2">
+      <div class="col-md-3">
+        <label for="id_mes" class="form-label">Mes (YYYY-MM)</label>
+        <input id="id_mes" type="month" name="mes" value="{{ mes }}" class="form-control form-control-sm">
+      </div>
+      <div class="col-md-3">
+        <label for="id_client_id" class="form-label">Client</label>
+        <select id="id_client_id" name="client_id" class="form-select form-select-sm">
+          <option value="">Tots</option>
+          {% for id, nom in clients %}
+            <option value="{{ id }}" {% if filters.client_id == id|stringformat:"s" %}selected{% endif %}>{{ nom }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label for="id_projecte_id" class="form-label">Projecte</label>
+        <select id="id_projecte_id" name="projecte_id" class="form-select form-select-sm">
+          <option value="">Tots</option>
+          {% for id, nom in projectes %}
+            <option value="{{ id }}" {% if filters.projecte_id == id|stringformat:"s" %}selected{% endif %}>{{ nom }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class="d-flex gap-2 mt-3">
+      <button class="btn btn-dark btn-sm" type="submit"><i class="bi bi-search"></i> Aplicar</button>
+      <a href="{% url 'pressupostos:informe_executiu_mensual' %}" class="btn btn-outline-dark btn-sm"><i class="bi bi-x-circle"></i> Netejar</a>
+    </div>
+  </form>
+
+  <div class="alert alert-dark">Mes analitzat: <strong>{{ month_label }}</strong></div>
+
+  <div class="row g-3 mb-3">
+    <div class="col-md-3"><div class="card card-body"><small class="text-muted">Hores Planificades</small><h4 class="mb-0">{{ totals.hores_planificades|floatformat:2 }}</h4></div></div>
+    <div class="col-md-3"><div class="card card-body"><small class="text-muted">Hores Reals</small><h4 class="mb-0">{{ totals.hores_reals|floatformat:2 }}</h4></div></div>
+    <div class="col-md-3"><div class="card card-body"><small class="text-muted">Desviació Hores</small><h4 class="mb-0">{{ totals.desviacio_hores|floatformat:2 }}</h4></div></div>
+    <div class="col-md-3"><div class="card card-body"><small class="text-muted">% Progrés Hores</small><h4 class="mb-0">{% if totals.percent_progres_hores is not None %}{{ totals.percent_progres_hores|floatformat:2 }}%{% else %}-{% endif %}</h4></div></div>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-3"><div class="card card-body"><small class="text-muted">Pressupostos Totals</small><h5 class="mb-0">{{ estat.total_pressupostos }}</h5></div></div>
+    <div class="col-md-3"><div class="card card-body"><small class="text-muted">Tancats</small><h5 class="mb-0">{{ estat.total_tancats }}</h5></div></div>
+    <div class="col-md-3"><div class="card card-body"><small class="text-muted">Oberts</small><h5 class="mb-0">{{ estat.total_oberts }}</h5></div></div>
+    <div class="col-md-3"><div class="card card-body"><small class="text-muted">% Tancats</small><h5 class="mb-0">{% if estat.percent_tancats is not None %}{{ estat.percent_tancats|floatformat:2 }}%{% else %}-{% endif %}</h5></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header fw-bold">Top 10 Projectes amb més desviació</div>
+    <div class="table-responsive">
+      <table class="table table-sm mb-0">
+        <thead>
+          <tr>
+            <th>Projecte</th>
+            <th class="text-end">Hores Planificades</th>
+            <th class="text-end">Hores Reals</th>
+            <th class="text-end">Desviació</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in top_projects %}
+            <tr>
+              <td>{{ row.projecte_nom }}</td>
+              <td class="text-end">{{ row.hores_planificades|floatformat:2 }}</td>
+              <td class="text-end">{{ row.hores_reals|floatformat:2 }}</td>
+              <td class="text-end">{{ row.desviacio|floatformat:2 }}</td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="4" class="text-center">Sense dades per aquest mes/filtres.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

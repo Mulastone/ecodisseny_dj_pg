@@ -203,7 +203,9 @@
               <tbody>
                 {% for stat in stats_per_recurso %}
                 <tr>
-                  <td><strong>{{ stat.recurso__nom }}</strong></td>
+                  <td>
+                    <strong>{{ stat.linia__recurs__nom|default:"Sense recurs" }}</strong>
+                  </td>
                   <td class="text-center">
                     <span class="badge badge-navbar-color"
                       >{{ stat.total_hores|default:0 }} h</span
@@ -307,10 +309,7 @@
                 {% for stat in stats_per_client %}
                 <tr>
                   <td>
-                    <strong
-                      >{{ stat.pressupost__client__nom_client|default:"Sense
-                      client" }}</strong
-                    >
+                    <strong>{{ stat.pressupost__client__nom_client|default:"Sense client" }}</strong>
                   </td>
                   <td class="text-center">
                     <span class="badge badge-navbar-color"
@@ -355,10 +354,7 @@
                 {% for stat in stats_per_projecte %}
                 <tr>
                   <td>
-                    <strong
-                      >{{ stat.pressupost__projecte__nom|default:"Sense
-                      projecte" }}</strong
-                    >
+                    <strong>{{ stat.pressupost__projecte__nom|default:"Sense projecte" }}</strong>
                   </td>
                   <td class="text-center">
                     <span class="badge badge-navbar-color"

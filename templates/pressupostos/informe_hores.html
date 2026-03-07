@@ -4,12 +4,9 @@
 <div class="container mt-4">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h2 class="mb-0">Informe Hores: Previstes vs Reals</h2>
-    <div class="d-flex gap-2">
+    <div>
       <a href="{% url 'pressupostos:informe_hores_csv' %}{% if query_string %}?{{ query_string }}{% endif %}" class="btn btn-outline-dark">
         <i class="bi bi-download"></i> CSV
-      </a>
-      <a href="{% url 'pressupostos:list' %}" class="btn btn-dark">
-        <i class="bi bi-arrow-left"></i> Pressupostos
       </a>
     </div>
   </div>
@@ -35,6 +32,15 @@
         </select>
       </div>
       <div class="col-md-2">
+        <label for="id_treball_id" class="form-label">Treball</label>
+        <select id="id_treball_id" name="treball_id" class="form-select form-select-sm">
+          <option value="">Tots</option>
+          {% for id, nom in treballs %}
+            <option value="{{ id }}" {% if filters.treball_id == id|stringformat:"s" %}selected{% endif %}>{{ nom }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
         <label for="id_tasca_id" class="form-label">Tasca</label>
         <select id="id_tasca_id" name="tasca_id" class="form-select form-select-sm">
           <option value="">Totes</option>
@@ -43,7 +49,7 @@
           {% endfor %}
         </select>
       </div>
-      <div class="col-md-2">
+      <div class="col-md-1">
         <label for="id_recurs_id" class="form-label">Recurs</label>
         <select id="id_recurs_id" name="recurs_id" class="form-select form-select-sm">
           <option value="">Tots</option>
@@ -52,7 +58,7 @@
           {% endfor %}
         </select>
       </div>
-      <div class="col-md-2">
+      <div class="col-md-1">
         <label for="id_data_inici" class="form-label">Data inici</label>
         <input id="id_data_inici" type="date" name="data_inici" value="{{ filters.data_inici }}" class="form-control form-control-sm">
       </div>
@@ -109,6 +115,7 @@
       <thead class="table-dark text-white">
         <tr>
           <th>Projecte</th>
+          <th>Treball</th>
           <th>Tasca</th>
           <th class="text-end">Hores Previstes</th>
           <th class="text-end">Hores Reals</th>
@@ -120,6 +127,7 @@
         {% for row in rows %}
           <tr>
             <td>{{ row.projecte_nom }}</td>
+            <td>{{ row.treball_nom }}</td>
             <td>{{ row.tasca_nom }}</td>
             <td class="text-end">{{ row.hores_previstes|floatformat:2 }}</td>
             <td class="text-end">{{ row.hores_reals|floatformat:2 }}</td>
@@ -133,7 +141,7 @@
             </td>
           </tr>
         {% empty %}
-          <tr><td colspan="6" class="text-center">Sense dades per als filtres seleccionats.</td></tr>
+          <tr><td colspan="7" class="text-center">Sense dades per als filtres seleccionats.</td></tr>
         {% endfor %}
       </tbody>
     </table>

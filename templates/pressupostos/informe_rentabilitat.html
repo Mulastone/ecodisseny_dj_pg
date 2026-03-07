@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Informe Rentabilitat per Pressupost</h2>
+    <div>
+      <a href="{% url 'pressupostos:informe_rentabilitat_csv' %}{% if query_string %}?{{ query_string }}{% endif %}" class="btn btn-outline-dark">
+        <i class="bi bi-download"></i> CSV
+      </a>
+    </div>
+  </div>
+
+  <form method="get" class="card card-body mb-3">
+    <div class="row g-2">
+      <div class="col-md-3">
+        <label for="id_client_id" class="form-label">Client</label>
+        <select id="id_client_id" name="client_id" class="form-select form-select-sm">
+          <option value="">Tots</option>
+          {% for id, nom in clients %}
+            <option value="{{ id }}" {% if filters.client_id == id|stringformat:"s" %}selected{% endif %}>{{ nom }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label for="id_projecte_id" class="form-label">Projecte</label>
+        <select id="id_projecte_id" name="projecte_id" class="form-select form-select-sm">
+          <option value="">Tots</option>
+          {% for id, nom in projectes %}
+            <option value="{{ id }}" {% if filters.projecte_id == id|stringformat:"s" %}selected{% endif %}>{{ nom }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label for="id_data_inici" class="form-label">Data inici</label>
+        <input id="id_data_inici" type="date" name="data_inici" value="{{ filters.data_inici }}" class="form-control form-control-sm">
+      </div>
+      <div class="col-md-2">
+        <label for="id_data_fi" class="form-label">Data fi</label>
+        <input id="id_data_fi" type="date" name="data_fi" value="{{ filters.data_fi }}" class="form-control form-control-sm">
+      </div>
+      <div class="col-md-1">
+        <label for="id_umbral_amber" class="form-label">Ambre %</label>
+        <input id="id_umbral_amber" type="number" step="0.1" name="umbral_amber" value="{{ filters.umbral_amber }}" class="form-control form-control-sm">
+      </div>
+      <div class="col-md-1">
+        <label for="id_umbral_red" class="form-label">Roig %</label>
+        <input id="id_umbral_red" type="number" step="0.1" name="umbral_red" value="{{ filters.umbral_red }}" class="form-control form-control-sm">
+      </div>
+    </div>
+    <div class="d-flex gap-2 mt-3">
+      <button class="btn btn-dark btn-sm" type="submit"><i class="bi bi-search"></i> Aplicar</button>
+      <a href="{% url 'pressupostos:informe_rentabilitat' %}" class="btn btn-outline-dark btn-sm"><i class="bi bi-x-circle"></i> Netejar</a>
+    </div>
+  </form>
+
+  <div class="row g-3 mb-3">
+    <div class="col-md-2"><div class="card card-body"><small class="text-muted">Ingressos Prevists</small><h5 class="mb-0">{{ totals.ingres_previst|floatformat:2 }}</h5></div></div>
+    <div class="col-md-2"><div class="card card-body"><small class="text-muted">Cost Previst</small><h5 class="mb-0">{{ totals.cost_previst|floatformat:2 }}</h5></div></div>
+    <div class="col-md-2"><div class="card card-body"><small class="text-muted">Cost Real</small><h5 class="mb-0">{{ totals.cost_real|floatformat:2 }}</h5></div></div>
+    <div class="col-md-2"><div class="card card-body"><small class="text-muted">Marge Previst</small><h5 class="mb-0">{{ totals.marge_previst|floatformat:2 }}</h5></div></div>
+    <div class="col-md-2"><div class="card card-body"><small class="text-muted">Marge Real</small><h5 class="mb-0">{{ totals.marge_real|floatformat:2 }}</h5></div></div>
+    <div class="col-md-2"><div class="card card-body"><small class="text-muted">Desviació Cost %</small><h5 class="mb-0">{% if totals.desviacio_percent is not None %}{{ totals.desviacio_percent|floatformat:2 }}%{% else %}-{% endif %}</h5></div></div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle bg-white table-dark-header">
+      <thead class="table-dark text-white">
+        <tr>
+          <th>Data</th>
+          <th>Pressupost</th>
+          <th>Client</th>
+          <th>Projecte</th>
+          <th class="text-end">Ingres Previst</th>
+          <th class="text-end">Cost Previst</th>
+          <th class="text-end">Cost Real</th>
+          <th class="text-end">Marge Previst</th>
+          <th class="text-end">Marge Real</th>
+          <th class="text-end">Desviació Cost</th>
+          <th class="text-end">% Desviació</th>
+          <th class="text-center">Semàfor</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+          <tr>
+            <td>{{ row.data|date:"d/m/Y" }}</td>
+            <td>{{ row.pressupost_nom }}</td>
+            <td>{{ row.client_nom }}</td>
+            <td>{{ row.projecte_nom }}</td>
+            <td class="text-end">{{ row.ingres_previst|floatformat:2 }}</td>
+            <td class="text-end">{{ row.cost_previst|floatformat:2 }}</td>
+            <td class="text-end">{{ row.cost_real|floatformat:2 }}</td>
+            <td class="text-end">{{ row.marge_previst|floatformat:2 }}</td>
+            <td class="text-end">{{ row.marge_real|floatformat:2 }}</td>
+            <td class="text-end">{{ row.desviacio_cost|floatformat:2 }}</td>
+            <td class="text-end">{% if row.desviacio_percent is not None %}{{ row.desviacio_percent|floatformat:2 }}%{% else %}-{% endif %}</td>
+            <td class="text-center"><span class="badge bg-{{ row.semafor }}">{{ row.semafor_label }}</span></td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="12" class="text-center">Sense dades per als filtres seleccionats.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

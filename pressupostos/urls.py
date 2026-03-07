@@ -9,6 +9,12 @@ urlpatterns = [
     path('list/', views.list_pressuposts, name='list'),
     path('informe-hores/', views.informe_hores, name='informe_hores'),
     path('informe-hores.csv', views.informe_hores_csv, name='informe_hores_csv'),
+    path('informe-rentabilitat/', views.informe_rentabilitat, name='informe_rentabilitat'),
+    path('informe-rentabilitat.csv', views.informe_rentabilitat_csv, name='informe_rentabilitat_csv'),
+    path('informe-productivitat/', views.informe_productivitat, name='informe_productivitat'),
+    path('informe-productivitat.csv', views.informe_productivitat_csv, name='informe_productivitat_csv'),
+    path('informe-executiu-mensual/', views.informe_executiu_mensual, name='informe_executiu_mensual'),
+    path('informe-executiu-mensual.csv', views.informe_executiu_mensual_csv, name='informe_executiu_mensual_csv'),
     path('detall/<int:pk>/', views.detail_view, name='detall'),
 
     # Formularis CRUD

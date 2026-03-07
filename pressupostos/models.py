@@ -26,6 +26,9 @@ class Pressupost(SafeSaveModel):
         verbose_name_plural = "Pressupostos"
         permissions = (
             ("view_hores_report", "Pot veure l'informe d'hores previstes vs reals"),
+            ("view_rentabilitat_report", "Pot veure l'informe de rentabilitat per pressupost"),
+            ("view_productivitat_report", "Pot veure l'informe de productivitat per recurs"),
+            ("view_executiu_report", "Pot veure l'informe executiu mensual"),
         )
 
     def __str__(self):
