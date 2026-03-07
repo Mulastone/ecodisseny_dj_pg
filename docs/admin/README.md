@@ -33,7 +33,7 @@ Documentación técnica y operativa para administradores del sistema Ecodisseny.
 
 ### 🌐 **URLs Importantes**
 - **Panel Admin:** `/admin/`
-- **CarregaHores:** `/carregahores/`
+- **CarregaHores:** `/carrega-hores/`
 - **Documentación:** `/documentacion/`
 - **API Admin:** `/admin/login/`
 

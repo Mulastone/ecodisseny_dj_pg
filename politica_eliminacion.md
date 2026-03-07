@@ -434,7 +434,7 @@ No es pot eliminar aquest pressupost perquè té X registre(s) d'hores carregade
 
 **Solució:**
 
-1. Ves a **Carregar Hores** (menu principal o `/carregahores/list/`)
+1. Ves a **Carregar Hores** (menu principal o `/carrega-hores/meves/`)
 2. Filtra o busca els registres del pressupost
 3. Elimina els registres d'hores
 4. Torna a Pressupostos i elimina el pressupost

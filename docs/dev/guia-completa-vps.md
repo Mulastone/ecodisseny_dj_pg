@@ -959,14 +959,10 @@ docker network inspect ecodisseny_dj_pg_default
 
 ```
 👑 ADMINISTRADORES:
-- mulastone / ecodisseny2024
-- gonzalo / ecodisseny2024
+- usuario definido en DJANGO_SUPERUSER_USERNAME
 
 👤 USUARIOS REGULARES:
-- sarah / ecodisseny2024
-- pilar / ecodisseny2024
-- santiago / ecodisseny2024
-- roger / ecodisseny2024
+- usuarios operativos definidos por fixtures o admin
 ```
 
 ### 🛠️ **Comandos de Gestión Rápida:**

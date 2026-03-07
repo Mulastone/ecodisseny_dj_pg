@@ -18,10 +18,10 @@ Cuando algo no funciona, sigue estos pasos en orden:
 
    ```bash
    # Estado de contenedores
-   docker-compose ps
+   docker compose --env-file .env.dev ps
 
    # Logs recientes
-   docker-compose logs --tail=50
+   docker compose --env-file .env.dev logs --tail=50
    ```
 
 3. **🌐 Verificar conectividad**

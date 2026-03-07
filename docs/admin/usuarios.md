@@ -24,6 +24,87 @@ Esta guía detalla cómo administrar usuarios, roles y permisos en Ecodisseny pa
 
 ## 👥 Gestión de Usuarios
 
+## SOP: Alta de Recurso Interno/Colaborador (flujo recomendado)
+
+Este es el flujo operativo recomendado para evitar descuadres entre `Usuario`, `Recurso` y `Perfil`.
+
+### Regla de negocio
+
+- `Intern` y `Colaborador`: necesitan usuario de login.
+- `Extern`: no necesita usuario de login (solo recurso maestro).
+
+`Necessita Usuari` se calcula automaticamente por tipo de recurso.
+
+### Flujo optimo (1 paso con comando)
+
+No hace falta crear usuario previamente en Admin si usas este comando.
+El comando crea/actualiza: tipo de recurso, recurso, usuario y perfil enlazado.
+
+```bash
+cd /opt/ecodisseny/ecodisseny_dj_pg
+docker compose -f docker-compose.prod.yml --env-file .env.prod exec web \
+python manage.py crear_recurso_usuari \
+  --username roger \
+  --first_name Roger \
+  --email roger@ecodisseny.com \
+  --password 'Cambiar123!' \
+  --recurso_name Roger \
+  --tipo_recurso Colaborador \
+  --preu_hora 19.60
+```
+
+Opcional admin:
+
+```bash
+# agrega acceso al admin si corresponde
+docker compose -f docker-compose.prod.yml --env-file .env.prod exec web \
+python manage.py crear_recurso_usuari \
+  --username gonzalo \
+  --first_name Gonzalo \
+  --email gonzalo@ecodisseny.com \
+  --password 'Cambiar123!' \
+  --recurso_name Gonzalo \
+  --tipo_recurso Intern \
+  --is_staff
+```
+
+### Flujo para recurso Extern
+
+1. Crear solo `Recurso` en Admin (`Tipus recurso = Extern`).
+2. No crear usuario salvo requerimiento excepcional.
+
+### Validacion post-alta (obligatoria)
+
+1. En Admin > Usuarios, el usuario existe y esta activo.
+2. En Admin > PerfilUsuario, el usuario apunta al recurso correcto.
+3. Login con el usuario y prueba de acceso a carga de horas.
+
+### Flujo alternativo manual (si no usas comando)
+
+1. Crear recurso.
+2. Crear usuario.
+3. Asignar perfil (`Usuario -> Recurso`) en Admin.
+4. Validar acceso.
+
+Evita depender de autoasignacion por coincidencia de nombres como flujo principal.
+
+### Flujo optimo sin terminal (Admin no tecnico)
+
+Tambien disponible en una pantalla unica dentro del Admin:
+
+1. `Moduls Maestros > Recursos`
+2. Boton: **Alta completa intern/colaborador**
+3. Completar formulario y guardar
+
+Este formulario crea/actualitza en una sola accion:
+- Recurso
+- Usuario
+- Perfil (enlace Usuario -> Recurso)
+
+Acces rapid adicional:
+- desde `Moduls Maestros > Tipus de Recurs > (detalle del tipo)` puedes usar
+  **Alta completa amb aquest tipus** para abrir el mismo formulario con el tipo preseleccionado.
+
 ### **➕ Crear Nuevo Usuario**
 
 #### **1. Acceso al Panel Admin**
@@ -503,9 +584,9 @@ for group in user.groups.all():
 ### **📚 Documentación Relacionada**
 
 - [🔐 Seguridad Avanzada](seguridad.md)
-- [🏗️ Datos Maestros](datos-maestros.md)
+- [🏗️ Datos Maestros](gestion-de-maestros.md)
 - [📊 Mantenimiento](mantenimiento.md)
 
 ---
 
-_🎯 **Siguiente paso**: Configurar [datos maestros](datos-maestros.md) del sistema._
+_🎯 **Siguiente paso**: Configurar [datos maestros](gestion-de-maestros.md) del sistema._

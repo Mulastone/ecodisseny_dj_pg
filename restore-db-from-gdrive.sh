@@ -1,109 +1,88 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
-# Script para restaurar base de datos desde Google Drive
-# USO: ./restore-db-from-gdrive.sh [fecha]
-# Ejemplo: ./restore-db-from-gdrive.sh 20260208
-# Si no se especifica fecha, muestra los backups disponibles
+# Restauracion de BBDD desde Google Drive.
+# Uso:
+#   ./restore-db-from-gdrive.sh
+#   ./restore-db-from-gdrive.sh all_databases_20260307_020000.tar.gz
+#   AUTO_YES=true ./restore-db-from-gdrive.sh all_databases_20260307_020000.tar.gz
 
-GDRIVE_REMOTE="gdrive:ecodisseny-backups/database"
-RESTORE_DIR="/tmp/restore-db"
-CONTAINER_NAME="ecodisseny_dj_pg_db_1"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="${PROJECT_DIR:-$SCRIPT_DIR}"
 
-# Crear directorio temporal
-mkdir -p $RESTORE_DIR
+GDRIVE_REMOTE="${GDRIVE_REMOTE:-gdrive:ecodisseny-backups/database}"
+RESTORE_DIR="${RESTORE_DIR:-/tmp/restore-db}"
+COMPOSE_FILE="${COMPOSE_FILE:-docker-compose.prod.yml}"
+ENV_FILE="${ENV_FILE:-.env.prod}"
+DB_SERVICE="${DB_SERVICE:-db}"
+DB_SPECS="${DB_SPECS:-ecodisseny_db:ecodisseny}"
+AUTO_YES="${AUTO_YES:-false}"
 
-# Si no se especifica archivo, listar backups disponibles
-if [ -z "$1" ]; then
-    echo "📦 Backups disponibles en Google Drive:"
-    echo "========================================"
-    rclone ls "$GDRIVE_REMOTE" | grep ".tar.gz" | sort -r
-    echo ""
-    echo "💡 Uso: $0 [fecha_archivo]"
-    echo "   Ejemplo: $0 all_databases_20260208_140000.tar.gz"
-    exit 0
-fi
-
-BACKUP_FILE="$1"
-
-echo "🔄 Descargando backup desde Google Drive..."
-rclone copy "${GDRIVE_REMOTE}/${BACKUP_FILE}" "$RESTORE_DIR"
-
-if [ $? -ne 0 ]; then
-    echo "❌ Error al descargar el backup"
-    exit 1
-fi
-
-echo "✓ Backup descargado"
-
-# Descomprimir
-cd $RESTORE_DIR
-echo "📦 Descomprimiendo archivo..."
-tar -xzf "$BACKUP_FILE"
-
-if [ $? -ne 0 ]; then
-    echo "❌ Error al descomprimir el backup"
-    exit 1
-fi
-
-echo "✓ Archivo descomprimido"
-
-# Función para restaurar una base de datos
-restore_database() {
-    local db_name=$1
-    local db_user=$2
-    local sql_file=$(ls ${RESTORE_DIR}/${db_name}_*.sql.gz 2>/dev/null | head -n1)
-    
-    if [ -z "$sql_file" ]; then
-        echo "⚠️  No se encontró backup para $db_name"
-        return 1
-    fi
-    
-    echo "🔄 Restaurando $db_name desde $sql_file..."
-    
-    # Descomprimir SQL
-    gunzip "$sql_file"
-    sql_file="${sql_file%.gz}"
-    
-    # Confirmar antes de restaurar
-    read -p "⚠️  ¿SEGURO que quieres restaurar $db_name? Esto SOBREESCRIBIRÁ los datos actuales [y/N]: " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        echo "❌ Restauración cancelada"
-        return 1
-    fi
-    
-    # Restaurar
-    docker exec -i $CONTAINER_NAME psql -U $db_user -d $db_name < "$sql_file"
-    
-    if [ $? -eq 0 ]; then
-        echo "✅ $db_name restaurada exitosamente"
-    else
-        echo "❌ Error al restaurar $db_name"
-        return 1
-    fi
+log() {
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*"
 }
 
-# Restaurar bases de datos
-echo ""
-echo "📊 Bases de datos encontradas en el backup:"
-ls $RESTORE_DIR/*.sql 2>/dev/null || ls $RESTORE_DIR/*.sql.gz 2>/dev/null
-echo ""
+mkdir -p "$RESTORE_DIR"
 
-# Preguntar qué restaurar
-read -p "¿Restaurar ecodisseny_db? [y/N]: " -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-    restore_database "ecodisseny_db" "ecodisseny_user"
+if [[ "$COMPOSE_FILE" != /* ]]; then
+  COMPOSE_FILE="${PROJECT_DIR}/${COMPOSE_FILE}"
+fi
+if [[ "$ENV_FILE" != /* ]]; then
+  ENV_FILE="${PROJECT_DIR}/${ENV_FILE}"
 fi
 
-read -p "¿Restaurar properties_db? [y/N]: " -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-    restore_database "properties_db" "scraper_user"
+if [[ $# -eq 0 ]]; then
+  log "Backups disponibles en ${GDRIVE_REMOTE}:"
+  rclone ls "$GDRIVE_REMOTE" | grep -E '\.tar\.gz$' | sort -r || true
+  echo
+  log "Uso: $0 all_databases_YYYYMMDD_HHMMSS.tar.gz"
+  exit 0
 fi
 
-# Limpiar archivos temporales
-echo "🧹 Limpiando archivos temporales..."
-rm -rf $RESTORE_DIR
+backup_file="$1"
+local_archive="${RESTORE_DIR}/${backup_file}"
 
-echo "✅ Proceso de restauración completado"
+log "Descargando backup desde Google Drive..."
+rclone copyto "${GDRIVE_REMOTE%/}/${backup_file}" "$local_archive"
+log "Descarga completada: $local_archive"
+
+log "Descomprimiendo backup..."
+tar -xzf "$local_archive" -C "$RESTORE_DIR"
+rm -f "$local_archive"
+
+log "Dumps encontrados:"
+find "$RESTORE_DIR" -maxdepth 1 -type f -name "*.sql.gz" -printf " - %f\n" | sort || true
+
+if [[ "$AUTO_YES" != "true" ]]; then
+  read -r -p "Esto sobrescribira datos actuales. Continuar? [y/N]: " confirm
+  if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+    log "Restauracion cancelada."
+    rm -rf "$RESTORE_DIR"
+    exit 1
+  fi
+fi
+
+restore_database() {
+  local spec="$1"
+  local db_name="${spec%%:*}"
+  local db_user="${spec##*:}"
+  local sql_gz
+  sql_gz="$(ls -1 "${RESTORE_DIR}/${db_name}"_*.sql.gz 2>/dev/null | head -n1 || true)"
+
+  if [[ -z "$sql_gz" ]]; then
+    log "WARN: no hay dump para ${db_name}. Se omite."
+    return 0
+  fi
+
+  log "Restaurando ${db_name} con usuario ${db_user}..."
+  gunzip -c "$sql_gz" | docker compose -f "$COMPOSE_FILE" --env-file "$ENV_FILE" exec -T "$DB_SERVICE" \
+    psql -U "$db_user" -d "$db_name"
+  log "OK: ${db_name} restaurada."
+}
+
+for spec in $DB_SPECS; do
+  restore_database "$spec"
+done
+
+rm -rf "$RESTORE_DIR"
+log "Proceso de restauracion completado."

@@ -1,0 +1,11 @@
+{% extends "admin/change_list.html" %}
+
+{% block object-tools-items %}
+<li style="list-style:none; display:inline-block; margin-right:8px;">
+  <a href="{% url 'admin:maestros_recurso_alta_completa' %}"
+     style="display:inline-block; background:#343a40; border:1px solid #343a40; color:#fff; border-radius:8px; font-weight:600; padding:8px 12px; text-decoration:none;">
+    Alta completa intern/colaborador
+  </a>
+</li>
+{{ block.super }}
+{% endblock %}

@@ -1,14 +1,6 @@
 # ⏱️ Guía Completa de Carga de Horas
 
-Esta guía te enseñará todo lo que necesitas saber### **Paso 1: Formulario de Registro**
-
-Al hacer clic en **"Nova Càrrega"**, verás un formulario con estos campos:
-
-| Campo | Descripción | Ejemplo | Dependencia | ¿Obligatorio? |
-|-------|-------------|---------|-------------|---------------|
-| 👥 **Filtrar per Client** | **[FILTRO]** Cliente para filtrar opciones | Prueba, Ensisa | - | ❌ No |
-| 📁 **Filtrar per Projecte** | **[FILTRO]** Proyecto para filtrar presupuestos | Proy prueba, Abarset | Depende del cliente | ❌ No |
-| 📋 **Pressupost** | Proyecto/presupuesto donde trabajaste | Lista filtrada | Depende de filtros anteriores | ✅ Sí |istrar tus horas de trabajo de manera eficiente en Ecodisseny.
+Esta guía te enseñará todo lo que necesitas saber para registrar tus horas de trabajo de manera eficiente en Ecodisseny.
 
 ## 🎯 ¿Qué es la Carga de Horas?
 
@@ -22,9 +14,9 @@ La **Carga de Horas** es el sistema que te permite registrar el tiempo que dedic
 ## 🚀 Acceso Rápido
 
 ### **URLs principales**:
-- **Nueva carga**: `/carregahores/nova/`
-- **Mis cargas**: `/carregahores/meves/`
-- **Editar carga**: `/carregahores/editar/{id}/`
+- **Nueva carga**: `/carrega-hores/nova/`
+- **Mis cargas**: `/carrega-hores/meves/`
+- **Editar carga**: `/carrega-hores/editar/{id}/`
 
 ### **Navegación**:
 1. Desde el menú principal: **⏱️ Carga de Horas**
@@ -180,7 +172,7 @@ En **"Meves Càrregues"** podrás:
 **Situación**: Necesitas registrar horas trabajadas para el cliente "Prueba"
 
 **Pasos**:
-1. Ve a **Nueva Carga** (`/carregahores/nova/`)
+1. Ve a **Nueva Carga** (`/carrega-hores/nova/`)
 2. En **"Filtrar per Client"** selecciona: `Prueba`
 3. Verás solo presupuestos del cliente Prueba:
    - ✅ Prova
@@ -461,9 +453,9 @@ El sistema verifica automáticamente:
 
 | Acción | URL | Descripción |
 |--------|-----|-------------|
-| **Nueva carga** | `/carregahores/nova/` | Registrar nuevas horas |
-| **Mis cargas** | `/carregahores/meves/` | Ver todos mis registros |
-| **Editar** | `/carregahores/editar/{id}/` | Modificar registro específico |
-| **Eliminar** | `/carregahores/eliminar/{id}/` | Borrar registro |
+| **Nueva carga** | `/carrega-hores/nova/` | Registrar nuevas horas |
+| **Mis cargas** | `/carrega-hores/meves/` | Ver todos mis registros |
+| **Editar** | `/carrega-hores/editar/{id}/` | Modificar registro específico |
+| **Eliminar** | `/carrega-hores/eliminar/{id}/` | Borrar registro |
 
 _💡 **Recuerda**: Un registro preciso de horas es fundamental para el éxito de los proyectos y la rentabilidad de la empresa._

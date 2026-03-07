@@ -1,0 +1,31 @@
+{% extends "admin/change_form.html" %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+  .object-tools li {
+    list-style: none;
+  }
+  .object-tools .alta-tipus-btn {
+    background: #343a40 !important;
+    border: 1px solid #343a40 !important;
+    color: #fff !important;
+    border-radius: 8px !important;
+    font-weight: 600;
+    padding: 8px 12px !important;
+  }
+  .object-tools .alta-tipus-btn:hover {
+    background: #1f252b !important;
+    border-color: #1f252b !important;
+  }
+</style>
+{% endblock %}
+
+{% block object-tools-items %}
+<li>
+  <a href="{% url 'admin:maestros_recurso_alta_completa' %}?tipus_recurso={{ original.pk }}" class="alta-tipus-btn">
+    Alta completa amb aquest tipus
+  </a>
+</li>
+{{ block.super }}
+{% endblock %}

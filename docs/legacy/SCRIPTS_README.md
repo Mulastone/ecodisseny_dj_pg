@@ -353,14 +353,14 @@ graph TD
 
 ### Tabla de Usuarios
 
-| Usuario   | Tipo  | Recurso  | Contraseña     | Permisos                              |
-| --------- | ----- | -------- | -------------- | ------------------------------------- |
-| mulastone | ADMIN | -        | ecodisseny2024 | Superusuario, acceso total            |
-| gonzalo   | ADMIN | Gonzalo  | ecodisseny2024 | Admin pressupostos, gestión completa  |
-| sarah     | USER  | Sarah    | ecodisseny2024 | Cargar horas propias                  |
-| pilar     | USER  | Pilar    | ecodisseny2024 | Cargar horas propias                  |
-| santiago  | USER  | Santiago | ecodisseny2024 | Cargar horas propias                  |
-| roger     | USER  | Roger    | ecodisseny2024 | Cargar horas propias                  |
+| Usuario   | Tipo  | Recurso  | Credenciales                      | Permisos                              |
+| --------- | ----- | -------- | --------------------------------- | ------------------------------------- |
+| mulastone | ADMIN | -        | Definidas por variables en `.env` | Superusuario, acceso total            |
+| gonzalo   | ADMIN | Gonzalo  | Definidas por variables en `.env` | Admin pressupostos, gestión completa  |
+| sarah     | USER  | Sarah    | Definidas por variables en `.env` | Cargar horas propias                  |
+| pilar     | USER  | Pilar    | Definidas por variables en `.env` | Cargar horas propias                  |
+| santiago  | USER  | Santiago | Definidas por variables en `.env` | Cargar horas propias                  |
+| roger     | USER  | Roger    | Definidas por variables en `.env` | Cargar horas propias                  |
 
 ### 🔐 Niveles de Permisos
 

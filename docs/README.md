@@ -17,7 +17,9 @@ Bienvenido a la documentación completa del sistema Ecodisseny. Aquí encontrar�
 - [💰 Gestión de Presupuestos](/documentacion/admin/presupuestos/) - Crear cotizaciones y presupuestos
 - [🏗️ Gestión de Maestros](/documentacion/admin/gestion-de-maestros/) - Datos maestros del sistema
 - [🔐 Seguridad](/documentacion/admin/seguridad/) - Permisos y configuración de seguridad
-- [🔧 Mantenimiento](/documentacion/admin/mantenimiento/) - Backups, logs y monitoreo### 🛠️ **Para Desarrolladores**
+- [🔧 Mantenimiento](/documentacion/admin/mantenimiento/) - Backups, logs y monitoreo
+
+### 🛠️ **Para Desarrolladores**
 
 - [🏗️ Guía Completa de Despliegue VPS](/documentacion/dev/guia-completa-vps/) - Deploy detallado en VPS y desarrollo
 - [📖 Arquitectura del Sistema](/documentacion/dev/arquitectura/) - Estructura técnica (próximamente)

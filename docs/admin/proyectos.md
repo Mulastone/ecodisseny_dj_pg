@@ -281,8 +281,8 @@ Ejemplos:
 ### **📚 Documentación Relacionada**
 
 - [💰 Presupuestos](presupuestos.md) - Crear cotizaciones para proyectos
-- [⏱️ Carga de Horas](carga-horas.md) - Registrar tiempo en proyectos
-- [📈 Reportes](reportes.md) - Análisis de proyectos
+- [⏱️ Carga de Horas](../usuario/carga-horas.md) - Registrar tiempo en proyectos
+- [🚨 Troubleshooting](../troubleshooting.md) - Diagnóstico y resolución de problemas
 
 ---
 

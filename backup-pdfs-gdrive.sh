@@ -1,46 +1,68 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
-# Script de backup automático de PDFs de presupuestos a Google Drive
-# Usa rclone para sincronizar con Google Drive
+# Backup de PDFs a Google Drive.
+# Usa copy (no sync) para evitar borrados accidentales en remoto.
 
-# Configuración
-SOURCE_DIR="/home/mulastone/proyectos/ecodisseny_dj_pg/media/pdfs_pressupostos"
-GDRIVE_REMOTE="gdrive:ecodisseny-backups/pdfs"
-LOG_FILE="/var/log/backup-pdfs-gdrive.log"
-DATE=$(date '+%Y-%m-%d %H:%M:%S')
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="${PROJECT_DIR:-$SCRIPT_DIR}"
+LOG_DIR="${LOG_DIR:-$PROJECT_DIR/logs}"
+LOG_FILE="${LOG_FILE:-$LOG_DIR/backup-pdfs-gdrive.log}"
 
-# Crear directorio de logs si no existe
-sudo mkdir -p /var/log
-sudo touch $LOG_FILE
-sudo chmod 666 $LOG_FILE
+SOURCE_DIR="${SOURCE_DIR:-$PROJECT_DIR/media/pdfs_pressupostos}"
+GDRIVE_REMOTE_ROOT="${GDRIVE_REMOTE_ROOT:-gdrive:ecodisseny-backups/pdfs}"
+REMOTE_LATEST_DIR="${REMOTE_LATEST_DIR:-latest}"
+DEST_REMOTE="${GDRIVE_REMOTE_ROOT%/}/${REMOTE_LATEST_DIR}"
 
-# Log inicio
-echo "[$DATE] Iniciando backup de PDFs a Google Drive..." >> $LOG_FILE
+PDFS_CREATE_SNAPSHOT="${PDFS_CREATE_SNAPSHOT:-false}"
+SNAPSHOT_RETENTION_DAYS="${SNAPSHOT_RETENTION_DAYS:-30}"
+DATE_TAG="$(date '+%Y%m%d_%H%M%S')"
 
-# Verificar que el directorio fuente existe
-if [ ! -d "$SOURCE_DIR" ]; then
-    echo "[$DATE] ERROR: Directorio fuente no existe: $SOURCE_DIR" >> $LOG_FILE
-    exit 1
+mkdir -p "$LOG_DIR"
+touch "$LOG_FILE"
+chmod 640 "$LOG_FILE" 2>/dev/null || true
+
+log() {
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" | tee -a "$LOG_FILE"
+}
+
+if ! command -v rclone >/dev/null 2>&1; then
+  log "ERROR: rclone no esta instalado."
+  exit 1
 fi
 
-# Sincronizar con Google Drive
-# --log-level INFO para logs detallados
-# --stats 1m para ver progreso cada minuto
-# --transfers 4 para subir 4 archivos en paralelo
-rclone sync "$SOURCE_DIR" "$GDRIVE_REMOTE" \
+if [[ ! -d "$SOURCE_DIR" ]]; then
+  log "ERROR: Directorio fuente no existe: $SOURCE_DIR"
+  exit 1
+fi
+
+log "Iniciando backup de PDFs: $SOURCE_DIR -> $DEST_REMOTE"
+rclone copy "$SOURCE_DIR" "$DEST_REMOTE" \
+  --log-level INFO \
+  --log-file="$LOG_FILE" \
+  --transfers 4 \
+  --checkers 8 \
+  --checksum \
+  --update \
+  --create-empty-src-dirs
+log "OK: backup de PDFs (latest) completado."
+
+if [[ "$PDFS_CREATE_SNAPSHOT" == "true" ]]; then
+  snapshot_remote="${GDRIVE_REMOTE_ROOT%/}/snapshots/${DATE_TAG}"
+  log "Creando snapshot adicional en ${snapshot_remote}"
+  rclone copy "$SOURCE_DIR" "$snapshot_remote" \
     --log-level INFO \
-    --log-file=$LOG_FILE \
+    --log-file="$LOG_FILE" \
     --transfers 4 \
+    --checkers 8 \
+    --checksum \
     --create-empty-src-dirs
 
-# Verificar resultado
-if [ $? -eq 0 ]; then
-    echo "[$DATE] ✓ Backup completado exitosamente" >> $LOG_FILE
-else
-    echo "[$DATE] ✗ ERROR: El backup falló" >> $LOG_FILE
-    exit 1
+  log "Aplicando retencion de snapshots (${SNAPSHOT_RETENTION_DAYS} dias)"
+  rclone delete "${GDRIVE_REMOTE_ROOT%/}/snapshots" \
+    --min-age "${SNAPSHOT_RETENTION_DAYS}d" \
+    --log-file="$LOG_FILE" || log "WARN: no se pudo limpiar snapshots antiguos."
 fi
 
-# Mostrar estadísticas
-TOTAL_SIZE=$(du -sh "$SOURCE_DIR" | cut -f1)
-echo "[$DATE] Tamaño total respaldado: $TOTAL_SIZE" >> $LOG_FILE
+total_size="$(du -sh "$SOURCE_DIR" | awk '{print $1}')"
+log "Tamano respaldado: ${total_size}"

@@ -23,8 +23,8 @@ _Sistema completo de gestión de proyectos, presupuestos y recursos para Ecodiss
 - [📂 Estructura del Proyecto](#-estructura-del-proyecto)
 - [👥 Usuarios por Defecto](#-usuarios-por-defecto)
 - [🔧 Configuración](#-configuración)
-- [� Documentación de Uso](#-documentación-de-uso)
-- [�📖 API y Endpoints](#-api-y-endpoints)
+- [📘 Documentación de Uso](#-documentación-de-uso)
+- [📖 API y Endpoints](#-api-y-endpoints)
 - [🤝 Contribución](#-contribución)
 - [📄 Licencia](#-licencia)
 
@@ -165,11 +165,11 @@ graph TB
 git clone https://github.com/tuusuario/ecodisseny_dj_pg.git
 cd ecodisseny_dj_pg
 
-# 2. Cambiar a la rama docker
-git checkout docker
+# 2. Ir a la rama principal
+git checkout main
 
 # 3. Levantar la aplicación
-docker-compose up --build
+docker compose --env-file .env.dev up -d --build
 
 # 4. ¡Listo! La aplicación está en http://localhost:8000
 ```
@@ -178,8 +178,8 @@ docker-compose up --build
 
 - **Aplicación**: http://localhost:8000
 - **Admin**: http://localhost:8000/admin/
-- **Usuario admin**: `mulastone` / `Santom@E14`
-- **Otros usuarios**: `gonzalo`, `sarah`, etc. / `ecodisseny2024`
+- **Crear superusuario**: `docker compose --env-file .env.dev exec web python manage.py createsuperuser`
+- **Nota**: no incluir usuarios/contraseñas reales en documentación versionada
 
 ## 🐳 Desarrollo con Docker
 
@@ -370,23 +370,17 @@ ecodisseny_dj_pg/
 
 ## 👥 Usuarios por Defecto
 
-El sistema viene preconfigurado con usuarios de ejemplo:
+Por seguridad, este repositorio no publica contraseñas de usuarios.
 
-### **🔑 Administradores**
+### **🔑 Crear usuario administrador**
 
-| Usuario     | Contraseña       | Rol                    | Email                    |
-| ----------- | ---------------- | ---------------------- | ------------------------ |
-| `mulastone` | `Santom@E14`     | Superusuario Principal | mulastone@ecodisseny.com |
-| `gonzalo`   | `ecodisseny2024` | Administrador          | gonzalo@ecodisseny.com   |
+```bash
+docker compose --env-file .env.dev exec web python manage.py createsuperuser
+```
 
-### **👤 Usuarios Normales**
+### **👤 Crear usuarios normales**
 
-| Usuario    | Contraseña       | Recurso Asignado | Email                   |
-| ---------- | ---------------- | ---------------- | ----------------------- |
-| `pilar`    | `ecodisseny2024` | Pilar            | pilar@ecodisseny.com    |
-| `roger`    | `ecodisseny2024` | Roger            | roger@ecodisseny.com    |
-| `santiago` | `ecodisseny2024` | Santiago         | santiago@ecodisseny.com |
-| `sarah`    | `ecodisseny2024` | Sarah            | sarah@ecodisseny.com    |
+Usa el panel admin en `/admin/` o carga fixtures según tu entorno.
 
 ### **🎯 Accesos**
 
@@ -411,7 +405,7 @@ DB_HOST=db                              # Hostname del contenedor
 DB_PORT=5432                            # Puerto PostgreSQL
 DB_NAME=ecodisseny_db                   # Nombre de la base de datos
 DB_USER=ecodisseny                      # Usuario de la BD
-DB_PASSWORD=ecodisseny2024              # Cambiar en producción
+DB_PASSWORD=tu_password_seguro          # Cambiar en producción
 
 # Django
 SECRET_KEY=tu_secret_key_aqui           # Generar uno nuevo en producción
@@ -451,7 +445,7 @@ El sistema incluye datos iniciales (fixtures) que se cargan automáticamente:
 - **Tareas y Trabajos**: Catálogo predefinido
 - **Desplazamientos**: Matriz de distancias
 
-## � Documentación de Uso
+## 📘 Documentación de Uso
 
 ### **📖 Guías Completas por Tipo de Usuario**
 
@@ -460,36 +454,32 @@ La documentación completa está disponible en la carpeta [`docs/`](docs/):
 #### **👤 Para Usuarios**
 
 - **[🚀 Guía de Inicio Rápido](docs/usuario/inicio-rapido.md)** - Primeros pasos en el sistema
-- **[🏗️ Gestión de Proyectos](docs/usuario/proyectos.md)** - Crear y administrar proyectos
-- **[💰 Presupuestos](docs/usuario/presupuestos.md)** - Cotizaciones y documentos PDF
 - **[⏱️ Carga de Horas](docs/usuario/carga-horas.md)** - Registro de tiempo trabajado
-- **[📈 Reportes](docs/usuario/reportes.md)** - Informes y estadísticas
 
 #### **🔧 Para Administradores**
 
 - **[⚙️ Configuración Inicial](docs/admin/configuracion.md)** - Setup completo del sistema
 - **[👥 Gestión de Usuarios](docs/admin/usuarios.md)** - Usuarios, roles y permisos
-- **[🏗️ Datos Maestros](docs/admin/datos-maestros.md)** - Recursos, ubicaciones, tareas
+- **[🏗️ Datos Maestros](docs/admin/gestion-de-maestros.md)** - Recursos, ubicaciones, tareas
 - **[🔐 Seguridad](docs/admin/seguridad.md)** - Configuración de seguridad
 - **[📊 Mantenimiento](docs/admin/mantenimiento.md)** - Backups y monitoreo
 
 #### **🛠️ Para Desarrolladores**
 
-- **[🏗️ Arquitectura](docs/dev/arquitectura.md)** - Estructura técnica
-- **[🔌 API Reference](docs/dev/api.md)** - Endpoints disponibles
-- **[🎨 Personalización](docs/dev/personalizacion.md)** - Modificar interface
-- **[🐛 Debugging](docs/dev/debugging.md)** - Solución de problemas
+- **[🏗️ Arquitectura](docs/dev/arquitectura-multi-app.md)** - Estructura técnica
+- **[🐳 Docker Detallado](docs/dev/docker-explicacion-detallada.md)** - Contenedores y servicios
+- **[🚀 Guía VPS](docs/dev/guia-completa-vps.md)** - Deploy y operación
+- **[🐛 Troubleshooting](docs/troubleshooting.md)** - Solución de problemas
 
 ### **🎯 Inicio Rápido por Rol**
 
 | Tu Rol                  | Empezar Aquí                                         | Objetivo                         |
 | ----------------------- | ---------------------------------------------------- | -------------------------------- |
 | **👤 Usuario Nuevo**    | [Inicio Rápido](docs/usuario/inicio-rapido.md)       | Aprender lo básico en 15 minutos |
-| **🏗️ Jefe de Proyecto** | [Gestión de Proyectos](docs/usuario/proyectos.md)    | Dominar la gestión completa      |
 | **🔧 Administrador**    | [Configuración Inicial](docs/admin/configuracion.md) | Setup completo del sistema       |
-| **🛠️ Desarrollador**    | [Arquitectura](docs/dev/arquitectura.md)             | Entender la estructura técnica   |
+| **🛠️ Desarrollador**    | [Arquitectura](docs/dev/arquitectura-multi-app.md)   | Entender la estructura técnica   |
 
-## �📖 API y Endpoints
+## 📖 API y Endpoints
 
 ### **🔗 URLs Principales**
 
@@ -500,19 +490,14 @@ La documentación completa está disponible en la carpeta [`docs/`](docs/):
 /accounts/logout/           # Logout
 /admin/                     # Panel de administración
 
-# Gestión de proyectos
-/projectes/                 # Listado de proyectos
-/projectes/create/          # Crear nuevo proyecto
-/projectes/<id>/            # Detalle de proyecto
-
 # Presupuestos
 /pressupostos/              # Listado de presupuestos
-/pressupostos/create/       # Crear presupuesto
-/pressupostos/<id>/pdf/     # Generar PDF
+/pressupostos/form/         # Crear presupuesto
+/pressupostos/pdf/<id>/     # Generar PDF
 
 # Carga de horas
-/carregahores/              # Registro de horas
-/carregahores/report/       # Reportes de tiempo
+/carrega-hores/meves/       # Registro personal de horas
+/carrega-hores/nova/        # Nueva carga
 ```
 
 ### **🎨 Autocompletado AJAX**

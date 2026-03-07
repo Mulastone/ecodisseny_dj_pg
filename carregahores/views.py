@@ -158,26 +158,11 @@ def eliminar_carrega(request, pk):
 @login_required
 def meves_carregues(request):
     from django.db.models import Sum
-    
-    # 🎯 FILTRAR POR RECURSO DEL USUARIO, NO POR USUARIO
-    # Obtener el recurso del usuario
-    user_recurso = None
-    try:
-        if hasattr(request.user, 'perfil') and request.user.perfil and request.user.perfil.recurso:
-            user_recurso = request.user.perfil.recurso
-    except:
-        user_recurso = None
-    
-    if user_recurso:
-        # QuerySet inicial sin filtros - el formulario se encargará del filtrado
-        qs = CarregaHores.objects.all()
-        title = f"🎯 Les càrregues d'hores de {user_recurso.nom}"
-        help_text = f"Mostrant totes les càrregues d'hores del recurs {user_recurso.nom}."
-    else:
-        # Si no tiene recurso asignado, mostrar solo sus cargas personales
-        qs = CarregaHores.objects.filter(usuari=request.user)
-        title = "🎯 Les meves càrregues d'hores"
-        help_text = f"Mostrant només les teves càrregues d'hores, {request.user.get_full_name() or request.user.username}."
+ 
+    # Vista personal: solo registros del usuario autenticado
+    qs = CarregaHores.objects.filter(usuari=request.user)
+    title = "🎯 Les meves càrregues d'hores"
+    help_text = f"Mostrant només les teves càrregues d'hores, {request.user.get_full_name() or request.user.username}."
     
     # Verificar si es admin para mostrar enlace a vista completa
     is_admin = request.user.is_superuser or request.user.is_staff
@@ -189,14 +174,7 @@ def meves_carregues(request):
     # Aplicar filtros si el formulario es válido
     if filter_form.is_valid():
         filters = filter_form.get_queryset_filters()
-        # Si no hay filtro de recurso específico, aplicar el del usuario
-        if 'linia__recurs' not in filters and user_recurso:
-            filters['linia__recurs'] = user_recurso
         qs = qs.filter(**filters)
-    else:
-        # Si el formulario no es válido, al menos filtrar por recurso del usuario
-        if user_recurso:
-            qs = qs.filter(linia__recurs=user_recurso)
     
     # Ordenar por fecha descendente
     qs = qs.order_by('-data', '-creat')

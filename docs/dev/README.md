@@ -5,19 +5,19 @@ Documentación técnica especializada para el desarrollo, mantenimiento y extens
 ## 📚 Índice de Documentación Técnica
 
 ### 🏗️ **Arquitectura y Aplicaciones**
-- **[App Documentación - Developer Guide](app-documentacion/)** ⭐
+- **[App Documentación - Developer Guide](app-documentacion.md)** ⭐
   - Arquitectura completa de la app de documentación
   - Modelos, views, permisos y sistema de archivos
   - Management commands y testing strategy
   - Performance y deployment considerations
 
 ### 🐳 **Infrastructure y Deployment**
-- **[Docker - Explicación Detallada](docker/)**
+- **[Docker - Explicación Detallada](docker-explicacion-detallada.md)**
   - Configuración de contenedores
   - Docker Compose y servicios
   - Volumes y networking
 
-- **[Guía Completa VPS](vps/)**
+- **[Guía Completa VPS](guia-completa-vps.md)**
   - Deployment en servidor VPS
   - Configuración SSL y Nginx
   - Backup y mantenimiento
@@ -31,10 +31,10 @@ Documentación técnica especializada para el desarrollo, mantenimiento y extens
 ## 🎯 Stack Tecnológico
 
 ### **Backend**
-- **Django 4.x:** Framework principal
+- **Django 5.2.x:** Framework principal
 - **PostgreSQL:** Base de datos
-- **Redis:** Cache y sessions
-- **Celery:** Tasks asíncronas
+- **Gunicorn:** Servidor WSGI en producción
+- **python-decouple:** Configuración por variables de entorno
 
 ### **Frontend**
 - **Jazzmin:** Admin interface
@@ -160,32 +160,32 @@ git clone https://github.com/Mulastone/ecodisseny_dj_pg.git
 cd ecodisseny_dj_pg
 
 # Levantar servicios
-docker-compose up -d
+docker compose --env-file .env.dev up -d
 
 # Verificar servicios
-docker-compose ps
+docker compose --env-file .env.dev ps
 
 # Acceder shell Django
-docker-compose exec web python manage.py shell
+docker compose --env-file .env.dev exec web python manage.py shell
 ```
 
 ### **Comandos Útiles**
 ```bash
 # Migrations
-docker-compose exec web python manage.py makemigrations
-docker-compose exec web python manage.py migrate
+docker compose --env-file .env.dev exec web python manage.py makemigrations
+docker compose --env-file .env.dev exec web python manage.py migrate
 
 # Fixtures
-docker-compose exec web python manage.py loaddata fixtures/
+docker compose --env-file .env.dev exec web python manage.py loaddata fixtures/
 
 # Documentación
-docker-compose exec web python manage.py cargar_documentacion
+docker compose --env-file .env.dev exec web python manage.py cargar_documentacion
 
 # Tests
-docker-compose exec web python manage.py test
+docker compose --env-file .env.dev exec web python manage.py test
 
 # Logs
-docker-compose logs web --tail=50
+docker compose --env-file .env.dev logs web --tail=50
 ```
 
 ### **Debugging**

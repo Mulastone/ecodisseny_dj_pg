@@ -1,45 +1,38 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
-# Script de backup completo: Base de Datos + PDFs a Google Drive
-# Este script ejecuta ambos backups de forma coordinada
+# Backup completo: BBDD + PDFs.
 
-LOG_FILE="/var/log/backup-complete-gdrive.log"
-SCRIPT_DIR="/home/mulastone/proyectos/ecodisseny_dj_pg"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="${PROJECT_DIR:-$SCRIPT_DIR}"
+LOG_DIR="${LOG_DIR:-$PROJECT_DIR/logs}"
+LOG_FILE="${LOG_FILE:-$LOG_DIR/backup-complete-gdrive.log}"
 
-echo "========================================" | tee -a $LOG_FILE
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] INICIO BACKUP COMPLETO" | tee -a $LOG_FILE
-echo "========================================" | tee -a $LOG_FILE
+mkdir -p "$LOG_DIR"
+touch "$LOG_FILE"
+chmod 640 "$LOG_FILE" 2>/dev/null || true
 
-# 1. Backup de Base de Datos
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] 1/2 - Ejecutando backup de base de datos..." | tee -a $LOG_FILE
-bash "${SCRIPT_DIR}/backup-db-gdrive.sh"
+log() {
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" | tee -a "$LOG_FILE"
+}
 
-if [ $? -eq 0 ]; then
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] ✓ Backup de base de datos completado" | tee -a $LOG_FILE
-else
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] ✗ ERROR en backup de base de datos" | tee -a $LOG_FILE
-    exit 1
+log "========================================"
+log "INICIO BACKUP COMPLETO"
+log "========================================"
+
+log "1/2 - Ejecutando backup de base de datos..."
+"${SCRIPT_DIR}/backup-db-gdrive.sh"
+log "OK - Backup de base de datos completado."
+
+log "2/2 - Ejecutando backup de PDFs..."
+"${SCRIPT_DIR}/backup-pdfs-gdrive.sh"
+log "OK - Backup de PDFs completado."
+
+log "========================================"
+log "BACKUP COMPLETO FINALIZADO"
+log "========================================"
+
+if command -v rclone >/dev/null 2>&1; then
+  log "Espacio usado en Google Drive:"
+  rclone about gdrive: 2>/dev/null | grep -E "Total|Used|Free" | tee -a "$LOG_FILE" || true
 fi
-
-# 2. Backup de PDFs
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] 2/2 - Ejecutando backup de PDFs..." | tee -a $LOG_FILE
-bash "${SCRIPT_DIR}/backup-pdfs-gdrive.sh"
-
-if [ $? -eq 0 ]; then
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] ✓ Backup de PDFs completado" | tee -a $LOG_FILE
-else
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] ✗ ERROR en backup de PDFs" | tee -a $LOG_FILE
-    exit 1
-fi
-
-# Resumen final
-echo "========================================" | tee -a $LOG_FILE
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] ✓ BACKUP COMPLETO FINALIZADO" | tee -a $LOG_FILE
-echo "========================================" | tee -a $LOG_FILE
-
-# Mostrar espacio usado en Google Drive
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] Espacio usado en Google Drive:" | tee -a $LOG_FILE
-rclone about gdrive: 2>/dev/null | grep -E "Total|Used|Free" | tee -a $LOG_FILE
-
-# Enviar notificación por email (opcional - descomentar si tienes configurado mail)
-# echo "Backup completo finalizado exitosamente en $(date)" | mail -s "Backup Ecodisseny OK" tu@email.com

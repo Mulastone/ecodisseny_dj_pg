@@ -249,8 +249,8 @@ class AnalyticsDocumentacion(ListView):
         
         # Documentos más visitados
         documentos_populares = DocumentoMarkdown.objects.annotate(
-            visitas=Count('historialacceso')
-        ).filter(visitas__gt=0).order_by('-visitas')[:10]
+            visitas=Count('accesos')
+        ).filter(publicado=True, visitas__gt=0).order_by('-visitas')[:10]
         
         # Feedback reciente
         feedback_reciente = FeedbackDocumentacion.objects.filter(
@@ -259,14 +259,14 @@ class AnalyticsDocumentacion(ListView):
         
         # Estadísticas por categoría
         stats_categorias = CategoriaDocumentacion.objects.annotate(
-            total_docs=Count('documentomarkdown'),
-            total_visitas=Count('documentomarkdown__historialacceso')
+            total_docs=Count('documentos', filter=Q(documentos__publicado=True), distinct=True),
+            total_visitas=Count('documentos__accesos', filter=Q(documentos__publicado=True))
         ).filter(activa=True)
         
         context.update({
-            'documents_populars': documentos_populares,
-            'feedback_recent': feedback_reciente,
-            'stats_categories': stats_categorias,
+            'documentos_populares': documentos_populares,
+            'feedback_reciente': feedback_reciente,
+            'stats_categorias': stats_categorias,
             'titulo_pagina': 'Analytics - Documentació',
         })
         

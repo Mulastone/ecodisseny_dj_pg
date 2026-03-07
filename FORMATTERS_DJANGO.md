@@ -73,10 +73,10 @@ Después de editar templates, verifica:
 
 ```bash
 # Dentro del contenedor Docker
-docker-compose exec web python manage.py check
+docker compose --env-file .env.dev exec web python manage.py check
 
 # O prueba la vista específica
-docker-compose exec web python -c "
+docker compose --env-file .env.dev exec web python -c "
 import os, django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ecodisseny.settings')
 django.setup()
@@ -127,7 +127,7 @@ Estos archivos **nunca** deben formatearse automáticamente:
 
 3. Reinicia el contenedor:
    ```bash
-   docker-compose restart web
+   docker compose --env-file .env.dev restart web
    ```
 
 ## Prevención

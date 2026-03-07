@@ -1,0 +1,170 @@
+{% extends "admin/base_site.html" %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+  .alta-wrap {
+    max-width: 1100px;
+    margin: 18px auto 0;
+  }
+  .alta-header {
+    background: #343a40;
+    color: #fff;
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  }
+  .alta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 14px;
+  }
+  .alta-card {
+    background: #fff;
+    border: 1px solid #d8dee4;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  }
+  .alta-card h2 {
+    margin: 0 0 12px;
+    font-size: 1rem;
+    background: #343a40;
+    color: #fff;
+    padding: 8px 10px;
+    border-radius: 8px;
+  }
+  .alta-row {
+    margin-bottom: 10px;
+  }
+  .alta-row label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  .alta-row input,
+  .alta-row select {
+    width: 100%;
+    min-height: 38px;
+    border-radius: 8px;
+    border: 1px solid #c9d2da;
+    padding: 6px 10px;
+    box-sizing: border-box;
+  }
+  .alta-help {
+    color: #5f6b76;
+    font-size: 0.88rem;
+    margin-top: 2px;
+  }
+  .alta-checks {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .alta-check-item {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .alta-check-item input {
+    width: auto;
+    min-height: 0;
+  }
+  .alta-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .alta-btn {
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  .alta-btn-primary {
+    background: #343a40;
+    color: #fff;
+    border-color: #343a40;
+  }
+  .alta-btn-primary:hover {
+    background: #1f252b;
+    border-color: #1f252b;
+  }
+  .alta-btn-secondary {
+    background: #fff;
+    color: #343a40;
+    border-color: #343a40;
+  }
+  .alta-btn-secondary:hover {
+    background: #f4f6f8;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="content-main" class="alta-wrap">
+  <div class="alta-header">
+    <h1 style="margin: 0; font-size: 1.5rem;">Alta Completa: Recurs + Usuari + Perfil</h1>
+  </div>
+  <form method="post" novalidate>
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+      <p class="errornote">{{ form.non_field_errors }}</p>
+    {% endif %}
+
+    <div class="alta-grid">
+      <fieldset class="alta-card">
+        <h2>Recurs</h2>
+        {{ form.nom.errors }}
+        <div class="alta-row">{{ form.nom.label_tag }} {{ form.nom }}</div>
+
+        {{ form.tipus_recurso.errors }}
+        <div class="alta-row">{{ form.tipus_recurso.label_tag }} {{ form.tipus_recurso }}</div>
+        <div class="alta-help">{{ form.tipus_recurso.help_text }}</div>
+
+        {{ form.preu_tancat.errors }}
+        <div class="alta-row">{{ form.preu_tancat.label_tag }} {{ form.preu_tancat }}</div>
+
+        {{ form.preu_hora.errors }}
+        <div class="alta-row">{{ form.preu_hora.label_tag }} {{ form.preu_hora }}</div>
+      </fieldset>
+
+      <fieldset class="alta-card">
+        <h2>Usuari</h2>
+        {{ form.username.errors }}
+        <div class="alta-row">{{ form.username.label_tag }} {{ form.username }}</div>
+
+        {{ form.first_name.errors }}
+        <div class="alta-row">{{ form.first_name.label_tag }} {{ form.first_name }}</div>
+
+        {{ form.last_name.errors }}
+        <div class="alta-row">{{ form.last_name.label_tag }} {{ form.last_name }}</div>
+
+        {{ form.email.errors }}
+        <div class="alta-row">{{ form.email.label_tag }} {{ form.email }}</div>
+
+        {{ form.password1.errors }}
+        <div class="alta-row">{{ form.password1.label_tag }} {{ form.password1 }}</div>
+
+        {{ form.password2.errors }}
+        <div class="alta-row">{{ form.password2.label_tag }} {{ form.password2 }}</div>
+
+        <div class="alta-checks">
+          <label class="alta-check-item">{{ form.is_staff }} {{ form.is_staff.label }}</label>
+          <label class="alta-check-item">{{ form.is_active }} {{ form.is_active.label }}</label>
+        </div>
+      </fieldset>
+    </div>
+
+    <div class="alta-actions">
+      <button type="submit" class="alta-btn alta-btn-primary">Crear/actualitzar recurs + usuari + perfil</button>
+      <a href="{% url 'admin:maestros_recurso_changelist' %}" class="alta-btn alta-btn-secondary">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

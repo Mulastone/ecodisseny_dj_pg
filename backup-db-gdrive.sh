@@ -1,81 +1,97 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
-# Script de backup automático de Base de Datos a Google Drive
-# Hace backup de PostgreSQL y lo sube a Google Drive con rotación
+# Backup de BBDD a Google Drive usando docker compose (sin nombre de contenedor hardcodeado).
 
-# Configuración
-BACKUP_DIR="/tmp/backups-db"
-DATE=$(date +"%Y%m%d_%H%M%S")
-DATE_SIMPLE=$(date +"%Y-%m-%d")
-GDRIVE_REMOTE="gdrive:ecodisseny-backups/database"
-LOG_FILE="/var/log/backup-db-gdrive.log"
-CONTAINER_NAME="ecodisseny_dj_pg_db_1"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="${PROJECT_DIR:-$SCRIPT_DIR}"
+LOG_DIR="${LOG_DIR:-$PROJECT_DIR/logs}"
+LOG_FILE="${LOG_FILE:-$LOG_DIR/backup-db-gdrive.log}"
+BACKUP_DIR="${BACKUP_DIR:-/tmp/ecodisseny-backups-db}"
+DATE="$(date +"%Y%m%d_%H%M%S")"
 
-# Crear directorio temporal de backups
-mkdir -p $BACKUP_DIR
+COMPOSE_FILE="${COMPOSE_FILE:-docker-compose.prod.yml}"
+ENV_FILE="${ENV_FILE:-.env.prod}"
+DB_SERVICE="${DB_SERVICE:-db}"
+DB_SPECS="${DB_SPECS:-ecodisseny_db:ecodisseny}"
 
-# Log inicio
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] Iniciando backup de base de datos..." | tee -a $LOG_FILE
+GDRIVE_REMOTE="${GDRIVE_REMOTE:-gdrive:ecodisseny-backups/database}"
+RETENTION_DAYS="${RETENTION_DAYS:-30}"
 
-# Función para hacer backup de una base de datos
-backup_database() {
-    local db_name=$1
-    local db_user=$2
-    local output_file="${BACKUP_DIR}/${db_name}_${DATE}.sql"
-    
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] Backup de ${db_name}..." | tee -a $LOG_FILE
-    
-    # Hacer dump de la base de datos
-    docker exec $CONTAINER_NAME pg_dump -U $db_user -d $db_name > "$output_file"
-    
-    if [ $? -eq 0 ]; then
-        echo "[$(date '+%Y-%m-%d %H:%M:%S')] ✓ Dump de ${db_name} completado" | tee -a $LOG_FILE
-        
-        # Comprimir el backup
-        gzip "$output_file"
-        echo "[$(date '+%Y-%m-%d %H:%M:%S')] ✓ Compresión completada: ${output_file}.gz" | tee -a $LOG_FILE
-    else
-        echo "[$(date '+%Y-%m-%d %H:%M:%S')] ✗ ERROR al hacer dump de ${db_name}" | tee -a $LOG_FILE
-        return 1
-    fi
-}
+mkdir -p "$LOG_DIR" "$BACKUP_DIR"
+touch "$LOG_FILE"
+chmod 640 "$LOG_FILE" 2>/dev/null || true
 
-# Backup de todas las bases de datos
-backup_database "ecodisseny_db" "ecodisseny_user"
-backup_database "properties_db" "scraper_user"
-
-# Crear archivo tar con todos los backups
-cd $BACKUP_DIR
-ARCHIVE_NAME="all_databases_${DATE}.tar.gz"
-tar -czf "$ARCHIVE_NAME" *.sql.gz
-rm *.sql.gz
-
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] ✓ Archivo comprimido: $ARCHIVE_NAME" | tee -a $LOG_FILE
-
-# Subir a Google Drive
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] Subiendo a Google Drive..." | tee -a $LOG_FILE
-
-rclone copy "${BACKUP_DIR}/${ARCHIVE_NAME}" "$GDRIVE_REMOTE" \
-    --log-level INFO \
-    --log-file=$LOG_FILE
-
-if [ $? -eq 0 ]; then
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] ✓ Backup subido a Google Drive" | tee -a $LOG_FILE
-    
-    # Limpiar archivo local
-    rm "${BACKUP_DIR}/${ARCHIVE_NAME}"
-    
-    # Mostrar tamaño
-    SIZE=$(rclone size "$GDRIVE_REMOTE" --json | grep -o '"bytes":[0-9]*' | cut -d: -f2)
-    SIZE_MB=$((SIZE / 1024 / 1024))
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] Tamaño total en Google Drive: ${SIZE_MB}MB" | tee -a $LOG_FILE
-else
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] ✗ ERROR al subir a Google Drive" | tee -a $LOG_FILE
-    exit 1
+if [[ "$COMPOSE_FILE" != /* ]]; then
+  COMPOSE_FILE="${PROJECT_DIR}/${COMPOSE_FILE}"
+fi
+if [[ "$ENV_FILE" != /* ]]; then
+  ENV_FILE="${PROJECT_DIR}/${ENV_FILE}"
 fi
 
-# Limpieza de backups antiguos en Google Drive (mantener últimos 30 días)
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] Limpiando backups antiguos..." | tee -a $LOG_FILE
-rclone delete "$GDRIVE_REMOTE" --min-age 30d --log-file=$LOG_FILE
+log() {
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] $*" | tee -a "$LOG_FILE"
+}
 
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] ✓ Backup de base de datos completado" | tee -a $LOG_FILE
+compose_exec() {
+  docker compose -f "$COMPOSE_FILE" --env-file "$ENV_FILE" exec -T "$DB_SERVICE" "$@"
+}
+
+if ! command -v rclone >/dev/null 2>&1; then
+  log "ERROR: rclone no esta instalado."
+  exit 1
+fi
+
+log "Iniciando backup de base de datos..."
+
+backup_database() {
+  local spec="$1"
+  local db_name="${spec%%:*}"
+  local db_user="${spec##*:}"
+  local output_file="${BACKUP_DIR}/${db_name}_${DATE}.sql"
+
+  if [[ -z "$db_name" || -z "$db_user" ]]; then
+    log "ERROR: DB_SPECS invalido: $spec (esperado db:user)."
+    return 1
+  fi
+
+  log "Dump de ${db_name} (usuario ${db_user})..."
+  compose_exec pg_dump -U "$db_user" -d "$db_name" >"$output_file"
+  gzip -f "$output_file"
+  log "OK: ${output_file}.gz"
+}
+
+for spec in $DB_SPECS; do
+  backup_database "$spec"
+done
+
+mapfile -t dump_files < <(find "$BACKUP_DIR" -maxdepth 1 -type f -name "*_${DATE}.sql.gz" -print)
+if [[ "${#dump_files[@]}" -eq 0 ]]; then
+  log "ERROR: No se generaron dumps SQL."
+  exit 1
+fi
+
+archive_name="all_databases_${DATE}.tar.gz"
+archive_path="${BACKUP_DIR}/${archive_name}"
+relative_files=()
+for file in "${dump_files[@]}"; do
+  relative_files+=("$(basename "$file")")
+done
+tar -czf "$archive_path" -C "$BACKUP_DIR" "${relative_files[@]}"
+rm -f "${dump_files[@]}"
+log "Archivo consolidado: ${archive_name}"
+
+log "Subiendo backup a Google Drive (${GDRIVE_REMOTE})..."
+rclone copy "$archive_path" "$GDRIVE_REMOTE" \
+  --log-level INFO \
+  --log-file="$LOG_FILE"
+rm -f "$archive_path"
+log "OK: backup subido."
+
+log "Aplicando retencion remota (${RETENTION_DAYS} dias)..."
+rclone delete "$GDRIVE_REMOTE" \
+  --min-age "${RETENTION_DAYS}d" \
+  --include "*.tar.gz" \
+  --log-file="$LOG_FILE" || log "WARN: no se pudo limpiar historico remoto."
+
+log "Backup de base de datos finalizado."

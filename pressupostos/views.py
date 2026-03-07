@@ -218,6 +218,7 @@ def delete_pressupost(request, id):
 
 
 # --- AJAX ---
+@user_passes_test(is_admin, login_url='/admin/login/')
 def get_increment_hores(request):
     id_parroquia = request.GET.get("id_parroquia")
     id_ubicacio = request.GET.get("id_ubicacio")
@@ -238,12 +239,14 @@ def get_increment_hores(request):
         return JsonResponse({"error": str(e)}, status=500)
 
 
+@user_passes_test(is_admin, login_url='/admin/login/')
 def get_projectes_by_client(request, client_id):
     projectes = Projecte.objects.filter(client_id=client_id, tancat=False)
     data = [{'id': p.id, 'nom': p.nom} for p in projectes]
     return JsonResponse(data, safe=False)
 
 
+@user_passes_test(is_admin, login_url='/admin/login/')
 def get_tasques_by_treball(request, treball_id):
     try:
         treball = Treball.objects.get(pk=treball_id)
@@ -254,6 +257,7 @@ def get_tasques_by_treball(request, treball_id):
         return JsonResponse({'error': 'Treball no trobat'}, status=404)
 
 
+@user_passes_test(is_admin, login_url='/admin/login/')
 def get_recurso_by_id(request, recurs_id):
     recurs = Recurso.objects.filter(pk=recurs_id).exclude(pk=1).first()
     if recurs:

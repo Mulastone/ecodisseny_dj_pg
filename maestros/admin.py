@@ -1,9 +1,12 @@
 from django.contrib import admin
 from django.contrib.admin import SimpleListFilter
 from django.contrib import messages
+from django.contrib.auth.models import Group
 from django.db.models import ProtectedError
+from django.db import transaction
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import path, reverse
 from django import forms
 from .models import (
     Clients, Parroquia, Poblacio, Recurso, TipusRecurso,
@@ -103,6 +106,7 @@ class PoblacioAdmin(admin.ModelAdmin):
 class TipusRecursoAdmin(admin.ModelAdmin):
     list_display = ("tipus",)
     search_fields = ("tipus",)
+    change_form_template = "admin/maestros/tipusrecurso/change_form.html"
 
 
 class TipusRecursoFilter(SimpleListFilter):
@@ -118,11 +122,148 @@ class TipusRecursoFilter(SimpleListFilter):
         return queryset
 
 
+class AltaCompletaRecursoForm(forms.Form):
+    nom = forms.CharField(label="Nom del recurs", max_length=100)
+    tipus_recurso = forms.ModelChoiceField(
+        label="Tipus recurs",
+        queryset=TipusRecurso.objects.none(),
+        help_text="Nomes 'Intern' o 'Colaborador' requereixen usuari."
+    )
+    preu_tancat = forms.IntegerField(label="Preu Tancat", initial=0, min_value=0)
+    preu_hora = forms.DecimalField(label="Preu Hora", max_digits=10, decimal_places=2, min_value=0)
+
+    username = forms.CharField(label="Nom d'usuari", max_length=150)
+    first_name = forms.CharField(label="Nom", max_length=150, required=False)
+    last_name = forms.CharField(label="Cognoms", max_length=150, required=False)
+    email = forms.EmailField(label="Correu electronic", required=False)
+    password1 = forms.CharField(label="Contrasenya temporal", widget=forms.PasswordInput)
+    password2 = forms.CharField(label="Repetir contrasenya", widget=forms.PasswordInput)
+    is_staff = forms.BooleanField(label="Membre del personal (staff)", required=False)
+    is_active = forms.BooleanField(label="Usuari actiu", required=False, initial=True)
+
+    def __init__(self, *args, **kwargs):
+        selected_tipus_id = kwargs.pop("selected_tipus_id", None)
+        super().__init__(*args, **kwargs)
+        self.fields["tipus_recurso"].queryset = TipusRecurso.objects.filter(
+            tipus__iregex=r"^(intern|colaborador)$"
+        ).order_by("tipus")
+        if selected_tipus_id and not self.is_bound:
+            try:
+                self.fields["tipus_recurso"].initial = int(selected_tipus_id)
+            except (TypeError, ValueError):
+                pass
+
+    def clean(self):
+        cleaned = super().clean()
+        password1 = cleaned.get("password1")
+        password2 = cleaned.get("password2")
+        tipus = cleaned.get("tipus_recurso")
+
+        if password1 != password2:
+            raise forms.ValidationError("Les contrasenyes no coincideixen.")
+
+        if tipus:
+            tipus_lower = tipus.tipus.lower()
+            if tipus_lower not in {"intern", "colaborador"}:
+                raise forms.ValidationError("Aquest formulari es nomes per recursos Intern o Colaborador.")
+
+        return cleaned
+
+
 @admin.register(Recurso)
 class RecursoAdmin(admin.ModelAdmin):
     list_display = ("nom", "mostrar_tipus", "necessita_usuari", "preu_tancat", "preu_hora")
     list_filter = (TipusRecursoFilter, "preu_tancat")
     search_fields = ("nom",)
+    change_list_template = "admin/maestros/recurso/change_list.html"
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                "alta-completa/",
+                self.admin_site.admin_view(self.alta_completa_view),
+                name="maestros_recurso_alta_completa",
+            ),
+        ]
+        return custom_urls + urls
+
+    def alta_completa_view(self, request):
+        selected_tipus_id = request.GET.get("tipus_recurso")
+        if request.method == "POST":
+            form = AltaCompletaRecursoForm(request.POST)
+            if form.is_valid():
+                data = form.cleaned_data
+                try:
+                    with transaction.atomic():
+                        recurso, recurso_created = Recurso.objects.get_or_create(
+                            nom=data["nom"],
+                            defaults={
+                                "tipus_recurso": data["tipus_recurso"],
+                                "preu_tancat": data["preu_tancat"],
+                                "preu_hora": data["preu_hora"],
+                            },
+                        )
+                        if not recurso_created:
+                            recurso.tipus_recurso = data["tipus_recurso"]
+                            recurso.preu_tancat = data["preu_tancat"]
+                            recurso.preu_hora = data["preu_hora"]
+                            recurso.save(update_fields=["tipus_recurso", "preu_tancat", "preu_hora"])
+
+                        user, user_created = User.objects.get_or_create(
+                            username=data["username"],
+                            defaults={
+                                "first_name": data["first_name"],
+                                "last_name": data["last_name"],
+                                "email": data["email"],
+                                "is_staff": data["is_staff"],
+                                "is_active": data["is_active"],
+                            },
+                        )
+
+                        if not user_created:
+                            user.first_name = data["first_name"]
+                            user.last_name = data["last_name"]
+                            user.email = data["email"]
+                            user.is_staff = data["is_staff"]
+                            user.is_active = data["is_active"]
+
+                        user.set_password(data["password1"])
+                        user.save()
+
+                        if not user.is_staff and not user.is_superuser:
+                            grup_recursos, _ = Group.objects.get_or_create(name="Recursos")
+                            user.groups.add(grup_recursos)
+
+                        perfil, perfil_created = PerfilUsuario.objects.get_or_create(
+                            user=user,
+                            defaults={"recurso": recurso},
+                        )
+                        if not perfil_created and perfil.recurso_id != recurso.id:
+                            perfil.recurso = recurso
+                            perfil.save(update_fields=["recurso"])
+
+                    self.message_user(
+                        request,
+                        (
+                            f"Alta completa correcta. Recurs {'creat' if recurso_created else 'actualitzat'}: {recurso.nom}. "
+                            f"Usuari {'creat' if user_created else 'actualitzat'}: {user.username}."
+                        ),
+                        level=messages.SUCCESS,
+                    )
+                    return HttpResponseRedirect(reverse("admin:maestros_recurso_changelist"))
+                except Exception as exc:
+                    self.message_user(request, f"Error en l'alta completa: {exc}", level=messages.ERROR)
+        else:
+            form = AltaCompletaRecursoForm(selected_tipus_id=selected_tipus_id)
+
+        context = {
+            **self.admin_site.each_context(request),
+            "title": "Alta completa recurs intern/colaborador",
+            "opts": self.model._meta,
+            "form": form,
+        }
+        return render(request, "admin/maestros/recurso/alta_completa.html", context)
 
     @admin.display(description="Tipus", ordering="tipus_recurso__tipus")
     def mostrar_tipus(self, obj):

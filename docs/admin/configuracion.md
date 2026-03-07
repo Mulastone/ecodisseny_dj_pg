@@ -18,8 +18,8 @@ Al completar esta guía tendrás:
 
 ```bash
 URL: http://tudominio.com/admin/
-Usuario: mulastone
-Contraseña: Santom@E14
+Usuario: definido en DJANGO_SUPERUSER_USERNAME (.env)
+Contraseña: definida en DJANGO_SUPERUSER_PASSWORD (.env)
 ```
 
 ### **2. Dashboard de Administración**
@@ -412,7 +412,7 @@ docker-compose build --no-cache web
 ### **📚 Documentación Avanzada**
 
 - [👥 Gestión de Usuarios](usuarios.md) - Permisos y roles detallados
-- [🏗️ Datos Maestros](datos-maestros.md) - Configuración avanzada
+- [🏗️ Datos Maestros](gestion-de-maestros.md) - Configuración avanzada
 - [🔐 Seguridad](seguridad.md) - Hardening y mejores prácticas
 - [📊 Mantenimiento](mantenimiento.md) - Rutinas de mantenimiento
 
