@@ -59,7 +59,14 @@
         <tr>
           <td>{{ form.tancat.label_tag }}</td>
           <td>{{ form.tancat }}</td>
-          <td colspan="2"></td>
+          <td>{{ form.default_aplicar_increment_hores.label_tag }}</td>
+          <td>{{ form.default_aplicar_increment_hores }}</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td>{{ form.default_aplicar_cost_hores.label_tag }}</td>
+          <td>{{ form.default_aplicar_cost_hores }}</td>
         </tr>
       </table>
     </div>
@@ -114,7 +121,7 @@
 {% endblock %}
 
 {% block extra_scripts %}
-<script src="{% static 'js/pressupostos.js' %}"></script>
+<script src="{% static 'js/pressupostos.js' %}?v=20260307-04"></script>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {

@@ -203,6 +203,28 @@ docker compose -f docker-compose.prod.yml --env-file .env.prod exec web python m
 docker compose -f docker-compose.prod.yml --env-file .env.prod exec web python manage.py collectstatic --noinput
 ```
 
+### 7.1 Cuando el cambio incluye schema (migraciones)
+Si un release trae cambios de modelos (como nuevos campos en `PressupostLinia`), usa este orden:
+
+```bash
+cd /opt/ecodisseny/ecodisseny_dj_pg
+git checkout main
+git pull origin main
+
+# Backup preventivo antes de migrar
+./backup-db-gdrive.sh
+
+# Deploy + migracion
+docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build
+docker compose -f docker-compose.prod.yml --env-file .env.prod exec web python manage.py migrate --noinput
+docker compose -f docker-compose.prod.yml --env-file .env.prod exec web python manage.py check
+```
+
+Verificacion recomendada:
+- abrir formulario de Pressupost
+- crear/editar una linea y revisar nuevos checks de calculo
+- confirmar que guarda y lista sin errores
+
 ## 8. Reset a sistema base (sin backups)
 
 Usar cuando quieras reiniciar datos a estado inicial (migraciones + fixtures), sin restaurar dump.

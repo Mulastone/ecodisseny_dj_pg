@@ -33,8 +33,10 @@ class PressupostLiniaForm(ModelForm):
         widgets = {
             'hora': HoresSelectWidget(),
             'preu_tancat': forms.CheckboxInput(),
+            'aplicar_increment_hores': forms.CheckboxInput(),
             'increment_hores': forms.NumberInput(attrs={'readonly': 'readonly'}),
             'hores_totals': forms.NumberInput(attrs={'readonly': 'readonly'}),
+            'aplicar_cost_hores': forms.CheckboxInput(),
             'cost_hores': forms.NumberInput(attrs={'readonly': 'readonly'}),
             'cost_hores_totals': forms.NumberInput(attrs={'readonly': 'readonly'}),
             'subtotal': forms.NumberInput(attrs={'readonly': 'readonly'}),
@@ -53,9 +55,11 @@ class PressupostLiniaForm(ModelForm):
         preu_tancat = cleaned_data.get("preu_tancat")
         hora = cleaned_data.get("hora")
         increment_hores = cleaned_data.get("increment_hores")
+        aplicar_increment_hores = cleaned_data.get("aplicar_increment_hores")
         hores_totals = cleaned_data.get("hores_totals")
         quantitat = cleaned_data.get("quantitat")
         cost_hores = cleaned_data.get("cost_hores")
+        aplicar_cost_hores = cleaned_data.get("aplicar_cost_hores")
         tasca = cleaned_data.get("tasca")
         recurs = cleaned_data.get("recurs")
 
@@ -75,6 +79,13 @@ class PressupostLiniaForm(ModelForm):
         else:
             if not hora:
                 self.add_error("hora", "És obligatori si Preu Tancat no està activat.")
+
+        if aplicar_increment_hores is False:
+            cleaned_data["increment_hores"] = 0
+
+        if aplicar_cost_hores is False:
+            cleaned_data["cost_hores"] = 0
+            cleaned_data["cost_hores_totals"] = 0
 
         if not tasca:
             self.add_error("tasca", "Cal seleccionar una tasca.")

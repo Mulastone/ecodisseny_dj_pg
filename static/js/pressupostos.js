@@ -65,12 +65,32 @@ if (window.__pressupostos_js_loaded__) {
         });
     });
 
+    const addBtn = document.querySelector("#add-linea");
+    const defaultIncrementGlobal = document.querySelector("#id_default_aplicar_increment_hores");
+    const defaultCostGlobal = document.querySelector("#id_default_aplicar_cost_hores");
+
+    function getGlobalLineDefaults() {
+      return {
+        aplicarIncrement: defaultIncrementGlobal ? defaultIncrementGlobal.checked : true,
+        aplicarCost: defaultCostGlobal ? defaultCostGlobal.checked : true,
+      };
+    }
+
+    function isUnsavedAndEmptyLine(linea) {
+      const idField = linea.querySelector(`[name$="-id"]`);
+      if (idField?.value) return false;
+      const treball = linea.querySelector(`[id$="-treball"]`)?.value;
+      const tasca = linea.querySelector(`[id$="-tasca"]`)?.value;
+      const recurs = linea.querySelector(`[id$="-recurs"]`)?.value;
+      const hora = linea.querySelector(`[id$="-hora"]`)?.value;
+      return !treball && !tasca && !recurs && !hora;
+    }
+
     document.querySelectorAll(".pressupost-linea").forEach((linea, index) => {
       console.log(`🔧 Inicialitzant línia ${index}`);
       setupLinea(linea, index);
     });
 
-    const addBtn = document.querySelector("#add-linea");
     if (addBtn) {
       addBtn.addEventListener("click", function () {
         const totalFormsInput = document.querySelector('input[name$="-TOTAL_FORMS"]');
@@ -96,6 +116,20 @@ if (window.__pressupostos_js_loaded__) {
               el.checked = false;
             } else {
               el.value = "";
+            }
+
+            // Els flags de càlcul han d'iniciar actius en línies noves
+            if (
+              el.type === "checkbox" &&
+              (el.name?.endsWith("-aplicar_increment_hores") || el.name?.endsWith("-aplicar_cost_hores"))
+            ) {
+              const defaults = getGlobalLineDefaults();
+              if (el.name?.endsWith("-aplicar_increment_hores")) {
+                el.checked = defaults.aplicarIncrement;
+              }
+              if (el.name?.endsWith("-aplicar_cost_hores")) {
+                el.checked = defaults.aplicarCost;
+              }
             }
 
             // 🟢 Inicialitzar benefici a 10
@@ -128,7 +162,9 @@ if (window.__pressupostos_js_loaded__) {
       const horaField = linea.querySelector(`[id$="-hora"]`); // Campo correcto: hora (sin 's')
       const horesHidden = linea.querySelector(".hores-value");
       const incrementField = linea.querySelector(`[id$="-increment_hores"]`);
+      const aplicarIncrementCheck = linea.querySelector(`[id$="-aplicar_increment_hores"]`);
       const horesTotalsField = linea.querySelector(`[id$="-hores_totals"]`);
+      const aplicarCostCheck = linea.querySelector(`[id$="-aplicar_cost_hores"]`);
       const costHoresField = linea.querySelector(`[id$="-cost_hores"]`);
       const costTotalsField = linea.querySelector(`[id$="-cost_hores_totals"]`);
       const costTancatField = linea.querySelector(`[id$="-cost_tancat"]`);
@@ -146,6 +182,57 @@ if (window.__pressupostos_js_loaded__) {
         horesHidden: !!horesHidden,
         quantitatField: !!quantitatField
       });
+
+      function syncAplicarFlags() {
+        if (aplicarIncrementCheck && incrementField && !aplicarIncrementCheck.checked) {
+          incrementField.value = "0";
+        }
+        if (aplicarCostCheck && costHoresField && !aplicarCostCheck.checked) {
+          costHoresField.value = "0";
+        }
+        if (aplicarIncrementCheck && incrementField && aplicarIncrementCheck.checked) {
+          incrementField.value = incrementField.dataset.baseIncrement || incrementField.value || "0";
+        }
+        if (aplicarCostCheck && costHoresField && aplicarCostCheck.checked) {
+          costHoresField.value = costHoresField.dataset.baseCost || costHoresField.value || "0";
+        }
+      }
+
+      function applyGlobalDefaultsIfNeeded() {
+        if (!isUnsavedAndEmptyLine(linea)) return;
+        const defaults = getGlobalLineDefaults();
+        if (aplicarIncrementCheck) {
+          aplicarIncrementCheck.checked = defaults.aplicarIncrement;
+        }
+        if (aplicarCostCheck) {
+          aplicarCostCheck.checked = defaults.aplicarCost;
+        }
+        syncAplicarFlags();
+      }
+
+      function refreshIncrementField() {
+        const idParroquia = document.querySelector("#id_parroquia")?.value;
+        const idUbicacio = document.querySelector("#id_ubicacio")?.value;
+        const idTasca = tascaSelect?.value;
+
+        if (!idParroquia || !idUbicacio || !idTasca || !incrementField) {
+          return;
+        }
+
+        fetch(`/pressupostos/get_increment_hores/?id_parroquia=${idParroquia}&id_ubicacio=${idUbicacio}&id_tasca=${idTasca}`)
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.increment_hores !== undefined) {
+              incrementField.dataset.baseIncrement = String(data.increment_hores);
+              if (aplicarIncrementCheck?.checked === false) {
+                incrementField.value = "0";
+              } else {
+                incrementField.value = data.increment_hores;
+              }
+              calcularSubtotal();
+            }
+          });
+      }
 
       // 🔒 Bloquejar select hora si preu_tancat activat
       if (preuTancatCheck && horaField) {
@@ -230,8 +317,14 @@ if (window.__pressupostos_js_loaded__) {
               horaField.classList.remove("readonly-select");
               horaField.disabled = false;
               costTancatField.setAttribute("readonly", "readonly");
-              costHoresField.value = data.PreuHora || "0";
+              costHoresField.dataset.baseCost = data.PreuHora || "0";
+              if (aplicarCostCheck?.checked === false) {
+                costHoresField.value = "0";
+              } else {
+                costHoresField.value = data.PreuHora || "0";
+              }
             }
+            syncAplicarFlags();
             calcularSubtotal();
           })
           .catch((error) => {
@@ -240,23 +333,7 @@ if (window.__pressupostos_js_loaded__) {
       });
 
       [document.querySelector("#id_parroquia"), document.querySelector("#id_ubicacio"), tascaSelect].forEach((el) => {
-        el?.addEventListener("change", () => {
-          const idParroquia = document.querySelector("#id_parroquia")?.value;
-          const idUbicacio = document.querySelector("#id_ubicacio")?.value;
-          const idTasca = tascaSelect?.value;
-          if (idParroquia && idUbicacio && idTasca) {
-            console.log("🔍 Buscant increment hores per:", { idParroquia, idUbicacio, idTasca });
-            fetch(`/pressupostos/get_increment_hores/?id_parroquia=${idParroquia}&id_ubicacio=${idUbicacio}&id_tasca=${idTasca}`)
-              .then((res) => res.json())
-              .then((data) => {
-                console.log("📦 increment_hores rebut:", data);
-                if (data.increment_hores !== undefined) {
-                  incrementField.value = data.increment_hores;
-                  calcularSubtotal();
-                }
-              });
-          }
-        });
+        el?.addEventListener("change", refreshIncrementField);
       });
 
       // Event listeners simplificats
@@ -278,6 +355,24 @@ if (window.__pressupostos_js_loaded__) {
         console.log("🔄 Preu tancat canviat, recalculant...");
         calcularSubtotal();
       });
+      const onToggleAplicarIncrement = () => {
+        console.log("🔄 Toggle aplica_increment:", aplicarIncrementCheck?.checked);
+        syncAplicarFlags();
+        if (aplicarIncrementCheck?.checked) {
+          refreshIncrementField();
+          return;
+        }
+        calcularSubtotal();
+      };
+      const onToggleAplicarCost = () => {
+        console.log("🔄 Toggle aplica_cost:", aplicarCostCheck?.checked);
+        syncAplicarFlags();
+        calcularSubtotal();
+      };
+      aplicarIncrementCheck?.addEventListener("change", onToggleAplicarIncrement);
+      aplicarIncrementCheck?.addEventListener("click", onToggleAplicarIncrement);
+      aplicarCostCheck?.addEventListener("change", onToggleAplicarCost);
+      aplicarCostCheck?.addEventListener("click", onToggleAplicarCost);
 
       function calcularSubtotal() {
         console.log('=== CALCULANT SUBTOTAL SIMPLIFICAT ===');
@@ -332,8 +427,10 @@ if (window.__pressupostos_js_loaded__) {
           }
         }
         
-        const inc = parseFloat(incrementField?.value) || 0;
-        const cost = parseFloat(costHoresField?.value) || 0;
+        const usarIncrement = aplicarIncrementCheck ? aplicarIncrementCheck.checked : true;
+        const inc = usarIncrement ? (parseFloat(incrementField?.value) || 0) : 0;
+        const usarCost = aplicarCostCheck ? aplicarCostCheck.checked : true;
+        const cost = usarCost ? (parseFloat(costHoresField?.value) || 0) : 0;
         const costTancat = parseFloat(costTancatField?.value) || 0;
         
         console.log('Increment:', inc);
@@ -358,6 +455,13 @@ if (window.__pressupostos_js_loaded__) {
           costTotalsField.value = totalCostHores.toFixed(4);
           console.log('✅ Cost totals actualitzat:', costTotalsField.value);
         }
+
+        if (incrementField && !usarIncrement) {
+          incrementField.value = "0";
+        }
+        if (costHoresField && !usarCost) {
+          costHoresField.value = "0";
+        }
         
         if (subtotalField) {
           subtotalField.value = subtotal.toFixed(4);
@@ -376,8 +480,25 @@ if (window.__pressupostos_js_loaded__) {
         calcularTotalPressupost();
       }      // Calcular valores iniciales al cargar la línea
       console.log("🚀 Executant calcularSubtotal inicial per línia", index);
+      applyGlobalDefaultsIfNeeded();
+      syncAplicarFlags();
       calcularSubtotal();
     }
+
+    [defaultIncrementGlobal, defaultCostGlobal].forEach((globalCheck) => {
+      globalCheck?.addEventListener("change", () => {
+        document.querySelectorAll(".pressupost-linea").forEach((linea) => {
+          if (!isUnsavedAndEmptyLine(linea)) return;
+          const incCheck = linea.querySelector(`[id$="-aplicar_increment_hores"]`);
+          const costCheck = linea.querySelector(`[id$="-aplicar_cost_hores"]`);
+          const defaults = getGlobalLineDefaults();
+          if (incCheck) incCheck.checked = defaults.aplicarIncrement;
+          if (costCheck) costCheck.checked = defaults.aplicarCost;
+          incCheck?.dispatchEvent(new Event("change"));
+          costCheck?.dispatchEvent(new Event("change"));
+        });
+      });
+    });
 
     function calcularTotalPressupost() {
       let total = 0;

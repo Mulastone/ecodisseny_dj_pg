@@ -12,6 +12,9 @@ from django.template.loader import get_template
 from django.core.files import File
 from django.core.files.base import ContentFile
 from weasyprint import HTML
+from datetime import datetime
+from decimal import Decimal
+import csv
 import tempfile
 
 from .models import Pressupost, PressupostLinia, PressupostPDFVersion
@@ -22,10 +25,134 @@ from .forms import (
 )
 from projectes.models import Projecte
 from maestros.models import Tasca, Recurso, Desplacament, Treball, Hores
+from carregahores.models import CarregaHores
 
 # Helper function para verificar si es admin
 def is_admin(user):
     return user.is_authenticated and user.is_superuser
+
+
+def can_view_hores_report(user):
+    return user.is_authenticated and (
+        user.is_superuser or user.has_perm("pressupostos.view_hores_report")
+    )
+
+
+def _parse_iso_date(value):
+    if not value:
+        return None
+    try:
+        return datetime.strptime(value, "%Y-%m-%d").date()
+    except ValueError:
+        return None
+
+
+def _get_hores_report_context(request):
+    client_id = request.GET.get("client_id", "").strip()
+    projecte_id = request.GET.get("projecte_id", "").strip()
+    tasca_id = request.GET.get("tasca_id", "").strip()
+    recurs_id = request.GET.get("recurs_id", "").strip()
+    data_inici = _parse_iso_date(request.GET.get("data_inici", "").strip())
+    data_fi = _parse_iso_date(request.GET.get("data_fi", "").strip())
+
+    linies_qs = PressupostLinia.objects.select_related(
+        "pressupost__client",
+        "pressupost__projecte",
+        "tasca",
+        "recurs",
+    )
+
+    if client_id:
+        linies_qs = linies_qs.filter(pressupost__client_id=client_id)
+    if projecte_id:
+        linies_qs = linies_qs.filter(pressupost__projecte_id=projecte_id)
+    if tasca_id:
+        linies_qs = linies_qs.filter(tasca_id=tasca_id)
+    if recurs_id:
+        linies_qs = linies_qs.filter(recurs_id=recurs_id)
+    if data_inici:
+        linies_qs = linies_qs.filter(pressupost__data__gte=data_inici)
+    if data_fi:
+        linies_qs = linies_qs.filter(pressupost__data__lte=data_fi)
+
+    carregues_qs = CarregaHores.objects.select_related(
+        "linia__pressupost__client",
+        "linia__pressupost__projecte",
+        "linia__tasca",
+        "linia__recurs",
+    )
+    if client_id:
+        carregues_qs = carregues_qs.filter(linia__pressupost__client_id=client_id)
+    if projecte_id:
+        carregues_qs = carregues_qs.filter(linia__pressupost__projecte_id=projecte_id)
+    if tasca_id:
+        carregues_qs = carregues_qs.filter(linia__tasca_id=tasca_id)
+    if recurs_id:
+        carregues_qs = carregues_qs.filter(linia__recurs_id=recurs_id)
+    if data_inici:
+        carregues_qs = carregues_qs.filter(data__gte=data_inici)
+    if data_fi:
+        carregues_qs = carregues_qs.filter(data__lte=data_fi)
+
+    grouped = {}
+
+    for linia in linies_qs:
+        key = (linia.pressupost.projecte_id, linia.tasca_id)
+        if key not in grouped:
+            grouped[key] = {
+                "projecte_nom": str(linia.pressupost.projecte),
+                "tasca_nom": str(linia.tasca),
+                "hores_previstes": Decimal("0"),
+                "hores_reals": Decimal("0"),
+            }
+        grouped[key]["hores_previstes"] += linia.hores_totals or Decimal("0")
+
+    for carrega in carregues_qs:
+        projecte = carrega.linia.pressupost.projecte
+        tasca = carrega.linia.tasca
+        key = (projecte.id, tasca.id)
+        if key not in grouped:
+            grouped[key] = {
+                "projecte_nom": str(projecte),
+                "tasca_nom": str(tasca),
+                "hores_previstes": Decimal("0"),
+                "hores_reals": Decimal("0"),
+            }
+        grouped[key]["hores_reals"] += carrega.hores or Decimal("0")
+
+    rows = []
+    for row in grouped.values():
+        previstes = row["hores_previstes"]
+        reals = row["hores_reals"]
+        desviacio = reals - previstes
+        row["desviacio"] = desviacio
+        row["consum_percent"] = (reals / previstes * Decimal("100")) if previstes > 0 else None
+        rows.append(row)
+
+    rows.sort(key=lambda r: (r["projecte_nom"].lower(), r["tasca_nom"].lower()))
+
+    totals_previstes = sum((r["hores_previstes"] for r in rows), Decimal("0"))
+    totals_reals = sum((r["hores_reals"] for r in rows), Decimal("0"))
+    totals_desviacio = totals_reals - totals_previstes
+    totals_consum_percent = (
+        (totals_reals / totals_previstes * Decimal("100")) if totals_previstes > 0 else None
+    )
+
+    return {
+        "rows": rows,
+        "totals_previstes": totals_previstes,
+        "totals_reals": totals_reals,
+        "totals_desviacio": totals_desviacio,
+        "totals_consum_percent": totals_consum_percent,
+        "filters": {
+            "client_id": client_id,
+            "projecte_id": projecte_id,
+            "tasca_id": tasca_id,
+            "recurs_id": recurs_id,
+            "data_inici": data_inici.isoformat() if data_inici else "",
+            "data_fi": data_fi.isoformat() if data_fi else "",
+        },
+    }
 
 
 # --- GENERAR PDF I GUARDAR ---
@@ -160,6 +287,49 @@ def list_pressuposts(request):
     return render(request, 'pressupostos/list.html', context)
 
 
+@user_passes_test(can_view_hores_report, login_url='/admin/login/')
+def informe_hores(request):
+    data = _get_hores_report_context(request)
+    context = {
+        **data,
+        "clients": Pressupost.objects.select_related("client").values_list("client_id", "client__nom_client").distinct().order_by("client__nom_client"),
+        "projectes": Projecte.objects.values_list("id", "nom").order_by("nom"),
+        "tasques": Tasca.objects.values_list("id", "tasca").order_by("tasca"),
+        "recursos": Recurso.objects.values_list("id", "nom").order_by("nom"),
+        "query_string": request.GET.urlencode(),
+    }
+    return render(request, "pressupostos/informe_hores.html", context)
+
+
+@user_passes_test(can_view_hores_report, login_url='/admin/login/')
+def informe_hores_csv(request):
+    data = _get_hores_report_context(request)
+    response = HttpResponse(content_type="text/csv")
+    response["Content-Disposition"] = 'attachment; filename="informe_hores_pressupostos.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(["Projecte", "Tasca", "Hores Previstes", "Hores Reals", "Desviacio", "% Consum"])
+    for row in data["rows"]:
+        writer.writerow([
+            row["projecte_nom"],
+            row["tasca_nom"],
+            f'{row["hores_previstes"]:.2f}',
+            f'{row["hores_reals"]:.2f}',
+            f'{row["desviacio"]:.2f}',
+            (f'{row["consum_percent"]:.2f}' if row["consum_percent"] is not None else ""),
+        ])
+    writer.writerow([])
+    writer.writerow([
+        "TOTAL",
+        "",
+        f'{data["totals_previstes"]:.2f}',
+        f'{data["totals_reals"]:.2f}',
+        f'{data["totals_desviacio"]:.2f}',
+        (f'{data["totals_consum_percent"]:.2f}' if data["totals_consum_percent"] is not None else ""),
+    ])
+    return response
+
+
 @user_passes_test(is_admin, login_url='/admin/login/')
 @require_POST
 def delete_version_ajax(request, version_id):
@@ -277,7 +447,6 @@ def eliminar_pressupost_ajax(request, pk):
         nom_pressupost = pressupost.nom or f"Pressupost #{pk}"
         
         # Verificar si tiene horas cargadas
-        from carregahores.models import CarregaHores
         horas_count = CarregaHores.objects.filter(pressupost=pressupost).count()
         
         if horas_count > 0:

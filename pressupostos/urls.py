@@ -7,6 +7,8 @@ urlpatterns = [
     # Llistat i detall
     path('', views.list_pressuposts),
     path('list/', views.list_pressuposts, name='list'),
+    path('informe-hores/', views.informe_hores, name='informe_hores'),
+    path('informe-hores.csv', views.informe_hores_csv, name='informe_hores_csv'),
     path('detall/<int:pk>/', views.detail_view, name='detall'),
 
     # Formularis CRUD

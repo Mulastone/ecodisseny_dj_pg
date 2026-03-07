@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Informe Hores: Previstes vs Reals</h2>
+    <div class="d-flex gap-2">
+      <a href="{% url 'pressupostos:informe_hores_csv' %}{% if query_string %}?{{ query_string }}{% endif %}" class="btn btn-outline-dark">
+        <i class="bi bi-download"></i> CSV
+      </a>
+      <a href="{% url 'pressupostos:list' %}" class="btn btn-dark">
+        <i class="bi bi-arrow-left"></i> Pressupostos
+      </a>
+    </div>
+  </div>
+
+  <form method="get" class="card card-body mb-3">
+    <div class="row g-2">
+      <div class="col-md-2">
+        <label for="id_client_id" class="form-label">Client</label>
+        <select id="id_client_id" name="client_id" class="form-select form-select-sm">
+          <option value="">Tots</option>
+          {% for id, nom in clients %}
+            <option value="{{ id }}" {% if filters.client_id == id|stringformat:"s" %}selected{% endif %}>{{ nom }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label for="id_projecte_id" class="form-label">Projecte</label>
+        <select id="id_projecte_id" name="projecte_id" class="form-select form-select-sm">
+          <option value="">Tots</option>
+          {% for id, nom in projectes %}
+            <option value="{{ id }}" {% if filters.projecte_id == id|stringformat:"s" %}selected{% endif %}>{{ nom }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label for="id_tasca_id" class="form-label">Tasca</label>
+        <select id="id_tasca_id" name="tasca_id" class="form-select form-select-sm">
+          <option value="">Totes</option>
+          {% for id, nom in tasques %}
+            <option value="{{ id }}" {% if filters.tasca_id == id|stringformat:"s" %}selected{% endif %}>{{ nom }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label for="id_recurs_id" class="form-label">Recurs</label>
+        <select id="id_recurs_id" name="recurs_id" class="form-select form-select-sm">
+          <option value="">Tots</option>
+          {% for id, nom in recursos %}
+            <option value="{{ id }}" {% if filters.recurs_id == id|stringformat:"s" %}selected{% endif %}>{{ nom }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
+        <label for="id_data_inici" class="form-label">Data inici</label>
+        <input id="id_data_inici" type="date" name="data_inici" value="{{ filters.data_inici }}" class="form-control form-control-sm">
+      </div>
+      <div class="col-md-2">
+        <label for="id_data_fi" class="form-label">Data fi</label>
+        <input id="id_data_fi" type="date" name="data_fi" value="{{ filters.data_fi }}" class="form-control form-control-sm">
+      </div>
+    </div>
+    <div class="d-flex gap-2 mt-3">
+      <button class="btn btn-dark btn-sm" type="submit">
+        <i class="bi bi-search"></i> Aplicar
+      </button>
+      <a href="{% url 'pressupostos:informe_hores' %}" class="btn btn-outline-dark btn-sm">
+        <i class="bi bi-x-circle"></i> Netejar
+      </a>
+    </div>
+  </form>
+
+  <div class="row g-3 mb-3">
+    <div class="col-md-3">
+      <div class="card card-body">
+        <small class="text-muted">Hores Previstes</small>
+        <h4 class="mb-0">{{ totals_previstes|floatformat:2 }}</h4>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-body">
+        <small class="text-muted">Hores Reals</small>
+        <h4 class="mb-0">{{ totals_reals|floatformat:2 }}</h4>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-body">
+        <small class="text-muted">Desviació (Reals - Previstes)</small>
+        <h4 class="mb-0">{{ totals_desviacio|floatformat:2 }}</h4>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-body">
+        <small class="text-muted">% Consum</small>
+        <h4 class="mb-0">
+          {% if totals_consum_percent is not None %}
+            {{ totals_consum_percent|floatformat:2 }}%
+          {% else %}
+            -
+          {% endif %}
+        </h4>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover align-middle bg-white table-dark-header">
+      <thead class="table-dark text-white">
+        <tr>
+          <th>Projecte</th>
+          <th>Tasca</th>
+          <th class="text-end">Hores Previstes</th>
+          <th class="text-end">Hores Reals</th>
+          <th class="text-end">Desviació</th>
+          <th class="text-end">% Consum</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+          <tr>
+            <td>{{ row.projecte_nom }}</td>
+            <td>{{ row.tasca_nom }}</td>
+            <td class="text-end">{{ row.hores_previstes|floatformat:2 }}</td>
+            <td class="text-end">{{ row.hores_reals|floatformat:2 }}</td>
+            <td class="text-end">{{ row.desviacio|floatformat:2 }}</td>
+            <td class="text-end">
+              {% if row.consum_percent is not None %}
+                {{ row.consum_percent|floatformat:2 }}%
+              {% else %}
+                -
+              {% endif %}
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="6" class="text-center">Sense dades per als filtres seleccionats.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

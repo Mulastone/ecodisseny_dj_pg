@@ -18,10 +18,15 @@ class Pressupost(SafeSaveModel):
     data = models.DateField("Data del Pressupost", default=timezone.now)
     observacions = models.CharField("Observacions", max_length=600, blank=True, null=True)
     tancat = models.BooleanField("Tancat", default=False)
+    default_aplicar_increment_hores = models.BooleanField("Per defecte: aplicar increment hores", default=True)
+    default_aplicar_cost_hores = models.BooleanField("Per defecte: aplicar cost hores", default=True)
 
     class Meta:
         verbose_name = "Pressupost"
         verbose_name_plural = "Pressupostos"
+        permissions = (
+            ("view_hores_report", "Pot veure l'informe d'hores previstes vs reals"),
+        )
 
     def __str__(self):
         return f"{self.nom} ({self.projecte})"
@@ -36,8 +41,10 @@ class PressupostLinia(SafeSaveModel):
     preu_tancat = models.BooleanField(blank=True, null=True)
     cost_tancat = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
     hora = models.ForeignKey(Hores, models.PROTECT, blank=True, null=True)
+    aplicar_increment_hores = models.BooleanField(default=True)
     increment_hores = models.DecimalField(max_digits=5, decimal_places=2)
     hores_totals = models.DecimalField(max_digits=5, decimal_places=2)
+    aplicar_cost_hores = models.BooleanField(default=True)
     cost_hores = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
     cost_hores_totals = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)
     subtotal = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True)

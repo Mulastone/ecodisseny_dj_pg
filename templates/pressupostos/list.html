@@ -37,6 +37,11 @@
           <button class="btn btn-dark" type="submit">
             <i class="bi bi-search"></i> Cercar
           </button>
+          {% if request.user.is_superuser or perms.pressupostos.view_hores_report %}
+          <a href="{% url 'pressupostos:informe_hores' %}" class="btn btn-outline-dark">
+            <i class="bi bi-bar-chart"></i> Informe hores
+          </a>
+          {% endif %}
           <a href="{% url 'pressupostos:create' %}" class="btn btn-dark">
             <i class="bi bi-plus-circle"></i> Nou pressupost
           </a>
