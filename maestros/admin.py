@@ -20,7 +20,6 @@ from .admin_utils import SafeDeleteAdmin
 @admin.register(Clients)
 class ClientsAdmin(admin.ModelAdmin):
     form = ClientAdminForm
-    change_form_template = 'admin/maestros/clients_change_form.html'
     list_display = ("nom_client", "mail", "telefon", "nrt")
     search_fields = ("nom_client", "mail", "nrt")
     fieldsets = (

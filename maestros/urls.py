@@ -1,6 +1,7 @@
 from django.urls import path
 from dal import autocomplete
-from .models import PersonaContactClient, Poblacio
+from .models import PersonaContactClient, Poblacio, Clients
+from .views import poblacions_by_parroquia
 
 
 class PoblacioAutocomplete(autocomplete.Select2QuerySetView):
@@ -26,27 +27,35 @@ class PersonaContactAutocomplete(autocomplete.Select2QuerySetView):
             return PersonaContactClient.objects.none()
 
         qs = PersonaContactClient.objects.all()
-        
-        # Obtener el ID del cliente desde forward
-        client_id = self.forwarded.get('client', None)
-        
-        # Debug: imprimir en consola
-        import sys
-        print(f"[DEBUG PersonaContactAutocomplete] client_id recibido: {client_id}", file=sys.stderr)
-        print(f"[DEBUG PersonaContactAutocomplete] forwarded completo: {self.forwarded}", file=sys.stderr)
 
-        if client_id:
-            qs = qs.filter(client_id=client_id)
-            print(f"[DEBUG PersonaContactAutocomplete] Filtrando por client_id={client_id}, resultados: {qs.count()}", file=sys.stderr)
+        # El contacto depende del cliente seleccionado en el formulario.
+        client_id = self.forwarded.get('client')
+        if not client_id:
+            return PersonaContactClient.objects.none()
+
+        qs = qs.filter(client_id=client_id)
 
         if self.q:
             qs = qs.filter(nom_contacte__icontains=self.q)
-            print(f"[DEBUG PersonaContactAutocomplete] Filtrando por búsqueda '{self.q}', resultados: {qs.count()}", file=sys.stderr)
 
         return qs.order_by("nom_contacte")
 
 
+class ClientsAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        if not self.request.user.is_authenticated:
+            return Clients.objects.none()
+
+        qs = Clients.objects.all()
+        if self.q:
+            qs = qs.filter(nom_client__icontains=self.q)
+
+        return qs.order_by("nom_client")
+
+
 urlpatterns = [
+    path("poblacions-by-parroquia/", poblacions_by_parroquia, name="poblacions-by-parroquia"),
+    path("autocomplete/clients/", ClientsAutocomplete.as_view(), name="autocomplete_clients"),
     path("poblacio-autocomplete/", PoblacioAutocomplete.as_view(), name="poblacio-autocomplete"),
     path("autocomplete/persona-contacte/", PersonaContactAutocomplete.as_view(), name="autocomplete_persona_contacte"),
 ]
