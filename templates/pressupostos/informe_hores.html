@@ -32,6 +32,15 @@
         </select>
       </div>
       <div class="col-md-2">
+        <label for="id_pressupost_id" class="form-label">Pressupost</label>
+        <select id="id_pressupost_id" name="pressupost_id" class="form-select form-select-sm">
+          <option value="">Tots</option>
+          {% for id, nom in pressupostos %}
+            <option value="{{ id }}" {% if filters.pressupost_id == id|stringformat:"s" %}selected{% endif %}>{{ nom }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-2">
         <label for="id_treball_id" class="form-label">Treball</label>
         <select id="id_treball_id" name="treball_id" class="form-select form-select-sm">
           <option value="">Tots</option>
@@ -62,7 +71,7 @@
         <label for="id_data_inici" class="form-label">Data inici</label>
         <input id="id_data_inici" type="date" name="data_inici" value="{{ filters.data_inici }}" class="form-control form-control-sm">
       </div>
-      <div class="col-md-2">
+      <div class="col-md-1">
         <label for="id_data_fi" class="form-label">Data fi</label>
         <input id="id_data_fi" type="date" name="data_fi" value="{{ filters.data_fi }}" class="form-control form-control-sm">
       </div>
@@ -115,6 +124,7 @@
       <thead class="table-dark text-white">
         <tr>
           <th>Projecte</th>
+          <th>Pressupost</th>
           <th>Treball</th>
           <th>Tasca</th>
           <th class="text-end">Hores Previstes</th>
@@ -127,6 +137,7 @@
         {% for row in rows %}
           <tr>
             <td>{{ row.projecte_nom }}</td>
+            <td>{{ row.pressupost_nom }}</td>
             <td>{{ row.treball_nom }}</td>
             <td>{{ row.tasca_nom }}</td>
             <td class="text-end">{{ row.hores_previstes|floatformat:2 }}</td>
@@ -141,7 +152,7 @@
             </td>
           </tr>
         {% empty %}
-          <tr><td colspan="7" class="text-center">Sense dades per als filtres seleccionats.</td></tr>
+          <tr><td colspan="8" class="text-center">Sense dades per als filtres seleccionats.</td></tr>
         {% endfor %}
       </tbody>
     </table>

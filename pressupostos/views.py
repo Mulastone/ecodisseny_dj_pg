@@ -87,6 +87,7 @@ def _month_range(year, month):
 def _get_hores_report_context(request):
     client_id = request.GET.get("client_id", "").strip()
     projecte_id = request.GET.get("projecte_id", "").strip()
+    pressupost_id = request.GET.get("pressupost_id", "").strip()
     treball_id = request.GET.get("treball_id", "").strip()
     tasca_id = request.GET.get("tasca_id", "").strip()
     recurs_id = request.GET.get("recurs_id", "").strip()
@@ -105,6 +106,8 @@ def _get_hores_report_context(request):
         linies_qs = linies_qs.filter(pressupost__client_id=client_id)
     if projecte_id:
         linies_qs = linies_qs.filter(pressupost__projecte_id=projecte_id)
+    if pressupost_id:
+        linies_qs = linies_qs.filter(pressupost_id=pressupost_id)
     if treball_id:
         linies_qs = linies_qs.filter(treball_id=treball_id)
     if tasca_id:
@@ -127,6 +130,8 @@ def _get_hores_report_context(request):
         carregues_qs = carregues_qs.filter(linia__pressupost__client_id=client_id)
     if projecte_id:
         carregues_qs = carregues_qs.filter(linia__pressupost__projecte_id=projecte_id)
+    if pressupost_id:
+        carregues_qs = carregues_qs.filter(pressupost_id=pressupost_id)
     if treball_id:
         carregues_qs = carregues_qs.filter(linia__treball_id=treball_id)
     if tasca_id:
@@ -141,10 +146,11 @@ def _get_hores_report_context(request):
     grouped = {}
 
     for linia in linies_qs:
-        key = (linia.pressupost.projecte_id, linia.treball_id, linia.tasca_id)
+        key = (linia.pressupost.projecte_id, linia.pressupost_id, linia.treball_id, linia.tasca_id)
         if key not in grouped:
             grouped[key] = {
                 "projecte_nom": str(linia.pressupost.projecte),
+                "pressupost_nom": str(linia.pressupost.nom or f"Pressupost #{linia.pressupost_id}"),
                 "treball_nom": str(linia.treball),
                 "tasca_nom": str(linia.tasca),
                 "hores_previstes": Decimal("0"),
@@ -154,12 +160,14 @@ def _get_hores_report_context(request):
 
     for carrega in carregues_qs:
         projecte = carrega.linia.pressupost.projecte
+        pressupost = carrega.linia.pressupost
         treball = carrega.linia.treball
         tasca = carrega.linia.tasca
-        key = (projecte.id, treball.id, tasca.id)
+        key = (projecte.id, pressupost.id, treball.id, tasca.id)
         if key not in grouped:
             grouped[key] = {
                 "projecte_nom": str(projecte),
+                "pressupost_nom": str(pressupost.nom or f"Pressupost #{pressupost.id}"),
                 "treball_nom": str(treball),
                 "tasca_nom": str(tasca),
                 "hores_previstes": Decimal("0"),
@@ -176,7 +184,14 @@ def _get_hores_report_context(request):
         row["consum_percent"] = (reals / previstes * Decimal("100")) if previstes > 0 else None
         rows.append(row)
 
-    rows.sort(key=lambda r: (r["projecte_nom"].lower(), r["treball_nom"].lower(), r["tasca_nom"].lower()))
+    rows.sort(
+        key=lambda r: (
+            r["projecte_nom"].lower(),
+            r["pressupost_nom"].lower(),
+            r["treball_nom"].lower(),
+            r["tasca_nom"].lower(),
+        )
+    )
 
     totals_previstes = sum((r["hores_previstes"] for r in rows), Decimal("0"))
     totals_reals = sum((r["hores_reals"] for r in rows), Decimal("0"))
@@ -194,6 +209,7 @@ def _get_hores_report_context(request):
         "filters": {
             "client_id": client_id,
             "projecte_id": projecte_id,
+            "pressupost_id": pressupost_id,
             "treball_id": treball_id,
             "tasca_id": tasca_id,
             "recurs_id": recurs_id,
@@ -342,6 +358,7 @@ def informe_hores(request):
         **data,
         "clients": Pressupost.objects.select_related("client").values_list("client_id", "client__nom_client").distinct().order_by("client__nom_client"),
         "projectes": Projecte.objects.values_list("id", "nom").order_by("nom"),
+        "pressupostos": Pressupost.objects.values_list("id", "nom").order_by("nom"),
         "treballs": Treball.objects.values_list("id", "descripcio").order_by("descripcio"),
         "tasques": Tasca.objects.values_list("id", "tasca").order_by("tasca"),
         "recursos": Recurso.objects.values_list("id", "nom").order_by("nom"),
@@ -357,10 +374,11 @@ def informe_hores_csv(request):
     response["Content-Disposition"] = 'attachment; filename="informe_hores_pressupostos.csv"'
 
     writer = csv.writer(response)
-    writer.writerow(["Projecte", "Treball", "Tasca", "Hores Previstes", "Hores Reals", "Desviacio", "% Consum"])
+    writer.writerow(["Projecte", "Pressupost", "Treball", "Tasca", "Hores Previstes", "Hores Reals", "Desviacio", "% Consum"])
     for row in data["rows"]:
         writer.writerow([
             row["projecte_nom"],
+            row["pressupost_nom"],
             row["treball_nom"],
             row["tasca_nom"],
             f'{row["hores_previstes"]:.2f}',
@@ -371,6 +389,7 @@ def informe_hores_csv(request):
     writer.writerow([])
     writer.writerow([
         "TOTAL",
+        "",
         "",
         "",
         f'{data["totals_previstes"]:.2f}',

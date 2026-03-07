@@ -458,6 +458,7 @@ class InformeHoresPermissionsAndDataTests(TestCase):
         self.assertEqual(response.context["totals_previstes"], Decimal("8.00"))
         self.assertEqual(response.context["totals_reals"], Decimal("5.50"))
         self.assertEqual(response.context["totals_desviacio"], Decimal("-2.50"))
+        self.assertContains(response, "Pressupost Report")
         self.assertContains(response, "Treball Report")
 
     def test_informe_hores_filter_by_treball(self):
@@ -469,6 +470,16 @@ class InformeHoresPermissionsAndDataTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context["totals_previstes"], Decimal("8.00"))
         self.assertEqual(response.context["filters"]["treball_id"], str(self.treball.id))
+
+    def test_informe_hores_filter_by_pressupost(self):
+        self.client.force_login(self.superuser)
+        response = self.client.get(
+            reverse("pressupostos:informe_hores"),
+            {"pressupost_id": self.pressupost.id},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["totals_previstes"], Decimal("8.00"))
+        self.assertEqual(response.context["filters"]["pressupost_id"], str(self.pressupost.id))
 
     def test_informe_hores_csv_requires_permission(self):
         self.client.force_login(self.user_no_perm)
