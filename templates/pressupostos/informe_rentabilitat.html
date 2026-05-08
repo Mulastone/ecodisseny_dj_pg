@@ -33,11 +33,11 @@
       </div>
       <div class="col-md-2">
         <label for="id_data_inici" class="form-label">Data inici</label>
-        <input id="id_data_inici" type="date" name="data_inici" value="{{ filters.data_inici }}" class="form-control form-control-sm">
+        <input id="id_data_inici" type="text" name="data_inici" value="{{ filters.data_inici }}" class="form-control form-control-sm datepicker-report">
       </div>
       <div class="col-md-2">
         <label for="id_data_fi" class="form-label">Data fi</label>
-        <input id="id_data_fi" type="date" name="data_fi" value="{{ filters.data_fi }}" class="form-control form-control-sm">
+        <input id="id_data_fi" type="text" name="data_fi" value="{{ filters.data_fi }}" class="form-control form-control-sm datepicker-report">
       </div>
       <div class="col-md-1">
         <label for="id_umbral_amber" class="form-label">Ambre %</label>
@@ -104,4 +104,18 @@
     </table>
   </div>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    flatpickr(".datepicker-report", {
+      locale: "cat",
+      dateFormat: "Y-m-d",
+      altInput: true,
+      altFormat: "d/m/Y",
+      allowInput: true
+    });
+  });
+</script>
 {% endblock %}

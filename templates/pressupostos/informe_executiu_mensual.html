@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block extra_head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
+{% endblock %}
+
 {% block content %}
 <div class="container mt-4">
   <div class="d-flex justify-content-between align-items-center mb-3">
@@ -15,7 +19,7 @@
     <div class="row g-2">
       <div class="col-md-3">
         <label for="id_mes" class="form-label">Mes (YYYY-MM)</label>
-        <input id="id_mes" type="month" name="mes" value="{{ mes }}" class="form-control form-control-sm">
+        <input id="id_mes" type="text" name="mes" value="{{ mes }}" class="form-control form-control-sm monthpicker-report">
       </div>
       <div class="col-md-3">
         <label for="id_client_id" class="form-label">Client</label>
@@ -86,4 +90,26 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    flatpickr(".monthpicker-report", {
+      locale: "cat",
+      dateFormat: "Y-m",
+      altInput: true,
+      altFormat: "m/Y",
+      allowInput: true,
+      plugins: [
+        new monthSelectPlugin({
+          shorthand: false,
+          dateFormat: "Y-m",
+          altFormat: "m/Y"
+        })
+      ]
+    });
+  });
+</script>
 {% endblock %}
