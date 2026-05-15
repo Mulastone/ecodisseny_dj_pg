@@ -9,6 +9,9 @@ django-jazzmin==3.0.1
 django-phonenumber-field==8.0.0
 django-widget-tweaks==1.5.0
 fonttools==4.58.4
+gunicorn==22.0.0
+Markdown==3.7
+packaging==26.1
 phonenumbers==9.0.2
 pillow==11.2.1
 psycopg2-binary==2.9.9
@@ -22,5 +25,3 @@ tinyhtml5==2.0.0
 weasyprint==65.1
 webencodings==0.5.1
 zopfli==0.2.3.post1
-gunicorn==22.0.0
-markdown==3.7
