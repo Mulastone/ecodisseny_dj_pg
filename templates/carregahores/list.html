@@ -2,233 +2,245 @@
 {% load static %}
 {% load widget_tweaks %}
 
+{% block extra_head %}
+<style>
+  select.form-control, input.form-control {
+    width: 100%;
+    padding: 0.35rem 0.6rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    background-color: #fff;
+  }
+  select.form-control:focus, input.form-control:focus {
+    outline: 2px solid #4e9b77;
+    outline-offset: -1px;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container mt-4">
-  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
-    <h2 class="mb-0">
-      <i class="bi bi-clock-history"></i> {{ title|default:"Les Meves Càrregues d'Hores" }}
+<div>
+  <!-- Capçalera -->
+  <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+    <h2 class="text-xl font-semibold text-gray-800 flex items-center gap-2">
+      <i class="bi bi-clock-history text-[#4e9b77]"></i>
+      {{ title|default:"Les Meves Càrregues d'Hores" }}
     </h2>
-    <a href="{% url 'carregahores:nova' %}" class="btn btn-dark text-white">
-      <i class="bi bi-plus-circle"></i> Nova Càrrega
+    <a href="{% url 'carregahores:nova' %}" class="btn btn-sm bg-[#343a40] text-white border-none hover:bg-[#495057]">
+      <i class="bi bi-plus-circle mr-1"></i>Nova Càrrega
     </a>
   </div>
 
   {% if help_text %}
-  <div class="alert alert-info">
-    <i class="bi bi-info-circle"></i> {{ help_text }}
+  <div x-data="{ show: true }" x-show="show" x-cloak
+       x-init="setTimeout(() => show = false, 2500)"
+       x-transition:leave="transition ease-in duration-300"
+       x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+       class="bg-blue-50 border border-blue-200 text-blue-800 rounded-xl px-4 py-3 mb-4 text-sm">
+    <i class="bi bi-info-circle mr-1"></i>{{ help_text }}
   </div>
   {% endif %}
 
-  <!-- Filtros -->
-  <div class="card mb-4">
-    <div class="card-header bg-light">
-      <h5 class="mb-0">
-        <i class="bi bi-funnel"></i> Filtres
-        <button class="btn btn-outline-secondary btn-sm ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#filtros" aria-expanded="false">
-          <i class="bi bi-chevron-down"></i>
-        </button>
-      </h5>
-    </div>
-    <div class="collapse" id="filtros">
-      <div class="card-body">
-        <form method="get" class="row g-3">
-          {% if filter_form.recurs %}
-          <div class="col-md-4">
-            <label class="form-label">{{ filter_form.recurs.label }}</label>
-            {{ filter_form.recurs|add_class:"form-control" }}
-          </div>
-          {% endif %}
-          <div class="col-md-4">
-            <label class="form-label">{{ filter_form.projecte.label }}</label>
-            {{ filter_form.projecte|add_class:"form-control" }}
-          </div>
-          <div class="col-md-4">
-            <label class="form-label">{{ filter_form.pressupost.label }}</label>
-            {{ filter_form.pressupost|add_class:"form-control" }}
-          </div>
-          <div class="col-md-3">
-            <label class="form-label">{{ filter_form.data_desde.label }}</label>
-            {{ filter_form.data_desde }}
-          </div>
-          <div class="col-md-3">
-            <label class="form-label">{{ filter_form.data_fins.label }}</label>
-            {{ filter_form.data_fins }}
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">&nbsp;</label>
-            <div>
-              <button type="submit" class="btn btn-primary">
-                <i class="bi bi-search"></i> Filtrar
-              </button>
-              <a href="{% url 'carregahores:meves' %}" class="btn btn-outline-secondary">
-                <i class="bi bi-x-circle"></i> Netejar
-              </a>
-            </div>
-          </div>
-        </form>
+  <!-- Filtres (col·lapsable) -->
+  <div class="bg-white border border-gray-200 rounded-xl shadow-sm mb-5" x-data="{ open: false }">
+    <button type="button" @click="open = !open"
+      class="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-gray-50 rounded-xl transition-colors">
+      <div>
+        <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-500"><i class="bi bi-funnel mr-2 text-[#4e9b77]"></i>Filtres</h2>
+        <p class="mt-1 text-sm text-gray-400">Acota les teves càrregues per projecte, pressupost i rang de dates.</p>
       </div>
+      <i class="bi transition-transform duration-200" :class="open ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+    </button>
+    <div x-show="open" x-cloak x-collapse class="border-t border-gray-100">
+      <form method="get" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 px-5 py-5">
+        {% if filter_form.recurs %}
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 mb-1">{{ filter_form.recurs.label }}</label>
+          {{ filter_form.recurs|add_class:"form-control" }}
+        </div>
+        {% endif %}
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 mb-1">{{ filter_form.projecte.label }}</label>
+          {{ filter_form.projecte|add_class:"form-control" }}
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 mb-1">{{ filter_form.pressupost.label }}</label>
+          {{ filter_form.pressupost|add_class:"form-control" }}
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 mb-1">{{ filter_form.data_desde.label }}</label>
+          {{ filter_form.data_desde }}
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-gray-500 mb-1">{{ filter_form.data_fins.label }}</label>
+          {{ filter_form.data_fins }}
+        </div>
+        <div class="flex items-end gap-2">
+          <button type="submit" class="btn btn-sm bg-[#4e9b77] text-white border-none hover:bg-[#3d7a5e]">
+            <i class="bi bi-search mr-1"></i>Aplicar filtres
+          </button>
+          <a href="{% url 'carregahores:meves' %}" class="btn btn-sm bg-transparent border border-gray-300 text-gray-500 hover:bg-gray-100">
+            <i class="bi bi-x-circle mr-1"></i>Netejar
+          </a>
+        </div>
+      </form>
     </div>
   </div>
 
   {% if carregues %}
-    <div class="table-responsive">
-      <table class="table table-bordered table-hover align-middle bg-white table-dark-header">
-        <thead class="table-dark text-white">
-          <tr>
-            <th><i class="bi bi-calendar3"></i> Data</th>
-            <th><i class="bi bi-briefcase"></i> Pressupost</th>
-            <th><i class="bi bi-tools"></i> Treball / Tasca</th>
-            <th><i class="bi bi-person"></i> Recurs</th>
-            <th class="text-center"><i class="bi bi-clock"></i> Hores</th>
-            <th><i class="bi bi-chat-text"></i> Observacions</th>
-            <th class="text-center"><i class="bi bi-gear"></i> Accions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for item in carregues %}
-            <tr>
-              <td>
-                <span class="badge bg-dark">{{ item.data|date:"d/m/Y" }}</span>
-              </td>
-              <td>
-                <strong>{{ item.pressupost.nom|default:"—" }}</strong>
-                {% if item.pressupost.projecte %}
-                  <br><small class="text-muted"><i class="bi bi-folder"></i> {{ item.pressupost.projecte.nom }}</small>
-                {% endif %}
-                {% if item.pressupost.client %}
-                  <br><small class="text-muted"><i class="bi bi-person-circle"></i> {{ item.pressupost.client }}</small>
-                {% endif %}
-              </td>
-              <td>
-                <div>
-                  <strong>{{ item.treball.descripcio }}</strong>
-                  <br><small class="text-muted">{{ item.tasca.tasca }}</small>
-                </div>
-              </td>
-              <td>
-                <span class="badge bg-secondary">{{ item.recurso.nom }}</span>
-              </td>
-              <td class="text-center">
-                <span class="badge bg-dark fs-6">{{ item.hores }} h</span>
-              </td>
-              <td>
-                <small>{{ item.observacions|default:"—"|truncatechars:50 }}</small>
-              </td>
-              <td class="text-center">
-                {% comment "Verificar permisos de edición" %}{% endcomment %}
-                {% if user.is_superuser or item.usuari == user %}
-                  {% comment "Calcular si puede editar (dentro de 24h para usuarios normales)" %}{% endcomment %}
-                  {% if user.is_superuser %}
-                    {% comment "Administradores pueden editar siempre" %}{% endcomment %}
-                    <div class="btn-group" role="group">
-                      <a href="{% url 'carregahores:editar' item.pk %}" class="btn btn-sm btn-outline-primary" title="Editar">
-                        <i class="bi bi-pencil"></i>
-                      </a>
-                      <button type="button" class="btn btn-sm btn-outline-danger delete-btn" title="Eliminar" 
-                              data-id="{{ item.pk }}" 
-                              data-data="{{ item.data|date:'d/m/Y' }}" 
-                              data-hores="{{ item.hores }}">
-                        <i class="bi bi-trash"></i>
-                      </button>
-                    </div>
-                  {% else %}
-                    {% comment "Usuarios normales: verificar tiempo límite" %}{% endcomment %}
-                    {% now "U" as now_timestamp %}
-                    {% with item.creat|date:"U"|add:"86400" as limite_edicion %}
-                      {% if now_timestamp <= limite_edicion %}
-                        <div class="btn-group" role="group">
-                          <a href="{% url 'carregahores:editar' item.pk %}" class="btn btn-sm btn-outline-primary" title="Editar (dins 24h)">
-                            <i class="bi bi-pencil"></i>
-                          </a>
-                          <button type="button" class="btn btn-sm btn-outline-danger delete-btn" title="Eliminar (dins 24h)" 
-                                  data-id="{{ item.pk }}" 
-                                  data-data="{{ item.data|date:'d/m/Y' }}" 
-                                  data-hores="{{ item.hores }}">
-                            <i class="bi bi-trash"></i>
-                          </button>
-                        </div>
-                      {% else %}
-                        <span class="text-muted small">
-                          <i class="bi bi-lock" title="Temps d'edició vençut (24h)"></i>
-                        </span>
-                      {% endif %}
-                    {% endwith %}
-                  {% endif %}
-                {% else %}
-                  <span class="text-muted small">—</span>
-                {% endif %}
-              </td>
+    <!-- Taula -->
+    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden mb-5">
+      <div class="overflow-x-auto">
+        <table class="table table-zebra table-sm w-full text-sm">
+          <thead>
+            <tr class="bg-[#343a40] text-white text-xs uppercase">
+              <th class="px-3 py-3"><i class="bi bi-calendar3 mr-1"></i>Data</th>
+              <th class="px-3 py-3"><i class="bi bi-briefcase mr-1"></i>Pressupost</th>
+              <th class="px-3 py-3"><i class="bi bi-tools mr-1"></i>Treball / Tasca</th>
+              <th class="px-3 py-3"><i class="bi bi-person mr-1"></i>Recurs</th>
+              <th class="px-3 py-3 text-center"><i class="bi bi-clock mr-1"></i>Hores</th>
+              <th class="px-3 py-3"><i class="bi bi-chat-text mr-1"></i>Observacions</th>
+              <th class="px-3 py-3 text-center"><i class="bi bi-gear mr-1"></i>Accions</th>
             </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {% for item in carregues %}
+              <tr class="hover:bg-gray-50">
+                <td class="px-3 py-2">
+                  <span class="badge badge-sm bg-[#343a40] text-white rounded-md px-2">{{ item.data|date:"d/m/Y" }}</span>
+                </td>
+                <td class="px-3 py-2">
+                  <p class="font-semibold text-gray-800 leading-tight">{{ item.pressupost.nom|default:"—" }}</p>
+                  {% if item.pressupost.projecte %}
+                    <p class="text-gray-400 text-xs"><i class="bi bi-folder"></i> {{ item.pressupost.projecte.nom }}</p>
+                  {% endif %}
+                  {% if item.pressupost.client %}
+                    <p class="text-gray-400 text-xs"><i class="bi bi-person-circle"></i> {{ item.pressupost.client }}</p>
+                  {% endif %}
+                </td>
+                <td class="px-3 py-2">
+                  <p class="font-semibold text-gray-800 leading-tight">{{ item.treball.descripcio }}</p>
+                  <p class="text-gray-400 text-xs">{{ item.tasca.tasca }}</p>
+                </td>
+                <td class="px-3 py-2">
+                  <span class="badge badge-sm bg-gray-200 text-gray-700 rounded-md px-2">{{ item.recurso.nom }}</span>
+                </td>
+                <td class="px-3 py-2 text-center">
+                  <span class="badge badge-sm bg-[#4e9b77] text-white rounded-md px-2 text-sm font-semibold">{{ item.hores }} h</span>
+                </td>
+                <td class="px-3 py-2 text-gray-500 text-xs">{{ item.observacions|default:"—"|truncatechars:50 }}</td>
+                <td class="px-3 py-2 text-center">
+                  {% if user.is_superuser or item.usuari == user %}
+                    {% if user.is_superuser %}
+                      <div class="flex items-center justify-center gap-1">
+                        <a href="{% url 'carregahores:editar' item.pk %}" title="Editar"
+                           class="btn btn-xs border border-blue-400 text-blue-600 hover:bg-blue-50 bg-transparent">
+                          <i class="bi bi-pencil"></i>
+                        </a>
+                        <button type="button" class="btn btn-xs border border-red-400 text-red-600 hover:bg-red-50 bg-transparent delete-btn"
+                                title="Eliminar"
+                                data-id="{{ item.pk }}"
+                                data-data="{{ item.data|date:'d/m/Y' }}"
+                                data-hores="{{ item.hores }}">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </div>
+                    {% else %}
+                      {% now "U" as now_timestamp %}
+                      {% with item.creat|date:"U"|add:"86400" as limite_edicion %}
+                        {% if now_timestamp <= limite_edicion %}
+                          <div class="flex items-center justify-center gap-1">
+                            <a href="{% url 'carregahores:editar' item.pk %}" title="Editar (dins 24h)"
+                               class="btn btn-xs border border-blue-400 text-blue-600 hover:bg-blue-50 bg-transparent">
+                              <i class="bi bi-pencil"></i>
+                            </a>
+                            <button type="button" class="btn btn-xs border border-red-400 text-red-600 hover:bg-red-50 bg-transparent delete-btn"
+                                    title="Eliminar (dins 24h)"
+                                    data-id="{{ item.pk }}"
+                                    data-data="{{ item.data|date:'d/m/Y' }}"
+                                    data-hores="{{ item.hores }}">
+                              <i class="bi bi-trash"></i>
+                            </button>
+                          </div>
+                        {% else %}
+                          <i class="bi bi-lock text-gray-400" title="Temps d'edició vençut (24h)"></i>
+                        {% endif %}
+                      {% endwith %}
+                    {% endif %}
+                  {% else %}
+                    <span class="text-gray-300">—</span>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
 
-    <!-- Resumen total -->
-    <div class="row mt-4">
-      <div class="col-md-6">
-        <div class="card bg-light">
-          <div class="card-body text-center">
-            <h5 class="card-title"><i class="bi bi-list-ol"></i> Total Registres</h5>
-            <h3 class="text-dark">{{ total_registres }}</h3>
-          </div>
+    <!-- Resum totals -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+      <div class="bg-white border border-gray-200 rounded-xl shadow-sm flex items-center gap-4 px-5 py-4">
+        <div class="w-10 h-10 rounded-full bg-[#4e9b77] flex items-center justify-center text-white shrink-0">
+          <i class="bi bi-list-ol"></i>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 font-medium">Total Registres</p>
+          <p class="text-2xl font-bold text-gray-800">{{ total_registres }}</p>
         </div>
       </div>
-      <div class="col-md-6">
-        <div class="card bg-light">
-          <div class="card-body text-center">
-            <h5 class="card-title"><i class="bi bi-clock"></i> Total Hores</h5>
-            <h3 class="text-dark">{{ total_hores }} h</h3>
-          </div>
+      <div class="bg-white border border-gray-200 rounded-xl shadow-sm flex items-center gap-4 px-5 py-4">
+        <div class="w-10 h-10 rounded-full bg-[#4e9b77] flex items-center justify-center text-white shrink-0">
+          <i class="bi bi-clock"></i>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 font-medium">Total Hores</p>
+          <p class="text-2xl font-bold text-gray-800">{{ total_hores }} h</p>
         </div>
       </div>
     </div>
 
   {% else %}
-    <div class="text-center py-5">
-      <div class="mb-4">
-        <i class="bi bi-clock-history" style="font-size: 4rem; color: #6c757d;"></i>
-      </div>
-      <h4 class="text-muted">Encara no hi ha registres</h4>
-      <p class="text-muted">Comença per carregar les teves primeres hores de treball.</p>
-      <a href="{% url 'carregahores:nova' %}" class="btn btn-dark">
-        <i class="bi bi-plus-circle"></i> Carregar Primera Hora
+    <!-- Estat buit -->
+    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm text-center py-16 px-6">
+      <i class="bi bi-clock-history text-6xl text-gray-300 block mb-4"></i>
+      <h4 class="text-lg font-semibold text-gray-500 mb-1">Encara no hi ha registres</h4>
+      <p class="text-sm text-gray-400 mb-5">Comença per carregar les teves primeres hores de treball.</p>
+      <a href="{% url 'carregahores:nova' %}" class="btn btn-sm bg-[#343a40] text-white border-none hover:bg-[#495057]">
+        <i class="bi bi-plus-circle mr-1"></i>Carregar Primera Hora
       </a>
     </div>
   {% endif %}
 </div>
 
-<!-- Modal de confirmación para eliminar -->
-<div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="modalEliminarLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title" id="modalEliminarLabel">
-          <i class="bi bi-exclamation-triangle"></i> Confirmar Eliminació
-        </h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+<!-- Modal DaisyUI per eliminar -->
+<div x-data="deleteModal()" @open-delete-modal.window="open($event.detail)">
+  <!-- Fons -->
+  <div x-show="show" x-cloak x-transition.opacity class="fixed inset-0 bg-black/40 z-40" @click="show=false"></div>
+  <!-- Diàleg -->
+  <div x-show="show" x-cloak x-transition class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm">
+      <div class="bg-red-600 text-white rounded-t-2xl px-5 py-4 flex items-center justify-between">
+        <span class="font-semibold flex items-center gap-2"><i class="bi bi-exclamation-triangle"></i> Confirmar Eliminació</span>
+        <button @click="show=false" class="text-white hover:text-red-200"><i class="bi bi-x-lg"></i></button>
       </div>
-      <div class="modal-body">
-        <p>Estàs segur que vols eliminar aquesta càrrega d'hores?</p>
-        <div class="bg-light p-3 rounded">
-          <strong>Data:</strong> <span id="eliminar-data"></span><br>
-          <strong>Hores:</strong> <span id="eliminar-hores"></span> h
+      <div class="px-5 py-4 text-sm text-gray-700">
+        <p class="mb-3">Estàs segur que vols eliminar aquesta càrrega d'hores?</p>
+        <div class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 text-sm">
+          <p><strong>Data:</strong> <span x-text="data"></span></p>
+          <p><strong>Hores:</strong> <span x-text="hores"></span> h</p>
         </div>
-        <div class="mt-3">
-          <small class="text-muted">
-            <i class="bi bi-info-circle"></i> 
-            Aquesta acció no es pot desfer.
-          </small>
-        </div>
+        <p class="text-xs text-gray-400 mt-3"><i class="bi bi-info-circle mr-1"></i>Aquesta acció no es pot desfer.</p>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          <i class="bi bi-x-circle"></i> Cancel·lar
+      <div class="px-5 py-3 flex justify-end gap-2 border-t border-gray-100">
+        <button @click="show=false" class="btn btn-sm bg-transparent border border-gray-300 text-gray-500 hover:bg-gray-100">
+          <i class="bi bi-x-circle mr-1"></i>Cancel·lar
         </button>
-        <form id="form-eliminar" method="post" class="d-inline">
+        <form :action="formAction" method="post" class="inline">
           {% csrf_token %}
-          <button type="submit" class="btn btn-danger">
-            <i class="bi bi-trash"></i> Eliminar
+          <button type="submit" class="btn btn-sm bg-red-600 text-white border-none hover:bg-red-700">
+            <i class="bi bi-trash mr-1"></i>Eliminar
           </button>
         </form>
       </div>
@@ -237,33 +249,33 @@
 </div>
 
 <script>
-// Manejar eliminación con data attributes
-document.addEventListener('DOMContentLoaded', function() {
-    const deleteButtons = document.querySelectorAll('.delete-btn');
-    
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const id = this.dataset.id;
-            const data = this.dataset.data;
-            const hores = this.dataset.hores;
-            
-            confirmarEliminacion(id, data, hores);
-        });
-    });
-});
-
-function confirmarEliminacion(id, data, hores) {
-    // Actualizar contenido del modal
-    document.getElementById('eliminar-data').textContent = data;
-    document.getElementById('eliminar-hores').textContent = hores;
-    
-    // Actualizar action del formulario
-    const form = document.getElementById('form-eliminar');
-    form.action = `/carrega-hores/eliminar/${id}/`;
-    
-    // Mostrar modal
-    const modal = new bootstrap.Modal(document.getElementById('modalEliminar'));
-    modal.show();
+function deleteModal() {
+  return {
+    show: false,
+    data: '',
+    hores: '',
+    formAction: '',
+    open(detail) {
+      this.data = detail.data;
+      this.hores = detail.hores;
+      this.formAction = `/carrega-hores/eliminar/${detail.id}/`;
+      this.show = true;
+    }
+  }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      window.dispatchEvent(new CustomEvent('open-delete-modal', {
+        detail: {
+          id: this.dataset.id,
+          data: this.dataset.data,
+          hores: this.dataset.hores
+        }
+      }));
+    });
+  });
+});
 </script>
 {% endblock %}

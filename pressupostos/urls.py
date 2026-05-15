@@ -7,6 +7,7 @@ urlpatterns = [
     # Llistat i detall
     path('', views.list_pressuposts),
     path('list/', views.list_pressuposts, name='list'),
+    path('informes/', views.informes_index, name='informes_index'),
     path('informe-hores/', views.informe_hores, name='informe_hores'),
     path('informe-hores.csv', views.informe_hores_csv, name='informe_hores_csv'),
     path('informe-rentabilitat/', views.informe_rentabilitat, name='informe_rentabilitat'),

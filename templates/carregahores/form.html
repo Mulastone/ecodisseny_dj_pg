@@ -2,156 +2,182 @@
 {% load static %}
 {% load widget_tweaks %}
 
+{% block extra_head %}
+<style>
+  select.fc, input.fc, textarea.fc {
+    width: 100%;
+    padding: 0.45rem 0.65rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    background-color: #fff;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  select.fc:focus, input.fc:focus, textarea.fc:focus {
+    outline: none;
+    border-color: #4e9b77;
+    box-shadow: 0 0 0 3px rgba(78,155,119,0.15);
+  }
+  select.fc:disabled, input.fc:disabled {
+    background-color: #f3f4f6;
+    color: #9ca3af;
+    cursor: not-allowed;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container-fluid mt-4">
-  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
-    <h2 class="mb-0">
-      <i class="bi bi-clock-history"></i> 
-      {% if is_edit %}
-        Editar Càrrega d'Hores
-      {% else %}
-        Carregar Hores
-      {% endif %}
-    </h2>
-    <a href="{% url 'carregahores:meves' %}" class="btn btn-outline-dark">
-      <i class="bi bi-list-ul"></i> Les Meves Hores
+<div class="max-w-2xl mx-auto">
+
+  <!-- Capçalera -->
+  <div class="flex items-center justify-between flex-wrap gap-2 mb-5">
+    <div>
+      <h2 class="text-xl font-semibold text-gray-800 flex items-center gap-2">
+        <i class="bi bi-clock-history text-[#4e9b77]"></i>
+        {% if is_edit %}Editar Càrrega d'Hores{% else %}Nova Càrrega d'Hores{% endif %}
+      </h2>
+    </div>
+    <a href="{% url 'carregahores:meves' %}" class="btn btn-sm bg-transparent border border-gray-300 text-gray-500 hover:bg-gray-100">
+      <i class="bi bi-arrow-left mr-1"></i>Tornar
     </a>
   </div>
 
   {% if is_edit %}
-    <div class="alert alert-info">
-      <i class="bi bi-info-circle"></i>
-      Estàs editant la càrrega del <strong>{{ carrega.data|date:"d/m/Y" }}</strong> 
-      de <strong>{{ carrega.hores }} hores</strong>.
-      {% if not user.is_superuser %}
-        <br><small>Recorda que només pots editar registres dins les primeres 24 hores.</small>
-      {% endif %}
+    <div x-data="{ show: true }" x-show="show" x-cloak
+         x-init="setTimeout(() => show = false, 2500)"
+         x-transition:leave="transition ease-in duration-300"
+         x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+         class="bg-blue-50 border border-blue-200 text-blue-800 rounded-xl px-4 py-3 mb-4 text-sm flex items-start gap-2">
+      <i class="bi bi-info-circle mt-0.5 shrink-0"></i>
+      <span>
+        Editant registre del <strong>{{ carrega.data|date:"d/m/Y" }}</strong> &mdash; <strong>{{ carrega.hores }} h</strong>
+        {% if not user.is_superuser %}<br><span class="text-amber-600">Recorda que només pots editar dins les primeres 24 hores.</span>{% endif %}
+      </span>
+    </div>
+  {% endif %}
+
+  {% if form.non_field_errors %}
+    <div class="bg-red-50 border border-red-300 text-red-700 rounded-xl px-4 py-3 mb-4 text-sm">
+      <i class="bi bi-exclamation-triangle mr-1"></i>{{ form.non_field_errors }}
     </div>
   {% endif %}
 
   <form method="post" novalidate>
     {% csrf_token %}
-    
-    {# Campo oculto para hores - se llena automáticamente con JavaScript #}
     {{ form.hores }}
-    
-    {% if form.non_field_errors %}
-      <div class="alert alert-danger">
-        {{ form.non_field_errors }}
-      </div>
-    {% endif %}
 
-    <div class="table-responsive mb-4">
-      <table class="table table-bordered bg-white table-dark-header">
-        <thead class="table-dark text-white">
-          <tr>
-            <th colspan="4" class="text-center">
-              <i class="bi bi-clock-history"></i> Formulari de Carrega d'Hores
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-        {# Filtros de Cliente y Proyecto #}
-        <tr class="table-info">
-          <td class="fw-bold" style="width:25%;">{{ form.client_filter.label_tag }}</td>
-          <td style="width:25%;">
-            {{ form.client_filter|add_class:"form-control" }}
-            {% if form.client_filter.errors %}
-              <div class="text-danger small">{{ form.client_filter.errors }}</div>
-            {% endif %}
-            <small class="text-muted">Filtra pressupostos per client</small>
-          </td>
-          <td class="fw-bold" style="width:25%;">{{ form.projecte_filter.label_tag }}</td>
-          <td style="width:25%;">
-            {{ form.projecte_filter|add_class:"form-control" }}
-            {% if form.projecte_filter.errors %}
-              <div class="text-danger small">{{ form.projecte_filter.errors }}</div>
-            {% endif %}
-            <small class="text-muted">Filtra pressupostos per projecte</small>
-          </td>
-        </tr>
-        <tr>
-          <td class="fw-bold" style="width:25%;">{{ form.pressupost.label_tag }}</td>
-          <td style="width:75%;" colspan="3">
-            {{ form.pressupost|add_class:"form-control" }}
-            {% if form.pressupost.errors %}
-              <div class="text-danger small">{{ form.pressupost.errors }}</div>
-            {% endif %}
-            <small class="text-muted">
-              {% if form.pressupost.help_text %}
-                {{ form.pressupost.help_text }}
-              {% else %}
-                Selecciona primer el pressupost per veure les línies disponibles
-              {% endif %}
-            </small>
-          </td>
-        </tr>
-        <tr>
-          <td class="fw-bold">{{ form.linia.label_tag }}</td>
-          <td colspan="3">
-            {{ form.linia|add_class:"form-control" }}
-            {% if form.linia.errors %}
-              <div class="text-danger small">{{ form.linia.errors }}</div>
-            {% endif %}
-            <small class="text-muted">Línia del pressupost (inclou recurs, treball i tasca)</small>
-          </td>
-        </tr>
-        <tr>
-          <td class="fw-bold">{{ form.hores_seleccionades.label_tag }}</td>
-          <td style="width:25%;">
-            {{ form.hores_seleccionades|add_class:"form-control" }}
-            {% if form.hores_seleccionades.errors %}
-              <div class="text-danger small">{{ form.hores_seleccionades.errors }}</div>
-            {% endif %}
-          </td>
-          <td class="fw-bold" style="width:25%;">{{ form.data.label_tag }}</td>
-          <td style="width:25%;">
-            <div class="input-group">
-              {% if form.data.field.disabled %}
-                <input type="text" id="id_data" name="data" value="{% now 'd/m/Y' %}" class="form-control datepicker bg-light" readonly disabled>
-              {% else %}
-                <input type="text" id="id_data" name="data" value="{% now 'd/m/Y' %}" class="form-control datepicker">
-              {% endif %}
-              <span class="input-group-text"><i class="bi bi-calendar3"></i></span>
-            </div>
-            {% if form.data.help_text %}
-              <small class="text-muted">{{ form.data.help_text }}</small>
-            {% endif %}
-            {% if form.data.errors %}
-              <div class="text-danger small">{{ form.data.errors }}</div>
-            {% endif %}
-          </td>
-        </tr>
-        <tr>
-          <td class="fw-bold">{{ form.observacions.label_tag }}</td>
-          <td colspan="3">
-            {{ form.observacions|add_class:"form-control" }}
-            {% if form.observacions.errors %}
-              <div class="text-danger small">{{ form.observacions.errors }}</div>
-            {% endif %}
-          </td>
-        </tr>
-        </tbody>
-      </table>
+    <!-- === SECCIÓ 1: Filtres de cerca (sempre visibles, no es guarden) === -->
+    <div class="bg-gray-50 border border-gray-200 rounded-xl px-4 py-4 mb-4">
+      <p class="text-xs font-semibold text-gray-500 mb-3 flex items-center gap-1.5">
+        <i class="bi bi-funnel text-[#4e9b77]"></i> Filtra la cerca
+        <span class="font-normal text-gray-400">&mdash; per reduir la llista de pressupostos (no es guarden)</span>
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs font-medium text-gray-500 mb-1">{{ form.client_filter.label }}</label>
+          {{ form.client_filter|add_class:"fc" }}
+          {% if form.client_filter.errors %}<p class="text-red-500 text-xs mt-1">{{ form.client_filter.errors }}</p>{% endif %}
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-gray-500 mb-1">{{ form.projecte_filter.label }}</label>
+          {{ form.projecte_filter|add_class:"fc" }}
+          {% if form.projecte_filter.errors %}<p class="text-red-500 text-xs mt-1">{{ form.projecte_filter.errors }}</p>{% endif %}
+        </div>
+      </div>
     </div>
 
-    <div class="d-flex gap-2">
-      <a href="{% url 'carregahores:meves' %}" class="btn btn-outline-dark">
-        <i class="bi bi-arrow-left-circle"></i> 
-        {% if is_edit %}Cancel·lar{% else %}Tornar{% endif %}
-      </a>
-      <button type="submit" class="btn btn-dark">
-        <i class="bi bi-save2"></i> 
-        {% if is_edit %}
-          Actualitzar
-        {% else %}
-          Guardar
-        {% endif %}
-      </button>
+    <!-- === SECCIÓ 2: Camps principals === -->
+    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+
+      <div class="bg-[#343a40] text-white px-5 py-3 text-sm font-medium">
+        <i class="bi bi-pencil-square mr-2"></i>Dades de la càrrega
+      </div>
+
+      <div class="divide-y divide-gray-100">
+
+        <!-- Pressupost -->
+        <div class="px-5 py-4">
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+            {{ form.pressupost.label }}
+            <span class="text-red-500 ml-0.5">*</span>
+          </label>
+          {{ form.pressupost|add_class:"fc" }}
+          {% if form.pressupost.errors %}
+            <p class="text-red-500 text-xs mt-1"><i class="bi bi-exclamation-circle mr-1"></i>{{ form.pressupost.errors }}</p>
+          {% else %}
+            <p class="text-gray-400 text-xs mt-1">{% if form.pressupost.help_text %}{{ form.pressupost.help_text }}{% else %}Selecciona el pressupost per veure les línies{% endif %}</p>
+          {% endif %}
+        </div>
+
+        <!-- Línia -->
+        <div class="px-5 py-4">
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+            {{ form.linia.label }}
+            <span class="text-red-500 ml-0.5">*</span>
+          </label>
+          {{ form.linia|add_class:"fc" }}
+          {% if form.linia.errors %}
+            <p class="text-red-500 text-xs mt-1"><i class="bi bi-exclamation-circle mr-1"></i>{{ form.linia.errors }}</p>
+          {% else %}
+            <p class="text-gray-400 text-xs mt-1">Inclou recurs, treball i tasca</p>
+          {% endif %}
+        </div>
+
+        <!-- Hores + Data (dues columnes) -->
+        <div class="grid grid-cols-2 gap-0 divide-x divide-gray-100">
+          <div class="px-5 py-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">
+              {{ form.hores_seleccionades.label }}
+              <span class="text-red-500 ml-0.5">*</span>
+            </label>
+            {{ form.hores_seleccionades|add_class:"fc" }}
+            {% if form.hores_seleccionades.errors %}
+              <p class="text-red-500 text-xs mt-1"><i class="bi bi-exclamation-circle mr-1"></i>{{ form.hores_seleccionades.errors }}</p>
+            {% endif %}
+          </div>
+          <div class="px-5 py-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">
+              {{ form.data.label }}
+              <span class="text-red-500 ml-0.5">*</span>
+            </label>
+            <div class="relative">
+              {% if form.data.field.disabled %}
+                <input type="text" id="id_data" name="data" value="{% now 'd/m/Y' %}" class="fc datepicker pr-8 bg-gray-100" readonly disabled>
+              {% else %}
+                <input type="text" id="id_data" name="data" value="{% now 'd/m/Y' %}" class="fc datepicker pr-8">
+              {% endif %}
+              <i class="bi bi-calendar3 absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-xs"></i>
+            </div>
+            {% if form.data.errors %}
+              <p class="text-red-500 text-xs mt-1"><i class="bi bi-exclamation-circle mr-1"></i>{{ form.data.errors }}</p>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Observacions -->
+        <div class="px-5 py-4">
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">{{ form.observacions.label }}</label>
+          {{ form.observacions|add_class:"fc" }}
+          {% if form.observacions.errors %}
+            <p class="text-red-500 text-xs mt-1"><i class="bi bi-exclamation-circle mr-1"></i>{{ form.observacions.errors }}</p>
+          {% endif %}
+        </div>
+
+      </div>
+
+      <!-- Footer botons dins la card -->
+      <div class="bg-gray-50 border-t border-gray-100 px-5 py-3 flex justify-end gap-2">
+        <a href="{% url 'carregahores:meves' %}" class="btn btn-sm bg-transparent border border-gray-300 text-gray-500 hover:bg-gray-100">
+          {% if is_edit %}Cancel·lar{% else %}Descartar{% endif %}
+        </a>
+        <button type="submit" class="btn btn-sm bg-[#4e9b77] text-white border-none hover:bg-[#3d7a5e]">
+          <i class="bi bi-check2 mr-1"></i>{% if is_edit %}Actualitzar{% else %}Guardar càrrega{% endif %}
+        </button>
+      </div>
+
     </div>
   </form>
 </div>
-
 {% endblock %}
 
 {% block scripts %}

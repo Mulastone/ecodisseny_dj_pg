@@ -1,127 +1,112 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mt-4">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="mb-0">Informe Productivitat per Recurs</h2>
+<section class="rounded-2xl bg-gradient-to-r from-[#343a40] via-[#3e454c] to-[#4c545c] text-white p-6 md:p-8 mb-6 shadow-md">
+  <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
     <div>
-      <a href="{% url 'pressupostos:informe_productivitat_csv' %}{% if query_string %}?{{ query_string }}{% endif %}" class="btn btn-outline-dark">
-        <i class="bi bi-download"></i> CSV
-      </a>
+      <p class="text-sm uppercase tracking-[0.2em] text-white/60 mb-2">Informes</p>
+      <h1 class="text-2xl md:text-3xl font-semibold flex items-center gap-3"><i class="bi bi-people text-[#4e9b77]"></i>Informe Productivitat per Recurs</h1>
+      <p class="text-white/75 mt-2">Visió de càrrega per recurs, projecte i tasca, amb proxy de facturabilitat.</p>
     </div>
+    <a href="{% url 'pressupostos:informe_productivitat_csv' %}{% if query_string %}?{{ query_string }}{% endif %}" class="btn bg-white text-[#343a40] border-none hover:bg-gray-100"><i class="bi bi-download mr-1"></i>Exportar CSV</a>
   </div>
+</section>
 
-  <form method="get" class="card card-body mb-3">
-    <div class="row g-2">
-      <div class="col-md-2">
-        <label for="id_usuari_id" class="form-label">Usuari</label>
-        <select id="id_usuari_id" name="usuari_id" class="form-select form-select-sm">
-          <option value="">Tots</option>
-          {% for id, nom in usuaris %}
-            <option value="{{ id }}" {% if filters.usuari_id == id|stringformat:"s" %}selected{% endif %}>{{ nom }}</option>
-          {% endfor %}
-        </select>
-      </div>
-      <div class="col-md-2">
-        <label for="id_recurs_id" class="form-label">Recurs</label>
-        <select id="id_recurs_id" name="recurs_id" class="form-select form-select-sm">
-          <option value="">Tots</option>
-          {% for id, nom in recursos %}
-            <option value="{{ id }}" {% if filters.recurs_id == id|stringformat:"s" %}selected{% endif %}>{{ nom }}</option>
-          {% endfor %}
-        </select>
-      </div>
-      <div class="col-md-2">
-        <label for="id_projecte_id" class="form-label">Projecte</label>
-        <select id="id_projecte_id" name="projecte_id" class="form-select form-select-sm">
-          <option value="">Tots</option>
-          {% for id, nom in projectes %}
-            <option value="{{ id }}" {% if filters.projecte_id == id|stringformat:"s" %}selected{% endif %}>{{ nom }}</option>
-          {% endfor %}
-        </select>
-      </div>
-      <div class="col-md-2">
-        <label for="id_tasca_id" class="form-label">Tasca</label>
-        <select id="id_tasca_id" name="tasca_id" class="form-select form-select-sm">
-          <option value="">Totes</option>
-          {% for id, nom in tasques %}
-            <option value="{{ id }}" {% if filters.tasca_id == id|stringformat:"s" %}selected{% endif %}>{{ nom }}</option>
-          {% endfor %}
-        </select>
-      </div>
-      <div class="col-md-2">
-        <label for="id_data_inici" class="form-label">Data inici</label>
-        <input id="id_data_inici" type="text" name="data_inici" value="{{ filters.data_inici }}" class="form-control form-control-sm datepicker-report">
-      </div>
-      <div class="col-md-2">
-        <label for="id_data_fi" class="form-label">Data fi</label>
-        <input id="id_data_fi" type="text" name="data_fi" value="{{ filters.data_fi }}" class="form-control form-control-sm datepicker-report">
-      </div>
+<section class="rounded-2xl border border-gray-200 bg-white shadow-sm mb-6" x-data="{ open: {% if filters.usuari_id or filters.recurs_id or filters.projecte_id or filters.tasca_id or filters.data_inici or filters.data_fi %}true{% else %}false{% endif %} }">
+  <button type="button" @click="open = !open" class="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-gray-50 rounded-2xl transition-colors">
+    <div>
+      <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-500"><i class="bi bi-funnel mr-2 text-[#4e9b77]"></i>Filtres</h2>
+      <p class="mt-1 text-sm text-gray-400">Llegeix càrrega i facturabilitat per usuari, recurs, projecte, tasca i dates.</p>
     </div>
-    <div class="d-flex gap-2 mt-3">
-      <button class="btn btn-dark btn-sm" type="submit"><i class="bi bi-search"></i> Aplicar</button>
-      <a href="{% url 'pressupostos:informe_productivitat' %}" class="btn btn-outline-dark btn-sm"><i class="bi bi-x-circle"></i> Netejar</a>
-    </div>
-  </form>
-
-  <div class="row g-3 mb-3">
-    <div class="col-md-4"><div class="card card-body"><small class="text-muted">Total Hores</small><h4 class="mb-0">{{ totals.total_hores|floatformat:2 }}</h4></div></div>
-    <div class="col-md-4"><div class="card card-body"><small class="text-muted">Hores Facturables*</small><h4 class="mb-0">{{ totals.hores_facturables|floatformat:2 }}</h4></div></div>
-    <div class="col-md-4"><div class="card card-body"><small class="text-muted">Hores No Facturables*</small><h4 class="mb-0">{{ totals.hores_no_facturables|floatformat:2 }}</h4></div></div>
+    <i class="bi transition-transform duration-200" :class="open ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+  </button>
+  <div x-show="open" x-cloak x-collapse class="border-t border-gray-100 px-5 py-5">
+    <form method="get" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-3">
+      <div>
+        <label for="id_usuari_id" class="block text-xs font-semibold text-gray-500 mb-1">Usuari</label>
+        <select id="id_usuari_id" name="usuari_id" class="select select-bordered w-full select-sm"><option value="">Tots</option>{% for id, nom in usuaris %}<option value="{{ id }}" {% if filters.usuari_id == id|stringformat:"s" %}selected{% endif %}>{{ nom }}</option>{% endfor %}</select>
+      </div>
+      <div>
+        <label for="id_recurs_id" class="block text-xs font-semibold text-gray-500 mb-1">Recurs</label>
+        <select id="id_recurs_id" name="recurs_id" class="select select-bordered w-full select-sm"><option value="">Tots</option>{% for id, nom in recursos %}<option value="{{ id }}" {% if filters.recurs_id == id|stringformat:"s" %}selected{% endif %}>{{ nom }}</option>{% endfor %}</select>
+      </div>
+      <div>
+        <label for="id_projecte_id" class="block text-xs font-semibold text-gray-500 mb-1">Projecte</label>
+        <select id="id_projecte_id" name="projecte_id" class="select select-bordered w-full select-sm"><option value="">Tots</option>{% for id, nom in projectes %}<option value="{{ id }}" {% if filters.projecte_id == id|stringformat:"s" %}selected{% endif %}>{{ nom }}</option>{% endfor %}</select>
+      </div>
+      <div>
+        <label for="id_tasca_id" class="block text-xs font-semibold text-gray-500 mb-1">Tasca</label>
+        <select id="id_tasca_id" name="tasca_id" class="select select-bordered w-full select-sm"><option value="">Totes</option>{% for id, nom in tasques %}<option value="{{ id }}" {% if filters.tasca_id == id|stringformat:"s" %}selected{% endif %}>{{ nom }}</option>{% endfor %}</select>
+      </div>
+      <div>
+        <label for="id_data_inici" class="block text-xs font-semibold text-gray-500 mb-1">Data inici</label>
+        <input id="id_data_inici" type="text" name="data_inici" value="{{ filters.data_inici }}" class="input input-bordered input-sm w-full datepicker-report">
+      </div>
+      <div>
+        <label for="id_data_fi" class="block text-xs font-semibold text-gray-500 mb-1">Data fi</label>
+        <input id="id_data_fi" type="text" name="data_fi" value="{{ filters.data_fi }}" class="input input-bordered input-sm w-full datepicker-report">
+      </div>
+      <div class="xl:col-span-6 flex flex-wrap gap-2 pt-1">
+        <button class="btn btn-sm bg-[#343a40] text-white border-none hover:bg-[#495057]" type="submit"><i class="bi bi-search mr-1"></i>Aplicar filtres</button>
+        <a href="{% url 'pressupostos:informe_productivitat' %}" class="btn btn-sm btn-outline"><i class="bi bi-x-circle mr-1"></i>Netejar</a>
+      </div>
+    </form>
   </div>
-  <p class="text-muted small mb-3">* Càlcul proxy: una càrrega es considera facturable si la línia té subtotal previst &gt; 0.</p>
+</section>
 
-  <div class="table-responsive mb-4">
-    <table class="table table-bordered table-hover align-middle bg-white table-dark-header">
-      <thead class="table-dark text-white">
-        <tr>
-          <th>Mes</th>
-          <th>Recurs</th>
-          <th>Projecte</th>
-          <th>Tasca</th>
-          <th class="text-end">Hores</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for row in detail_rows %}
+<section class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+  <article class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"><p class="text-sm text-gray-500">Total hores</p><p class="text-2xl font-semibold text-[#343a40]">{{ totals.total_hores|floatformat:2 }}</p></article>
+  <article class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"><p class="text-sm text-gray-500">Hores facturables</p><p class="text-2xl font-semibold text-emerald-700">{{ totals.hores_facturables|floatformat:2 }}</p></article>
+  <article class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"><p class="text-sm text-gray-500">Hores no facturables</p><p class="text-2xl font-semibold text-amber-700">{{ totals.hores_no_facturables|floatformat:2 }}</p></article>
+</section>
+<p class="text-sm text-gray-500 mb-6">La facturabilitat es calcula com a proxy: una càrrega es considera facturable si la línia té subtotal previst superior a 0.</p>
+
+<section class="grid grid-cols-1 2xl:grid-cols-3 gap-6">
+  <div class="2xl:col-span-2 rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+    <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between gap-3">
+      <h2 class="font-semibold text-gray-800">Detall mensual per recurs</h2>
+      <span class="text-sm text-gray-500">{{ detail_rows|length }} files</span>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="table table-zebra w-full">
+        <thead class="bg-[#343a40] text-white">
+          <tr><th>Mes</th><th>Recurs</th><th>Projecte</th><th>Tasca</th><th class="text-right">Hores</th></tr>
+        </thead>
+        <tbody>
+          {% for row in detail_rows %}
           <tr>
             <td>{{ row.mes }}</td>
             <td>{{ row.recurs_nom }}</td>
             <td>{{ row.projecte_nom }}</td>
             <td>{{ row.tasca_nom }}</td>
-            <td class="text-end">{{ row.hores|floatformat:2 }}</td>
+            <td class="text-right">{{ row.hores|floatformat:2 }}</td>
           </tr>
-        {% empty %}
-          <tr><td colspan="5" class="text-center">Sense dades per als filtres seleccionats.</td></tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-
-  <div class="card">
-    <div class="card-header fw-bold">Top 10 Tasques consumidores de temps</div>
-    <div class="table-responsive">
-      <table class="table table-sm mb-0">
-        <thead>
-          <tr>
-            <th>Tasca</th>
-            <th class="text-end">Hores</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for row in top_tasques_rows %}
-            <tr>
-              <td>{{ row.tasca_nom }}</td>
-              <td class="text-end">{{ row.hores|floatformat:2 }}</td>
-            </tr>
           {% empty %}
-            <tr><td colspan="2" class="text-center">Sense dades.</td></tr>
+          <tr><td colspan="5" class="text-center text-gray-500 py-8">Sense dades per als filtres seleccionats.</td></tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
   </div>
-</div>
+
+  <aside class="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+    <div class="px-4 py-3 border-b border-gray-200">
+      <h2 class="font-semibold text-gray-800">Top 10 tasques consumidores</h2>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="table table-sm w-full">
+        <thead><tr><th>Tasca</th><th class="text-right">Hores</th></tr></thead>
+        <tbody>
+          {% for row in top_tasques_rows %}
+          <tr><td>{{ row.tasca_nom }}</td><td class="text-right">{{ row.hores|floatformat:2 }}</td></tr>
+          {% empty %}
+          <tr><td colspan="2" class="text-center text-gray-500 py-6">Sense dades.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </aside>
+</section>
 {% endblock %}
 
 {% block extra_scripts %}

@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
 from documentacion.models import CategoriaDocumentacion, DocumentoMarkdown
 from django.utils.text import slugify
+from django.conf import settings
 import os
 
 
@@ -92,14 +93,17 @@ class Command(BaseCommand):
         import glob
         
         documentos = []
-        docs_base = os.path.join('/app', 'docs')  # Para Docker
+        base_dir = str(settings.BASE_DIR)
+        docs_base = os.path.join(base_dir, 'docs')
+        if not os.path.exists(docs_base):
+            docs_base = os.path.join('/app', 'docs')
         
         # Buscar todos los archivos .md
         md_files = glob.glob(os.path.join(docs_base, '**/*.md'), recursive=True)
         
         for archivo_path in md_files:
             # Obtener ruta relativa
-            archivo_relativo = os.path.relpath(archivo_path, '/app')
+            archivo_relativo = os.path.relpath(archivo_path, base_dir)
             
             # Determinar categoría basada en la estructura de carpetas
             if '/admin/' in archivo_relativo:
@@ -170,7 +174,9 @@ class Command(BaseCommand):
                 continue
             
             # Verificar si el archivo existe
-            archivo_path = os.path.join('/app', doc_data['archivo_markdown'])  # Para Docker
+            archivo_path = os.path.join(base_dir, doc_data['archivo_markdown'])
+            if not os.path.exists(archivo_path):
+                archivo_path = os.path.join('/app', doc_data['archivo_markdown'])
             if not os.path.exists(archivo_path):
                 self.stdout.write(
                     self.style.WARNING(f"⚠️  Archivo no encontrado: {doc_data['archivo_markdown']}")

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="rounded-2xl bg-gradient-to-r from-[#343a40] via-[#3e454c] to-[#4c545c] text-white p-6 md:p-8 mb-6 shadow-md">
+  <div class="max-w-4xl">
+    <p class="text-sm uppercase tracking-[0.2em] text-white/60 mb-2">Centre d'informes</p>
+    <h1 class="text-2xl md:text-4xl font-semibold flex items-center gap-3 mb-3">
+      <i class="bi bi-grid-1x2 text-[#4e9b77]"></i>Panell d'Informes
+    </h1>
+    <p class="text-white/75">Accés ràpid als informes operatius i executius disponibles segons els teus permisos.</p>
+  </div>
+</section>
+
+<section class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+  <article class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+    <p class="text-sm text-gray-500 mb-1">Informes disponibles</p>
+    <p class="text-3xl font-semibold text-[#343a40]">{{ total_reports }}</p>
+  </article>
+  <article class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+    <p class="text-sm text-gray-500 mb-1">Tipologia</p>
+    <p class="text-3xl font-semibold text-[#343a40]">{% if admin_cards %}4{% else %}3{% endif %}</p>
+    <p class="text-xs text-gray-500 mt-1">operatiu, rendiment, executiu{% if admin_cards %} i control{% endif %}</p>
+  </article>
+  <article class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+    <p class="text-sm text-gray-500 mb-1">Format exportable</p>
+    <p class="text-3xl font-semibold text-[#343a40]">CSV</p>
+    <p class="text-xs text-gray-500 mt-1">tots els informes inclouen exportació</p>
+  </article>
+</section>
+
+<section class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-4 mb-8">
+  {% for card in report_cards %}
+  <a href="{% url card.url_name %}" class="group flex items-center gap-4 bg-white border-l-4 rounded-xl shadow-sm px-5 py-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200" style="border-left-color: {{ card.accent }};">
+    <div class="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 transition-colors" style="background: color-mix(in srgb, {{ card.accent }} 12%, white 88%);">
+      <i class="bi {{ card.icon }} text-xl" style="color: {{ card.accent }};"></i>
+    </div>
+    <div class="flex-1 min-w-0">
+      <p class="font-semibold text-gray-800 text-sm">{{ card.title }}</p>
+      <p class="text-gray-400 text-xs">{{ card.description }}</p>
+    </div>
+    <i class="bi bi-chevron-right text-gray-300 group-hover:text-gray-500 transition-colors"></i>
+  </a>
+  {% endfor %}
+</section>
+
+{% if admin_cards %}
+<section class="mb-8">
+  <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">Admin Hores</h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {% for card in admin_cards %}
+    <a href="{% url card.url_name %}" class="group flex items-center gap-4 bg-white border-l-4 rounded-xl shadow-sm px-5 py-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200" style="border-left-color: {{ card.accent }};">
+      <div class="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 transition-colors" style="background: color-mix(in srgb, {{ card.accent }} 12%, white 88%);">
+        <i class="bi {{ card.icon }} text-xl" style="color: {{ card.accent }};"></i>
+      </div>
+      <div class="flex-1 min-w-0">
+        <p class="font-semibold text-gray-800 text-sm">{{ card.title }}</p>
+        <p class="text-gray-400 text-xs">{{ card.description }}</p>
+      </div>
+      <i class="bi bi-chevron-right text-gray-300 group-hover:text-gray-500 transition-colors"></i>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-2">
+  <article class="rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2.5 text-[13px] leading-snug text-emerald-900">
+    <h3 class="font-semibold mb-0.5">Visió operativa</h3>
+    <p>Detecta desviacions i sobrecàrregues del dia a dia.</p>
+  </article>
+  <article class="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2.5 text-[13px] leading-snug text-amber-900">
+    <h3 class="font-semibold mb-0.5">Visió econòmica</h3>
+    <p>Posa el focus en costos reals, marge i risc.</p>
+  </article>
+  <article class="rounded-lg border border-sky-200 bg-sky-50 px-3 py-2.5 text-[13px] leading-snug text-sky-900">
+    <h3 class="font-semibold mb-0.5">Visió directiva</h3>
+    <p>Resumeix el mes i ajuda a prioritzar desviacions.</p>
+  </article>
+</section>
+{% endblock %}

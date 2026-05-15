@@ -1,468 +1,332 @@
-{% extends "base.html" %} {% load static %} {% block extra_head %}
-<style>
-  /* Usar el mismo color del navbar para las cabeceras y elementos principales */
-  .navbar-color {
-    background-color: #343a40 !important;
-    color: white !important;
-  }
-  .badge-navbar-color {
-    background-color: #343a40 !important;
-    color: white !important;
-  }
-</style>
-{% endblock %} {% block content %}
-<div class="container mt-4">
-  <div
-    class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4"
-  >
-    <h2 class="mb-0"><i class="bi bi-graph-up"></i> Estadístiques - Admin</h2>
-    <div class="d-flex gap-2">
-      <a
-        href="{% url 'carregahores:admin_totes' %}"
-        class="btn btn-outline-secondary"
-      >
-        <i class="bi bi-list"></i> Totes les Càrregues
-      </a>
-      <a href="{% url 'carregahores:meves' %}" class="btn btn-outline-primary">
-        <i class="bi bi-person"></i> Les Meves
-      </a>
-    </div>
-  </div>
+{% extends "base.html" %}
+{% load widget_tweaks %}
 
-  <!-- Formulario de filtros -->
-  <div class="card mb-4">
-    <div class="card-header navbar-color text-white">
-      <h5 class="mb-0"><i class="bi bi-funnel"></i> Filtres</h5>
+{% block content %}
+<div class="space-y-6">
+  <section class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400">Admin Hores</p>
+      <h1 class="mt-1 flex items-center gap-3 text-2xl font-semibold text-[#343a40]">
+        <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#343a40] text-white shadow-sm">
+          <i class="bi bi-graph-up text-xl"></i>
+        </span>
+        Estadístiques
+      </h1>
+      <p class="mt-2 max-w-3xl text-sm text-gray-500">
+        Lectura operativa de càrregues per usuari, recurs, client, projecte i evolució mensual.
+      </p>
     </div>
-    <div class="card-body">
-      <form method="get" id="filterForm">
-        <div class="row g-3">
-          <div class="col-md-2">
-            <label for="{{ filter_form.any.id_for_label }}" class="form-label"
-              >{{ filter_form.any.label }}</label
-            >
-            {{ filter_form.any }}
-          </div>
-          <div class="col-md-2">
-            <label for="{{ filter_form.mes.id_for_label }}" class="form-label"
-              >{{ filter_form.mes.label }}</label
-            >
-            {{ filter_form.mes }}
-          </div>
-          <div class="col-md-2">
-            <label
-              for="{{ filter_form.client.id_for_label }}"
-              class="form-label"
-              >{{ filter_form.client.label }}</label
-            >
-            {{ filter_form.client }}
-          </div>
-          <div class="col-md-2">
-            <label
-              for="{{ filter_form.projecte.id_for_label }}"
-              class="form-label"
-              >{{ filter_form.projecte.label }}</label
-            >
-            {{ filter_form.projecte }}
-          </div>
-          <div class="col-md-2">
-            <label
-              for="{{ filter_form.pressupost.id_for_label }}"
-              class="form-label"
-              >{{ filter_form.pressupost.label }}</label
-            >
-            {{ filter_form.pressupost }}
-          </div>
-          <div class="col-md-2">
-            <label
-              for="{{ filter_form.recurs.id_for_label }}"
-              class="form-label"
-              >{{ filter_form.recurs.label }}</label
-            >
-            {{ filter_form.recurs }}
-          </div>
-          <div class="col-md-2">
-            <label
-              for="{{ filter_form.usuari.id_for_label }}"
-              class="form-label"
-              >{{ filter_form.usuari.label }}</label
-            >
-            {{ filter_form.usuari }}
-          </div>
-          <div class="col-md-10 d-flex align-items-end gap-2">
-            <button type="submit" class="btn btn-primary">
-              <i class="bi bi-search"></i> Aplicar Filtres
-            </button>
-            <a
-              href="{% url 'carregahores:admin_stats' %}"
-              class="btn btn-secondary"
-            >
-              <i class="bi bi-x-circle"></i> Netejar Filtres
-            </a>
-          </div>
+    <div class="flex flex-wrap gap-2">
+      <a href="{% url 'pressupostos:informes_index' %}" class="btn btn-sm border border-gray-300 bg-white text-gray-600 hover:bg-gray-100">
+        <i class="bi bi-arrow-left mr-1"></i>Informes
+      </a>
+      <a href="{% url 'carregahores:admin_totes' %}" class="btn btn-sm border border-[#343a40] bg-white text-[#343a40] hover:bg-gray-100">
+        <i class="bi bi-list mr-1"></i>Totes les Càrregues
+      </a>
+      <a href="{% url 'carregahores:meves' %}" class="btn btn-sm border-none bg-[#343a40] text-white hover:bg-[#495057]">
+        <i class="bi bi-person mr-1"></i>Les Meves
+      </a>
+    </div>
+  </section>
+
+  <section class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <article class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm md:col-span-1 xl:col-span-2">
+      <p class="text-sm text-gray-500">Hores totals</p>
+      <p class="mt-1 text-2xl font-semibold text-[#343a40]">{{ total_general }} h</p>
+      <p class="mt-2 text-xs text-gray-400">{% if filter_form.is_bound %}Resultat amb filtres aplicats.{% else %}Sense filtres: visió global del sistema.{% endif %}</p>
+    </article>
+    <article class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+      <p class="text-sm text-gray-500">Registres</p>
+      <p class="mt-1 text-2xl font-semibold text-[#343a40]">{{ total_registres }}</p>
+    </article>
+    <article class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+      <p class="text-sm text-gray-500">Mitjana</p>
+      <p class="mt-1 text-2xl font-semibold text-[#343a40]">
+        {% if total_registres > 0 %}
+          {% widthratio total_general total_registres 1 %} h
+        {% else %}
+          0 h
+        {% endif %}
+      </p>
+    </article>
+  </section>
+
+  <section class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm" x-data="{ open: {% if filter_form.is_bound %}true{% else %}false{% endif %} }">
+    <button type="button" @click="open = !open" class="flex w-full items-center justify-between px-5 py-4 text-left hover:bg-gray-50 transition-colors">
+      <div>
+        <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-500"><i class="bi bi-funnel mr-2 text-[#4e9b77]"></i>Filtres</h2>
+        <p class="mt-1 text-sm text-gray-400">Creua any, mes, client, projecte, pressupost, recurs i usuari per llegir desviacions operatives.</p>
+      </div>
+      <i class="bi text-gray-400 transition-transform duration-200" :class="open ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+    </button>
+    <div x-show="open" x-cloak x-collapse class="border-t border-gray-100 px-5 py-5">
+      <form method="get" id="filterForm" class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div>
+          <label for="{{ filter_form.any.id_for_label }}" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500">{{ filter_form.any.label }}</label>
+          {{ filter_form.any|add_class:"select select-bordered w-full" }}
+        </div>
+        <div>
+          <label for="{{ filter_form.mes.id_for_label }}" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500">{{ filter_form.mes.label }}</label>
+          {{ filter_form.mes|add_class:"select select-bordered w-full" }}
+        </div>
+        <div>
+          <label for="{{ filter_form.client.id_for_label }}" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500">{{ filter_form.client.label }}</label>
+          {{ filter_form.client|add_class:"select select-bordered w-full" }}
+        </div>
+        <div>
+          <label for="{{ filter_form.projecte.id_for_label }}" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500">{{ filter_form.projecte.label }}</label>
+          {{ filter_form.projecte|add_class:"select select-bordered w-full" }}
+        </div>
+        <div>
+          <label for="{{ filter_form.pressupost.id_for_label }}" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500">{{ filter_form.pressupost.label }}</label>
+          {{ filter_form.pressupost|add_class:"select select-bordered w-full" }}
+        </div>
+        <div>
+          <label for="{{ filter_form.recurs.id_for_label }}" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500">{{ filter_form.recurs.label }}</label>
+          {{ filter_form.recurs|add_class:"select select-bordered w-full" }}
+        </div>
+        <div>
+          <label for="{{ filter_form.usuari.id_for_label }}" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500">{{ filter_form.usuari.label }}</label>
+          {{ filter_form.usuari|add_class:"select select-bordered w-full" }}
+        </div>
+        <div class="flex items-end gap-2">
+          <button type="submit" class="btn btn-sm border-none bg-[#4e9b77] text-white hover:bg-[#3d7a5e]">
+            <i class="bi bi-search mr-1"></i>Aplicar filtres
+          </button>
+          <a href="{% url 'carregahores:admin_stats' %}" class="btn btn-sm border border-gray-300 bg-white text-gray-600 hover:bg-gray-100">
+            <i class="bi bi-x-circle mr-1"></i>Netejar
+          </a>
         </div>
       </form>
     </div>
-  </div>
+  </section>
 
-  <!-- Resum general -->
-  <div class="row mb-4">
-    <div class="col-md-6">
-      <div class="card navbar-color text-white">
-        <div class="card-body text-center">
-          <h3>
-            <i class="bi bi-clock-fill"></i> {{ total_general }} hores totals
-          </h3>
-          <p class="mb-0">
-            Registrades{% if filter_form.is_bound %} (amb filtres aplicats){% endif %}
-          </p>
-        </div>
+  <section class="grid grid-cols-1 gap-6 xl:grid-cols-2">
+    <article class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+      <div class="border-b border-gray-100 px-5 py-4">
+        <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-500">Per Usuari</h2>
       </div>
-    </div>
-    <div class="col-md-6">
-      <div class="card navbar-color text-white">
-        <div class="card-body text-center">
-          <h3>
-            <i class="bi bi-list-check"></i> {{ total_registres }} registres
-          </h3>
-          <p class="mb-0">
-            Total de càrregues{% if filter_form.is_bound %} (filtrades){% endif %}
-          </p>
-        </div>
+      {% if stats_per_user %}
+      <div class="overflow-x-auto">
+        <table class="table table-sm w-full text-sm">
+          <thead>
+            <tr class="bg-[#343a40] text-xs uppercase tracking-wide text-white">
+              <th>Usuari</th>
+              <th class="text-center">Hores</th>
+              <th class="text-center">Registres</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for stat in stats_per_user %}
+            <tr class="hover:bg-gray-50">
+              <td class="font-medium text-gray-800">{% if stat.usuari__first_name %}{{ stat.usuari__first_name }} {{ stat.usuari__last_name }}{% else %}{{ stat.usuari__username }}{% endif %}</td>
+              <td class="text-center"><span class="inline-flex rounded-full bg-[#343a40] px-2.5 py-1 text-xs font-medium text-white">{{ stat.total_hores|default:0 }} h</span></td>
+              <td class="text-center"><span class="inline-flex rounded-full bg-gray-200 px-2.5 py-1 text-xs font-medium text-gray-700">{{ stat.total_registres }}</span></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
       </div>
-    </div>
-  </div>
+      {% else %}
+      <div class="px-5 py-8 text-sm text-gray-400">No hi ha dades disponibles.</div>
+      {% endif %}
+    </article>
 
-  <div class="row">
-    <!-- Estadístiques per usuari -->
-    <div class="col-md-6 mb-4">
-      <div class="card">
-        <div class="card-header navbar-color text-white">
-          <h5 class="mb-0"><i class="bi bi-people"></i> Per Usuari</h5>
-        </div>
-        <div class="card-body">
-          {% if stats_per_user %}
-          <div class="table-responsive">
-            <table class="table table-sm">
-              <thead>
-                <tr>
-                  <th>Usuari</th>
-                  <th class="text-center">Hores</th>
-                  <th class="text-center">Registres</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for stat in stats_per_user %}
-                <tr>
-                  <td>
-                    <strong>
-                      {% if stat.usuari__first_name %} {{
-                      stat.usuari__first_name }} {{ stat.usuari__last_name }} {%
-                      else %} {{ stat.usuari__username }} {% endif %}
-                    </strong>
-                  </td>
-                  <td class="text-center">
-                    <span class="badge badge-navbar-color"
-                      >{{ stat.total_hores|default:0 }} h</span
-                    >
-                  </td>
-                  <td class="text-center">
-                    <span class="badge bg-secondary"
-                      >{{ stat.total_registres }}</span
-                    >
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-          {% else %}
-          <p class="text-muted">No hi ha dades disponibles</p>
-          {% endif %}
-        </div>
+    <article class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+      <div class="border-b border-gray-100 px-5 py-4">
+        <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-500">Per Recurs</h2>
       </div>
-    </div>
+      {% if stats_per_recurso %}
+      <div class="overflow-x-auto">
+        <table class="table table-sm w-full text-sm">
+          <thead>
+            <tr class="bg-[#343a40] text-xs uppercase tracking-wide text-white">
+              <th>Recurs</th>
+              <th class="text-center">Hores</th>
+              <th class="text-center">Registres</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for stat in stats_per_recurso %}
+            <tr class="hover:bg-gray-50">
+              <td class="font-medium text-gray-800">{{ stat.linia__recurs__nom|default:"Sense recurs" }}</td>
+              <td class="text-center"><span class="inline-flex rounded-full bg-[#343a40] px-2.5 py-1 text-xs font-medium text-white">{{ stat.total_hores|default:0 }} h</span></td>
+              <td class="text-center"><span class="inline-flex rounded-full bg-gray-200 px-2.5 py-1 text-xs font-medium text-gray-700">{{ stat.total_registres }}</span></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="px-5 py-8 text-sm text-gray-400">No hi ha dades disponibles.</div>
+      {% endif %}
+    </article>
+  </section>
 
-    <!-- Estadístiques per recurs -->
-    <div class="col-md-6 mb-4">
-      <div class="card">
-        <div class="card-header navbar-color text-white">
-          <h5 class="mb-0"><i class="bi bi-gear"></i> Per Recurs</h5>
-        </div>
-        <div class="card-body">
-          {% if stats_per_recurso %}
-          <div class="table-responsive">
-            <table class="table table-sm">
-              <thead>
-                <tr>
-                  <th>Recurs</th>
-                  <th class="text-center">Hores</th>
-                  <th class="text-center">Registres</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for stat in stats_per_recurso %}
-                <tr>
-                  <td>
-                    <strong>{{ stat.linia__recurs__nom|default:"Sense recurs" }}</strong>
-                  </td>
-                  <td class="text-center">
-                    <span class="badge badge-navbar-color"
-                      >{{ stat.total_hores|default:0 }} h</span
-                    >
-                  </td>
-                  <td class="text-center">
-                    <span class="badge bg-secondary"
-                      >{{ stat.total_registres }}</span
-                    >
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-          {% else %}
-          <p class="text-muted">No hi ha dades disponibles</p>
-          {% endif %}
-        </div>
-      </div>
+  <section class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+    <div class="border-b border-gray-100 px-5 py-4">
+      <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-500">Per Mes</h2>
     </div>
-  </div>
+    {% if stats_per_month %}
+    <div class="overflow-x-auto">
+      <table class="table w-full text-sm">
+        <thead>
+          <tr class="bg-[#343a40] text-xs uppercase tracking-wide text-white">
+            <th>Mes</th>
+            <th class="text-center">Hores</th>
+            <th class="text-center">Registres</th>
+            <th class="text-center">Mitjana per Registre</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for stat in stats_per_month %}
+          <tr class="hover:bg-gray-50">
+            <td class="font-medium text-gray-800">{{ stat.mes|date:"F Y" }}</td>
+            <td class="text-center"><span class="inline-flex rounded-full bg-[#343a40] px-2.5 py-1 text-xs font-medium text-white">{{ stat.total_hores|default:0 }} h</span></td>
+            <td class="text-center"><span class="inline-flex rounded-full bg-gray-200 px-2.5 py-1 text-xs font-medium text-gray-700">{{ stat.total_registres }}</span></td>
+            <td class="text-center">
+              {% if stat.total_registres > 0 %}
+              <span class="inline-flex rounded-full bg-[#4e9b77] px-2.5 py-1 text-xs font-medium text-white">{% widthratio stat.total_hores stat.total_registres 1 %} h</span>
+              {% else %}
+              <span class="inline-flex rounded-full bg-gray-200 px-2.5 py-1 text-xs font-medium text-gray-700">0 h</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="px-5 py-8 text-sm text-gray-400">No hi ha dades disponibles.</div>
+    {% endif %}
+  </section>
 
-  <!-- Estadístiques per mes -->
-  <div class="row">
-    <div class="col-12 mb-4">
-      <div class="card">
-        <div class="card-header navbar-color text-white">
-          <h5 class="mb-0"><i class="bi bi-calendar-month"></i> Per Mes</h5>
-        </div>
-        <div class="card-body">
-          {% if stats_per_month %}
-          <div class="table-responsive">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Mes</th>
-                  <th class="text-center">Hores</th>
-                  <th class="text-center">Registres</th>
-                  <th class="text-center">Mitjana per Registre</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for stat in stats_per_month %}
-                <tr>
-                  <td>
-                    <strong>{{ stat.mes|date:"F Y" }}</strong>
-                  </td>
-                  <td class="text-center">
-                    <span class="badge badge-navbar-color fs-6"
-                      >{{ stat.total_hores|default:0 }} h</span
-                    >
-                  </td>
-                  <td class="text-center">
-                    <span class="badge bg-secondary fs-6"
-                      >{{ stat.total_registres }}</span
-                    >
-                  </td>
-                  <td class="text-center">
-                    {% if stat.total_registres > 0 %}
-                    <span class="badge badge-navbar-color fs-6">
-                      {% widthratio stat.total_hores stat.total_registres 1 %} h
-                    </span>
-                    {% else %}
-                    <span class="badge bg-secondary fs-6">0 h</span>
-                    {% endif %}
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-          {% else %}
-          <p class="text-muted">No hi ha dades disponibles</p>
-          {% endif %}
-        </div>
+  <section class="grid grid-cols-1 gap-6 xl:grid-cols-2">
+    <article class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+      <div class="border-b border-gray-100 px-5 py-4">
+        <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-500">Per Client</h2>
       </div>
-    </div>
-  </div>
+      {% if stats_per_client %}
+      <div class="overflow-x-auto">
+        <table class="table table-sm w-full text-sm">
+          <thead>
+            <tr class="bg-[#343a40] text-xs uppercase tracking-wide text-white">
+              <th>Client</th>
+              <th class="text-center">Hores</th>
+              <th class="text-center">Registres</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for stat in stats_per_client %}
+            <tr class="hover:bg-gray-50">
+              <td class="font-medium text-gray-800">{{ stat.pressupost__client__nom_client|default:"Sense client" }}</td>
+              <td class="text-center"><span class="inline-flex rounded-full bg-[#343a40] px-2.5 py-1 text-xs font-medium text-white">{{ stat.total_hores|default:0 }} h</span></td>
+              <td class="text-center"><span class="inline-flex rounded-full bg-gray-200 px-2.5 py-1 text-xs font-medium text-gray-700">{{ stat.total_registres }}</span></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="px-5 py-8 text-sm text-gray-400">No hi ha dades disponibles.</div>
+      {% endif %}
+    </article>
 
-  <!-- Estadístiques per client i projecte -->
-  <div class="row">
-    <!-- Estadístiques per client -->
-    <div class="col-md-6 mb-4">
-      <div class="card">
-        <div class="card-header navbar-color text-white">
-          <h5 class="mb-0"><i class="bi bi-building"></i> Per Client</h5>
-        </div>
-        <div class="card-body">
-          {% if stats_per_client %}
-          <div class="table-responsive">
-            <table class="table table-sm">
-              <thead>
-                <tr>
-                  <th>Client</th>
-                  <th class="text-center">Hores</th>
-                  <th class="text-center">Registres</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for stat in stats_per_client %}
-                <tr>
-                  <td>
-                    <strong>{{ stat.pressupost__client__nom_client|default:"Sense client" }}</strong>
-                  </td>
-                  <td class="text-center">
-                    <span class="badge badge-navbar-color"
-                      >{{ stat.total_hores|default:0 }} h</span
-                    >
-                  </td>
-                  <td class="text-center">
-                    <span class="badge bg-secondary"
-                      >{{ stat.total_registres }}</span
-                    >
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-          {% else %}
-          <p class="text-muted">No hi ha dades disponibles</p>
-          {% endif %}
-        </div>
+    <article class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+      <div class="border-b border-gray-100 px-5 py-4">
+        <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-500">Per Projecte</h2>
       </div>
-    </div>
-
-    <!-- Estadístiques per projecte -->
-    <div class="col-md-6 mb-4">
-      <div class="card">
-        <div class="card-header navbar-color text-white">
-          <h5 class="mb-0"><i class="bi bi-folder"></i> Per Projecte</h5>
-        </div>
-        <div class="card-body">
-          {% if stats_per_projecte %}
-          <div class="table-responsive">
-            <table class="table table-sm">
-              <thead>
-                <tr>
-                  <th>Projecte</th>
-                  <th class="text-center">Hores</th>
-                  <th class="text-center">Registres</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for stat in stats_per_projecte %}
-                <tr>
-                  <td>
-                    <strong>{{ stat.pressupost__projecte__nom|default:"Sense projecte" }}</strong>
-                  </td>
-                  <td class="text-center">
-                    <span class="badge badge-navbar-color"
-                      >{{ stat.total_hores|default:0 }} h</span
-                    >
-                  </td>
-                  <td class="text-center">
-                    <span class="badge bg-secondary"
-                      >{{ stat.total_registres }}</span
-                    >
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-          {% else %}
-          <p class="text-muted">No hi ha dades disponibles</p>
-          {% endif %}
-        </div>
+      {% if stats_per_projecte %}
+      <div class="overflow-x-auto">
+        <table class="table table-sm w-full text-sm">
+          <thead>
+            <tr class="bg-[#343a40] text-xs uppercase tracking-wide text-white">
+              <th>Projecte</th>
+              <th class="text-center">Hores</th>
+              <th class="text-center">Registres</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for stat in stats_per_projecte %}
+            <tr class="hover:bg-gray-50">
+              <td class="font-medium text-gray-800">{{ stat.pressupost__projecte__nom|default:"Sense projecte" }}</td>
+              <td class="text-center"><span class="inline-flex rounded-full bg-[#343a40] px-2.5 py-1 text-xs font-medium text-white">{{ stat.total_hores|default:0 }} h</span></td>
+              <td class="text-center"><span class="inline-flex rounded-full bg-gray-200 px-2.5 py-1 text-xs font-medium text-gray-700">{{ stat.total_registres }}</span></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
       </div>
-    </div>
-  </div>
+      {% else %}
+      <div class="px-5 py-8 text-sm text-gray-400">No hi ha dades disponibles.</div>
+      {% endif %}
+    </article>
+  </section>
 </div>
-{% endblock %} {% block extra_scripts %}
+{% endblock %}
+
+{% block extra_scripts %}
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const clientSelect = document.getElementById("id_client");
-    const projecteSelect = document.getElementById("id_projecte");
-    const pressupostSelect = document.getElementById("id_pressupost");
+  document.addEventListener('DOMContentLoaded', function () {
+    const clientSelect = document.getElementById('id_client');
+    const projecteSelect = document.getElementById('id_projecte');
+    const pressupostSelect = document.getElementById('id_pressupost');
 
     if (!clientSelect || !projecteSelect || !pressupostSelect) {
-      console.log("Filtros no encontrados");
       return;
     }
 
-    // Guardar opciones originales
     const originalProjectes = Array.from(projecteSelect.options);
     const originalPressupostos = Array.from(pressupostSelect.options);
 
-    // Cuando cambia el cliente
-    clientSelect.addEventListener("change", function () {
+    clientSelect.addEventListener('change', function () {
       const clientId = this.value;
 
       if (!clientId) {
-        // Restaurar todos los proyectos
-        projecteSelect.innerHTML = "";
-        originalProjectes.forEach((opt) =>
-          projecteSelect.add(opt.cloneNode(true)),
-        );
-        projecteSelect.value = "";
+        projecteSelect.innerHTML = '';
+        originalProjectes.forEach((option) => projecteSelect.add(option.cloneNode(true)));
+        projecteSelect.value = '';
         projecteSelect.disabled = false;
 
-        // Restaurar presupuestos
-        pressupostSelect.innerHTML = "";
-        originalPressupostos.forEach((opt) =>
-          pressupostSelect.add(opt.cloneNode(true)),
-        );
-        pressupostSelect.value = "";
+        pressupostSelect.innerHTML = '';
+        originalPressupostos.forEach((option) => pressupostSelect.add(option.cloneNode(true)));
+        pressupostSelect.value = '';
         return;
       }
 
-      // Cargar proyectos del cliente
       fetch(`/carrega-hores/ajax/stats/projectes/?client_id=${clientId}`)
         .then((response) => response.json())
         .then((projectes) => {
-          projecteSelect.innerHTML =
-            '<option value="">Tots els projectes</option>';
-          projectes.forEach((p) => {
-            const option = new Option(p.nom, p.id);
-            projecteSelect.add(option);
+          projecteSelect.innerHTML = '<option value="">Tots els projectes</option>';
+          projectes.forEach((projecte) => {
+            projecteSelect.add(new Option(projecte.nom, projecte.id));
           });
           projecteSelect.disabled = false;
-
-          // Limpiar presupuesto
-          pressupostSelect.innerHTML =
-            '<option value="">Tots els pressupostos</option>';
-          pressupostSelect.value = "";
+          pressupostSelect.innerHTML = '<option value="">Tots els pressupostos</option>';
+          pressupostSelect.value = '';
         })
-        .catch((err) => console.error("Error cargando proyectos:", err));
+        .catch((error) => console.error('Error cargando proyectos:', error));
     });
 
-    // Cuando cambia el proyecto
-    projecteSelect.addEventListener("change", function () {
+    projecteSelect.addEventListener('change', function () {
       const projecteId = this.value;
 
       if (!projecteId) {
-        // Restaurar presupuestos
-        pressupostSelect.innerHTML = "";
-        originalPressupostos.forEach((opt) =>
-          pressupostSelect.add(opt.cloneNode(true)),
-        );
-        pressupostSelect.value = "";
+        pressupostSelect.innerHTML = '';
+        originalPressupostos.forEach((option) => pressupostSelect.add(option.cloneNode(true)));
+        pressupostSelect.value = '';
         return;
       }
 
-      // Cargar presupuestos del proyecto
       fetch(`/carrega-hores/ajax/stats/pressupostos/?projecte_id=${projecteId}`)
         .then((response) => response.json())
         .then((pressupostos) => {
-          pressupostSelect.innerHTML =
-            '<option value="">Tots els pressupostos</option>';
-          pressupostos.forEach((p) => {
-            const option = new Option(p.nom || `Pressupost #${p.id}`, p.id);
-            pressupostSelect.add(option);
+          pressupostSelect.innerHTML = '<option value="">Tots els pressupostos</option>';
+          pressupostos.forEach((pressupost) => {
+            pressupostSelect.add(new Option(pressupost.nom || `Pressupost #${pressupost.id}`, pressupost.id));
           });
         })
-        .catch((err) => console.error("Error cargando presupuestos:", err));
+        .catch((error) => console.error('Error cargando presupuestos:', error));
     });
   });
 </script>

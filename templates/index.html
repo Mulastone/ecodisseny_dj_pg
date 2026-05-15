@@ -3,242 +3,96 @@
 
 {% block title %}Ecodisseny - Inici{% endblock %}
 
-{% block extra_head %}
-<style>
-  .welc            <div class="col-md-6 mb-4">
-              <div class="card feature-card">
-                <div class="card-body text-center">
-                  <div class="feature-icon text-warning">
-                    <i class="fas fa-cog"></i>
-                  </div>
-                  <h5 class="card-title">Admin</h5>
-                  <p class="card-text">Accés a l'administració completa del sistema.</p>
-                  <a href="{% url 'admin:index' %}" class="btn btn-dark">Admin</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 mb-4">
-              <div class="card feature-card">
-                <div class="card-body text-center">
-                  <div class="feature-icon text-purple">
-                    <i class="fas fa-book"></i>
-                  </div>
-                  <h5 class="card-title">Documentació</h5>
-                  <p class="card-text">Centre de documentació i ajuda del sistema.</p>
-                  <a href="{% url 'documentacion:index' %}" class="btn btn-outline-dark">Documentació</a>
-                </div>
-              </div>
-            </div>r {
-    padding-top: 30px;
-  }
-  .logo {
-    max-width: 180px;
-  }
-  .feature-card {
-    border: 1px solid #dee2e6;
-    border-radius: 15px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-    height: 100%;
-    background: white;
-  }
-  .feature-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    border-color: #2c3e50;
-  }
-  .feature-icon {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    color: #2c3e50;
-  }
-  .text-purple {
-    color: #6f42c1 !important;
-  }
-  .user-welcome {
-    background-color: #343a40;
-    color: white;
-    border-radius: 15px;
-    padding: 2rem;
-    margin-bottom: 2rem;
-    text-align: center;
-  }
-  .stats-card {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    color: #2c3e50;
-    border: 1px solid #dee2e6;
-    border-radius: 15px;
-    padding: 1.5rem;
-    text-align: center;
-  }
-  .btn-dark-custom {
-    background: #2c3e50;
-    border: none;
-    color: white;
-  }
-  .btn-dark-custom:hover {
-    background: #34495e;
-    color: white;
-  }
-  .btn-light-custom {
-    background: white;
-    border: 1px solid #2c3e50;
-    color: #2c3e50;
-  }
-  .btn-light-custom:hover {
-    background: #2c3e50;
-    color: white;
-  }
-  .btn-outline-dark-custom {
-    background: transparent;
-    border: 1px solid #2c3e50;
-    color: #2c3e50;
-  }
-  .btn-outline-dark-custom:hover {
-    background: #2c3e50;
-    color: white;
-  }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="welcome-container">
-  {% if user.is_authenticated %}
-    <div class="user-welcome">
-      <img src="{% static 'logo_ecodisseny_positiu.png' %}" alt="Logo Ecodisseny" class="logo mb-3" style="filter: brightness(0) invert(1);" />
-      <h2 class="mb-2">Benvingut/da, {{ user.get_full_name|default:user.username }}!</h2>
-      <p class="mb-0">
-        {% if user.is_superuser %}
-          🔑 Administrador del Sistema - Accés complet a totes les funcionalitats
-        {% else %}
-          👤 Usuari del Sistema - Gestiona les teves hores de treball
-        {% endif %}
-      </p>
-    </div>
-
-    <div class="row">
-      {% if user.is_superuser %}
-        <!-- Panel para Administradores -->
-        <div class="col-lg-12">
-          <h4 class="mb-4"><i class="fas fa-tachometer-alt me-2"></i>Panel d'Administració</h4>
-          <div class="row">
-            <div class="col-md-6 mb-4">
-              <div class="card feature-card">
-                <div class="card-body text-center">
-                  <div class="feature-icon text-success">
-                    <i class="fas fa-chart-bar"></i>
-                  </div>
-                  <h5 class="card-title">Estadístiques</h5>
-                  <p class="card-text">Consulta les estadístiques de càrrega d'hores.</p>
-                  <a href="{% url 'carregahores:admin_stats' %}" class="btn btn-dark-custom">Veure Estadístiques</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 mb-4">
-              <div class="card feature-card">
-                <div class="card-body text-center">
-                  <div class="feature-icon text-info">
-                    <i class="fas fa-users"></i>
-                  </div>
-                  <h5 class="card-title">Totes les Càrregues</h5>
-                  <p class="card-text">Gestiona totes les càrregues d'hores dels usuaris.</p>
-                  <a href="{% url 'carregahores:admin_totes' %}" class="btn btn-outline-dark-custom">Gestionar</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 mb-4">
-              <div class="card feature-card">
-                <div class="card-body text-center">
-                  <div class="feature-icon text-warning">
-                    <i class="fas fa-file-invoice-dollar"></i>
-                  </div>
-                  <h5 class="card-title">Pressupostos</h5>
-                  <p class="card-text">Gestiona els pressupostos i projectes.</p>
-                  <a href="{% url 'pressupostos:list' %}" class="btn btn-light-custom">Pressupostos</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6 mb-4">
-              <div class="card feature-card">
-                <div class="card-body text-center">
-                  <div class="feature-icon text-dark">
-                    <i class="fas fa-cog"></i>
-                  </div>
-                  <h5 class="card-title">Admin</h5>
-                  <p class="card-text">Accés a l'administració completa del sistema.</p>
-                  <a href="{% url 'admin:index' %}" class="btn btn-dark">Admin</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+{% if user.is_authenticated %}
+  <section class="rounded-2xl bg-gradient-to-r from-[#343a40] via-[#3e454c] to-[#4c545c] text-white p-6 md:p-8 mb-6 shadow-md">
+    <p class="text-sm uppercase tracking-[0.2em] text-white/60 mb-2">Panell principal</p>
+    <h1 class="text-2xl md:text-4xl font-semibold">Bon dia, {{ user.get_full_name|default:user.username }}</h1>
+    <p class="text-white/75 mt-3 text-sm md:text-base">
+      {% if request.user.is_superuser %}
+        Administrador del Sistema · Accés complet a totes les funcionalitats.
       {% else %}
-        <!-- Panel para Usuarios Normales -->
-        <div class="col-lg-12">
-          <h4 class="mb-4"><i class="fas fa-clock me-2"></i>Gestió d'Hores</h4>
-          <div class="row">
-            <div class="col-md-4 mb-4">
-              <div class="card feature-card">
-                <div class="card-body text-center">
-                  <div class="feature-icon text-primary">
-                    <i class="fas fa-plus-circle"></i>
-                  </div>
-                  <h5 class="card-title">Carregar Hores</h5>
-                  <p class="card-text">Registra les hores treballades en projectes.</p>
-                  <a href="{% url 'carregahores:nova' %}" class="btn btn-dark-custom">Carregar Hores</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4 mb-4">
-              <div class="card feature-card">
-                <div class="card-body text-center">
-                  <div class="feature-icon text-info">
-                    <i class="fas fa-list-alt"></i>
-                  </div>
-                  <h5 class="card-title">Les Meves Hores</h5>
-                  <p class="card-text">Consulta el teu registre d'hores.</p>
-                  <a href="{% url 'carregahores:meves' %}" class="btn btn-outline-dark-custom">Veure Hores</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4 mb-4">
-              <div class="card feature-card">
-                <div class="card-body text-center">
-                  <div class="feature-icon text-purple">
-                    <i class="fas fa-book"></i>
-                  </div>
-                  <h5 class="card-title">Documentació</h5>
-                  <p class="card-text">Guies i ajuda per utilitzar el sistema.</p>
-                  <a href="{% url 'documentacion:index' %}" class="btn btn-outline-dark-custom">Documentació</a>
-                </div>
-              </div>
-            </div>
-          </div>
+        Usuari del Sistema · Accions ràpides segons el teu perfil d'accés.
+      {% endif %}
+    </p>
+  </section>
+
+  <section class="mb-6">
+    <div class="mb-4">
+      <h2 class="text-xl font-semibold text-gray-800">Accions principals</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      {% if request.user.is_superuser %}
+      <a href="{% url 'pressupostos:list' %}" class="group rounded-3xl border border-gray-200 bg-white p-7 min-h-[190px] shadow-md hover:border-[#6c757d] hover:bg-[#6c757d]/[0.03] hover:shadow-xl hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6c757d] focus-visible:ring-offset-2 transition-all duration-200 flex flex-col justify-center">
+        <div class="w-16 h-16 rounded-2xl bg-[#6c757d]/10 flex items-center justify-center mb-4 group-hover:bg-[#6c757d]/20 transition-colors">
+          <i class="bi bi-file-earmark-text-fill text-[#6c757d] text-3xl"></i>
         </div>
+        <h2 class="text-2xl font-semibold text-gray-800">Pressupostos</h2>
+        <p class="text-base text-gray-500 mt-2">Gestió completa de pressupostos.</p>
+        <span class="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-[#343a40] bg-gray-100 rounded-xl px-4 py-2 w-fit group-hover:bg-[#343a40] group-hover:text-white transition-colors">
+          Obrir
+          <i class="bi bi-arrow-right"></i>
+        </span>
+      </a>
+      {% endif %}
+
+      <a href="{% if request.user.is_superuser %}{% url 'carregahores:admin_totes' %}{% else %}{% url 'carregahores:nova' %}{% endif %}" class="group rounded-3xl border border-gray-200 bg-white p-7 min-h-[190px] shadow-md hover:border-[#4e9b77] hover:bg-[#4e9b77]/[0.03] hover:shadow-xl hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4e9b77] focus-visible:ring-offset-2 transition-all duration-200 flex flex-col justify-center">
+        <div class="w-16 h-16 rounded-2xl bg-[#4e9b77]/10 flex items-center justify-center mb-4 group-hover:bg-[#4e9b77]/20 transition-colors">
+          <i class="bi bi-clock-history text-[#4e9b77] text-3xl"></i>
+        </div>
+        <h2 class="text-2xl font-semibold text-gray-800">Carrega Hores</h2>
+        <p class="text-base text-gray-500 mt-2">
+          {% if request.user.is_superuser %}
+            Revisió i operativa de càrregues.
+          {% else %}
+            Registre ràpid de les teves hores.
+          {% endif %}
+        </p>
+        <span class="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-[#2d6a4f] bg-[#4e9b77]/10 rounded-xl px-4 py-2 w-fit group-hover:bg-[#4e9b77] group-hover:text-white transition-colors">
+          Anar-hi
+          <i class="bi bi-arrow-right"></i>
+        </span>
+      </a>
+
+      {% if request.user.is_superuser or perms.pressupostos.view_hores_report or perms.pressupostos.view_rentabilitat_report or perms.pressupostos.view_productivitat_report or perms.pressupostos.view_executiu_report %}
+      <a href="{% url 'pressupostos:informes_index' %}" class="group rounded-3xl border border-gray-200 bg-white p-7 min-h-[190px] shadow-md hover:border-sky-500 hover:bg-sky-50/40 hover:shadow-xl hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500 focus-visible:ring-offset-2 transition-all duration-200 flex flex-col justify-center">
+        <div class="w-16 h-16 rounded-2xl bg-sky-100 flex items-center justify-center mb-4 group-hover:bg-sky-200 transition-colors">
+          <i class="bi bi-grid-1x2 text-sky-700 text-3xl"></i>
+        </div>
+        <h2 class="text-2xl font-semibold text-gray-800">Informes</h2>
+        <p class="text-base text-gray-500 mt-2">Accés a informes disponibles per permisos.</p>
+        <span class="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-sky-700 bg-sky-100 rounded-xl px-4 py-2 w-fit group-hover:bg-sky-700 group-hover:text-white transition-colors">
+          Veure informes
+          <i class="bi bi-arrow-right"></i>
+        </span>
+      </a>
+      {% endif %}
+
+      {% if request.user.is_superuser %}
+      <a href="{% url 'admin:index' %}" class="group rounded-3xl border border-gray-200 bg-white p-7 min-h-[190px] shadow-md hover:border-gray-600 hover:bg-gray-50 hover:shadow-xl hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-600 focus-visible:ring-offset-2 transition-all duration-200 flex flex-col justify-center">
+        <div class="w-16 h-16 rounded-2xl bg-gray-100 flex items-center justify-center mb-4 group-hover:bg-gray-200 transition-colors">
+          <i class="bi bi-gear-fill text-gray-600 text-3xl"></i>
+        </div>
+        <h2 class="text-2xl font-semibold text-gray-800">Admin</h2>
+        <p class="text-base text-gray-500 mt-2">Administració tècnica del sistema.</p>
+        <span class="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-gray-700 bg-gray-100 rounded-xl px-4 py-2 w-fit group-hover:bg-gray-700 group-hover:text-white transition-colors">
+          Entrar a Admin
+          <i class="bi bi-arrow-right"></i>
+        </span>
+      </a>
       {% endif %}
     </div>
-  {% else %}
-    <!-- Para usuarios no autenticados -->
-    <div class="text-center">
-      <img src="{% static 'logo_ecodisseny_positiu.png' %}" alt="Logo Ecodisseny" class="logo mb-4" />
-      <h1 class="mb-3">Benvinguts a Ecodisseny</h1>
-      <p class="lead mb-4">Sistema de Gestió de Projectes i Hores</p>
-      
-      <div class="row justify-content-center">
-        <div class="col-md-6">
-          <div class="card feature-card">
-            <div class="card-body text-center">
-              <div class="feature-icon text-primary">
-                <i class="fas fa-sign-in-alt"></i>
-              </div>
-              <h5 class="card-title">Iniciar Sessió</h5>
-              <p class="card-text">Accedeix al teu compte per gestionar hores i projectes.</p>
-              <a href="{% url 'login' %}" class="btn btn-dark-custom btn-lg">Iniciar Sessió</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  {% endif %}
-</div>
+  </section>
+
+{% else %}
+  <!-- Usuari no autenticat -->
+  <div class="flex flex-col items-center justify-center py-20 text-center">
+    <img src="{% static 'logo_ecodisseny_positiu.png' %}" alt="Logo Ecodisseny" class="h-20 w-auto mb-6" />
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">Benvinguts a Ecodisseny</h1>
+    <p class="text-gray-500 mb-8">Sistema de Gestió de Projectes i Hores</p>
+    <a href="{% url 'login' %}" class="btn bg-[#343a40] text-white border-none hover:bg-[#495057] px-8">
+      <i class="bi bi-box-arrow-in-right mr-2"></i>Iniciar Sessió
+    </a>
+  </div>
+{% endif %}
 {% endblock %}

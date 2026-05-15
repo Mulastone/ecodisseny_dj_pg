@@ -1,222 +1,142 @@
 {% extends "base.html" %}
-{% load static %}
 
 {% block title %}{{ titulo_pagina }} - Ecodisseny{% endblock %}
 
 {% block extra_head %}
 <style>
-    .documento-content {
-        line-height: 1.7;
-        font-size: 1.1rem;
-    }
-    .documento-content h1, .documento-content h2, .documento-content h3 {
-        color: #2c3e50;
-        margin-top: 2rem;
-        margin-bottom: 1rem;
-    }
-    .documento-content pre {
-        background: #f8f9fa;
-        padding: 1rem;
-        border-radius: 5px;
-        border-left: 4px solid #007bff;
-    }
-    .documento-content blockquote {
-        border-left: 4px solid #6c757d;
-        padding-left: 1rem;
-        margin: 1rem 0;
-        font-style: italic;
-        background: #f8f9fa;
-        padding: 1rem;
-        border-radius: 0 5px 5px 0;
-    }
-    .documento-header {
-        background: #343a40;
-        color: white;
-        padding: 40px 0;
-        margin-bottom: 30px;
-    }
-    .feedback-section {
-        background: #f8f9fa;
-        border-radius: 10px;
-        padding: 20px;
-        margin-top: 30px;
-    }
-    .documento-relacionado {
-        transition: transform 0.2s;
-    }
-    .documento-relacionado:hover {
-        transform: translateY(-2px);
-    }
-    .tabla-contenidos {
-        background: #f8f9fa;
-        border-radius: 10px;
-        padding: 20px;
-        position: sticky;
-        top: 20px;
-    }
-    .btn-feedback {
-        margin: 2px;
-    }
+  .documento-content {
+    line-height: 1.7;
+    font-size: 1.02rem;
+  }
+  .documento-content h1,
+  .documento-content h2,
+  .documento-content h3 {
+    color: #2c3e50;
+    margin-top: 1.6rem;
+    margin-bottom: 0.8rem;
+  }
+  .documento-content pre {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-left: 4px solid #4e9b77;
+    border-radius: 10px;
+    padding: 0.9rem;
+    overflow-x: auto;
+  }
+  .documento-content blockquote {
+    border-left: 4px solid #94a3b8;
+    background: #f8fafc;
+    border-radius: 0 10px 10px 0;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+    font-style: italic;
+  }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-    <!-- Header del Documento -->
-    <div class="documento-header">
-        <div class="container">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb text-white-50">
-                    <li class="breadcrumb-item">
-                        <a href="{% url 'documentacion:index' %}" class="text-white">
-                            <i class="bi bi-house"></i> Documentació
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a href="{% url 'documentacion:categoria' categoria.slug %}" class="text-white">
-                            {{ categoria.nombre }}
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item active text-white">{{ documento.titulo }}</li>
-                </ol>
-            </nav>
-            
-            <div class="row align-items-center">
-                <div class="col-md-8">
-                    <h1 class="display-5 mb-3">{{ documento.titulo }}</h1>
-                    {% if documento.resumen %}
-                        <p class="lead">{{ documento.resumen }}</p>
-                    {% endif %}
-                </div>
-                <div class="col-md-4">
-                    <div class="bg-white bg-opacity-25 rounded p-3">
-                        <div class="mb-2">
-                            <small><i class="bi bi-person"></i> Autor:</small><br>
-                            <strong>
-                            {% if documento.autor %}
-                                {{ documento.autor.get_full_name|default:documento.autor.username }}
-                            {% else %}
-                                Sistema
-                            {% endif %}
-                            </strong>
-                        </div>
-                        <div class="mb-2">
-                            <small><i class="bi bi-calendar"></i> Actualitzat:</small><br>
-                            <strong>{{ documento.fecha_actualizacion|date:"d/m/Y" }}</strong>
-                        </div>
-                        {% if documento.palabras_clave %}
-                        <div>
-                            <small><i class="bi bi-tags"></i> Etiquetes:</small><br>
-                            {% for palabra in documento.get_palabras_clave_lista %}
-                                <span class="badge bg-light text-dark me-1">{{ palabra }}</span>
-                            {% endfor %}
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
+<section class="rounded-2xl bg-[#343a40] text-white p-6 md:p-8 mb-6 shadow-md">
+  <nav class="text-sm text-white/80 mb-2">
+    <a href="{% url 'documentacion:index' %}" class="hover:text-white"><i class="bi bi-house mr-1"></i>Documentació</a>
+    <span class="mx-2">/</span>
+    <a href="{% url 'documentacion:categoria' categoria.slug %}" class="hover:text-white">{{ categoria.nombre }}</a>
+    <span class="mx-2">/</span>
+    <span>{{ documento.titulo }}</span>
+  </nav>
+  <h1 class="text-2xl md:text-3xl font-semibold mb-2">{{ documento.titulo }}</h1>
+  {% if documento.resumen %}<p class="text-white/80">{{ documento.resumen }}</p>{% endif %}
+</section>
+
+<section class="grid grid-cols-1 xl:grid-cols-12 gap-6">
+  <article class="xl:col-span-8 space-y-6">
+    <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+      <div class="documento-content">{{ contenido_html|safe }}</div>
     </div>
 
-    <div class="container">
-        <div class="row">
-            <!-- Contenido Principal -->
-            <div class="col-lg-9">
-                <div class="documento-content">
-                    {{ contenido_html|safe }}
-                </div>
+    <div class="rounded-2xl border border-gray-200 bg-gray-50 p-5 shadow-sm">
+      <h2 class="text-lg font-semibold text-gray-800 mb-1"><i class="bi bi-chat-dots mr-1 text-[#4e9b77]"></i>T'ha estat útil aquest document?</h2>
+      <p class="text-sm text-gray-600 mb-4">El teu feedback ens ajuda a millorar la documentació.</p>
 
-                <!-- Sección de Feedback -->
-                <div class="feedback-section">
-                    <h4><i class="bi bi-chat-dots"></i> T'ha estat útil aquest document?</h4>
-                    <p class="text-muted">El teu feedback ens ajuda a millorar la documentació.</p>
-                    
-                    <div id="feedback-buttons" class="mb-3">
-                        <button class="btn btn-success btn-feedback" data-tipo="util">
-                            <i class="bi bi-hand-thumbs-up"></i> Útil
-                        </button>
-                        <button class="btn btn-warning btn-feedback" data-tipo="mejoras">
-                            <i class="bi bi-exclamation-triangle"></i> Necessita millores
-                        </button>
-                        <button class="btn btn-danger btn-feedback" data-tipo="incorrecto">
-                            <i class="bi bi-hand-thumbs-down"></i> Incorrecte
-                        </button>
-                        <button class="btn btn-info btn-feedback" data-tipo="sugerencia">
-                            <i class="bi bi-lightbulb"></i> Suggeriment
-                        </button>
-                    </div>
+      <div id="feedback-buttons" class="flex flex-wrap gap-2 mb-3">
+        <button class="btn btn-sm bg-green-600 hover:bg-green-700 text-white border-none btn-feedback" data-tipo="util"><i class="bi bi-hand-thumbs-up mr-1"></i>Útil</button>
+        <button class="btn btn-sm bg-amber-500 hover:bg-amber-600 text-white border-none btn-feedback" data-tipo="mejoras"><i class="bi bi-exclamation-triangle mr-1"></i>Necessita millores</button>
+        <button class="btn btn-sm bg-red-500 hover:bg-red-600 text-white border-none btn-feedback" data-tipo="incorrecto"><i class="bi bi-hand-thumbs-down mr-1"></i>Incorrecte</button>
+        <button class="btn btn-sm bg-sky-600 hover:bg-sky-700 text-white border-none btn-feedback" data-tipo="sugerencia"><i class="bi bi-lightbulb mr-1"></i>Suggeriment</button>
+      </div>
 
-                    <div id="feedback-form" class="d-none">
-                        <div class="mb-3">
-                            <label for="comentario" class="form-label">Comentari (opcional):</label>
-                            <textarea id="comentario" class="form-control" rows="3" 
-                                      placeholder="Deixa'ns els teus comentaris per millorar aquest document..."></textarea>
-                        </div>
-                        <button id="enviar-feedback" class="btn btn-primary">
-                            <i class="bi bi-send"></i> Enviar Feedback
-                        </button>
-                        <button id="cancelar-feedback" class="btn btn-secondary">
-                            Cancel·lar
-                        </button>
-                    </div>
-
-                    {% if feedback_usuario %}
-                    <div class="alert alert-info mt-3">
-                        <i class="bi bi-info-circle"></i>
-                        Ja has enviat feedback per a aquest document: <strong>{{ feedback_usuario.get_tipo_display }}</strong>
-                        {% if feedback_usuario.comentario %}
-                            <br><small>{{ feedback_usuario.comentario }}</small>
-                        {% endif %}
-                    </div>
-                    {% endif %}
-
-                    <div id="feedback-message" class="mt-3"></div>
-                </div>
-            </div>
-
-            <!-- Sidebar -->
-            <div class="col-lg-3">
-                <!-- Documentos Relacionados -->
-                {% if documentos_relacionados %}
-                <div class="tabla-contenidos mb-4">
-                    <h5><i class="bi bi-bookmark"></i> Documents Relacionats</h5>
-                    <hr>
-                    {% for doc in documentos_relacionados %}
-                    <div class="documento-relacionado mb-2">
-                        <a href="{% url 'documentacion:documento' categoria.slug doc.slug %}" 
-                           class="text-decoration-none">
-                            <small class="text-muted d-block">{{ doc.titulo }}</small>
-                        </a>
-                    </div>
-                    {% endfor %}
-                </div>
-                {% endif %}
-
-                <!-- Navegación -->
-                <div class="tabla-contenidos">
-                    <h5><i class="bi bi-compass"></i> Navegació</h5>
-                    <hr>
-                    <div class="d-grid gap-2">
-                        <a href="{% url 'documentacion:categoria' categoria.slug %}" 
-                           class="btn btn-outline-primary btn-sm">
-                            <i class="bi bi-arrow-left"></i> Tornar a {{ categoria.nombre }}
-                        </a>
-                        <a href="{% url 'documentacion:index' %}" 
-                           class="btn btn-outline-secondary btn-sm">
-                            <i class="bi bi-house"></i> Inici de Documentació
-                        </a>
-                        <a href="{% url 'documentacion:busqueda' %}" 
-                           class="btn btn-outline-info btn-sm">
-                            <i class="bi bi-search"></i> Cercar Documents
-                        </a>
-                    </div>
-                </div>
-            </div>
+      <div id="feedback-form" class="hidden">
+        <label for="comentario" class="text-sm font-medium text-gray-700">Comentari (opcional)</label>
+        <textarea id="comentario" class="textarea textarea-bordered w-full mt-1" rows="3"
+                  placeholder="Deixa'ns els teus comentaris per millorar aquest document..."></textarea>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <button id="enviar-feedback" class="btn btn-sm bg-[#4e9b77] text-white border-none hover:bg-[#3d7a5e]">
+            <i class="bi bi-send mr-1"></i>Enviar feedback
+          </button>
+          <button id="cancelar-feedback" class="btn btn-sm btn-outline">Cancel·lar</button>
         </div>
-    </div>
-</div>
+      </div>
 
-<!-- JavaScript para Feedback -->
+      {% if feedback_usuario %}
+      <div class="mt-4 rounded-xl border border-blue-200 bg-blue-50 text-blue-800 px-4 py-3 text-sm">
+        Ja has enviat feedback: <strong>{{ feedback_usuario.get_tipo_display }}</strong>
+        {% if feedback_usuario.comentario %}<p class="mt-1">{{ feedback_usuario.comentario }}</p>{% endif %}
+      </div>
+      {% endif %}
+
+      <div id="feedback-message" class="mt-3"></div>
+    </div>
+  </article>
+
+  <aside class="xl:col-span-4 space-y-4">
+    <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm xl:sticky xl:top-6">
+      <h3 class="font-semibold text-gray-800 mb-3"><i class="bi bi-info-circle mr-1 text-[#4e9b77]"></i>Detalls</h3>
+      <div class="text-sm text-gray-600 space-y-2">
+        <p><i class="bi bi-folder mr-1"></i><strong>Categoria:</strong> {{ categoria.nombre }}</p>
+        <p><i class="bi bi-person mr-1"></i><strong>Autor:</strong>
+          {% if documento.autor %}
+            {{ documento.autor.get_full_name|default:documento.autor.username }}
+          {% else %}
+            Sistema
+          {% endif %}
+        </p>
+        <p><i class="bi bi-calendar mr-1"></i><strong>Actualitzat:</strong> {{ documento.fecha_actualizacion|date:"d/m/Y" }}</p>
+      </div>
+      {% if documento.palabras_clave %}
+      <div class="mt-4">
+        <p class="text-sm font-medium text-gray-700 mb-2">Etiquetes</p>
+        <div class="flex flex-wrap gap-1">
+          {% for palabra in documento.get_palabras_clave_lista %}
+            <span class="badge bg-gray-100 text-gray-700 border-none">{{ palabra }}</span>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    {% if documentos_relacionats %}
+    <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+      <h3 class="font-semibold text-gray-800 mb-3"><i class="bi bi-bookmark mr-1 text-[#4e9b77]"></i>Documents relacionats</h3>
+      <div class="space-y-2">
+        {% for doc in documentos_relacionats %}
+          <a href="{% url 'documentacion:documento' categoria.slug doc.slug %}" class="block rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-50">
+            {{ doc.titulo }}
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+      <h3 class="font-semibold text-gray-800 mb-3"><i class="bi bi-compass mr-1 text-[#4e9b77]"></i>Navegació</h3>
+      <div class="flex flex-col gap-2">
+        <a href="{% url 'documentacion:categoria' categoria.slug %}" class="btn btn-sm btn-outline"><i class="bi bi-arrow-left mr-1"></i>Tornar a {{ categoria.nombre }}</a>
+        <a href="{% url 'documentacion:index' %}" class="btn btn-sm btn-outline"><i class="bi bi-house mr-1"></i>Inici documentació</a>
+        <a href="{% url 'documentacion:busqueda' %}" class="btn btn-sm btn-outline"><i class="bi bi-search mr-1"></i>Cercar documents</a>
+      </div>
+    </div>
+  </aside>
+</section>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const feedbackButtons = document.querySelectorAll('.btn-feedback');
@@ -225,24 +145,22 @@ document.addEventListener('DOMContentLoaded', function() {
     const cancelarBtn = document.getElementById('cancelar-feedback');
     const comentarioTextarea = document.getElementById('comentario');
     const messageDiv = document.getElementById('feedback-message');
-    
+
     let tipoSeleccionado = '';
 
     feedbackButtons.forEach(btn => {
         btn.addEventListener('click', function() {
             tipoSeleccionado = this.dataset.tipo;
-            feedbackForm.classList.remove('d-none');
-            
-            // Resetear estilos
-            feedbackButtons.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
+            feedbackForm.classList.remove('hidden');
+            feedbackButtons.forEach(b => b.classList.remove('ring-2', 'ring-offset-1', 'ring-gray-400'));
+            this.classList.add('ring-2', 'ring-offset-1', 'ring-gray-400');
         });
     });
 
     cancelarBtn.addEventListener('click', function() {
-        feedbackForm.classList.add('d-none');
+        feedbackForm.classList.add('hidden');
         comentarioTextarea.value = '';
-        feedbackButtons.forEach(b => b.classList.remove('active'));
+        feedbackButtons.forEach(b => b.classList.remove('ring-2', 'ring-offset-1', 'ring-gray-400'));
         tipoSeleccionado = '';
     });
 
@@ -261,27 +179,15 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                messageDiv.innerHTML = `
-                    <div class="alert alert-success">
-                        <i class="bi bi-check-circle"></i> ${data.message}
-                    </div>
-                `;
-                feedbackForm.classList.add('d-none');
+                messageDiv.innerHTML = '<div class="rounded-xl border border-green-200 bg-green-50 text-green-800 px-4 py-3 text-sm"><i class="bi bi-check-circle mr-1"></i>' + data.message + '</div>';
+                feedbackForm.classList.add('hidden');
                 feedbackButtons.forEach(btn => btn.disabled = true);
             } else {
-                messageDiv.innerHTML = `
-                    <div class="alert alert-danger">
-                        <i class="bi bi-exclamation-circle"></i> ${data.error || 'Error al enviar feedback'}
-                    </div>
-                `;
+                messageDiv.innerHTML = '<div class="rounded-xl border border-red-200 bg-red-50 text-red-800 px-4 py-3 text-sm"><i class="bi bi-exclamation-circle mr-1"></i>' + (data.error || 'Error al enviar feedback') + '</div>';
             }
         })
-        .catch(error => {
-            messageDiv.innerHTML = `
-                <div class="alert alert-danger">
-                    <i class="bi bi-exclamation-circle"></i> Error de conexión
-                </div>
-            `;
+        .catch(() => {
+            messageDiv.innerHTML = '<div class="rounded-xl border border-red-200 bg-red-50 text-red-800 px-4 py-3 text-sm"><i class="bi bi-exclamation-circle mr-1"></i>Error de connexio</div>';
         });
     });
 });

@@ -1,186 +1,117 @@
 {% extends "base.html" %}
-{% load static %}
 
 {% block title %}{{ titulo_pagina }} - Ecodisseny{% endblock %}
 
-{% block extra_head %}
-<style>
-    .categoria-card {
-        transition: transform 0.2s, box-shadow 0.2s;
-        height: 100%;
-    }
-    .categoria-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    }
-    .documento-destacado {
-        border-left: 4px solid #007bff;
-        background-color: #f8f9fa;
-    }
-    .stats-card {
-        background: #343a40;
-        color: white;
-    }
-    .search-section {
-        background: #343a40;
-        color: white;
-        padding: 60px 0;
-        margin-bottom: 40px;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="container-fluid">
-    <!-- Hero Section con Búsqueda -->
-    <div class="search-section text-center">
-        <div class="container">
-            <h1 class="display-4 mb-4">
-                <i class="bi bi-book-half"></i> {{ titulo_pagina }}
-            </h1>
-            <p class="lead mb-4">Troba tota la informació que necessites</p>
-            
-            <form method="get" action="{% url 'documentacion:busqueda' %}" class="mx-auto" style="max-width: 600px;">
-                <div class="input-group input-group-lg">
-                    <input type="text" name="q" class="form-control" placeholder="Cerca a la documentació..." 
-                           value="{{ request.GET.q }}" required>
-                    <button class="btn btn-light" type="submit">
-                        <i class="bi bi-search"></i> Cercar
-                    </button>
-                </div>
-            </form>
+<section class="rounded-2xl bg-gradient-to-r from-[#343a40] via-[#3f464d] to-[#4a525a] text-white p-6 md:p-10 mb-6 shadow-md">
+  <div class="max-w-4xl">
+    <h1 class="text-2xl md:text-4xl font-semibold flex items-center gap-3 mb-3">
+      <i class="bi bi-book-half text-[#4e9b77]"></i>{{ titulo_pagina }}
+    </h1>
+    <p class="text-white/80 mb-5">Troba tota la informació que necessites en un únic espai.</p>
+    <form method="get" action="{% url 'documentacion:busqueda' %}" class="flex flex-col sm:flex-row gap-2 max-w-2xl">
+      <input type="text" name="q" value="{{ request.GET.q }}" required
+             class="input input-bordered w-full text-gray-800"
+             placeholder="Cerca a la documentació...">
+      <button type="submit" class="btn bg-[#4e9b77] text-white border-none hover:bg-[#3d7a5e]">
+        <i class="bi bi-search mr-1"></i>Cercar
+      </button>
+    </form>
+  </div>
+</section>
+
+<section class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+  <article class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+    <p class="text-sm text-gray-500 mb-1">Documents disponibles</p>
+    <p class="text-3xl font-semibold text-[#343a40]">{{ total_documents }}</p>
+  </article>
+  <article class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+    <p class="text-sm text-gray-500 mb-1">Categories</p>
+    <p class="text-3xl font-semibold text-[#343a40]">{{ categorias|length }}</p>
+  </article>
+  <article class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+    <p class="text-sm text-gray-500 mb-1">Documents destacats</p>
+    <p class="text-3xl font-semibold text-[#343a40]">{{ documentos_destacats|length }}</p>
+  </article>
+</section>
+
+<section class="mb-10">
+  <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+    <i class="bi bi-grid-3x3-gap text-[#4e9b77]"></i>Categories de documentació
+  </h2>
+
+  {% if categorias %}
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+      {% for categoria in categorias %}
+      <article class="rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden">
+        <div class="p-5">
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ categoria.nombre }}</h3>
+          <p class="text-sm text-gray-600 mb-4">{{ categoria.descripcion|default:"Sense descripció disponible" }}</p>
+          <div class="flex items-center justify-between text-sm">
+            <span class="text-gray-500">
+              <i class="bi bi-file-earmark-text mr-1"></i>{{ categoria.num_documentos }} document{{ categoria.num_documentos|pluralize:"s" }}
+            </span>
+            <span class="badge bg-[#e8f3ed] text-[#2d6a4f] border-none">{{ categoria.get_tipo_display }}</span>
+          </div>
         </div>
-    </div>
-
-    <div class="container">
-        <!-- Estadísticas Rápidas -->
-        <div class="row mb-5">
-            <div class="col-md-4">
-                <div class="card stats-card text-center p-4">
-                    <h3 class="mb-0">{{ total_documentos }}</h3>
-                    <p class="mb-0">Documents Disponibles</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card stats-card text-center p-4">
-                    <h3 class="mb-0">{{ categorias.count }}</h3>
-                    <p class="mb-0">Categories</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card stats-card text-center p-4">
-                    <h3 class="mb-0">{{ documentos_destacados.count }}</h3>
-                    <p class="mb-0">Documents Destacats</p>
-                </div>
-            </div>
+        <div class="px-5 pb-5">
+          <a href="{% url 'documentacion:categoria' categoria.slug %}"
+             class="btn btn-sm w-full bg-[#343a40] text-white border-none hover:bg-[#495057]">
+            Veure documents <i class="bi bi-arrow-right ml-1"></i>
+          </a>
         </div>
-
-        <!-- Categories Disponibles -->
-        <section class="mb-5">
-            <h2 class="mb-4">
-                <i class="bi bi-grid-3x3"></i> Categories de Documentació
-            </h2>
-            
-            {% if categorias %}
-                <div class="row">
-                    {% for categoria in categorias %}
-                    <div class="col-md-6 col-lg-4 mb-4">
-                        <div class="card categoria-card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">
-                                    {{ categoria.nombre }}
-                                </h5>
-                                <p class="card-text">{{ categoria.descripcion|default:"Sense descripció disponible" }}</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <small class="text-muted">
-                                        <i class="bi bi-file-earmark-text"></i>
-                                        {{ categoria.num_documentos }} document{{ categoria.num_documentos|pluralize:"s" }}
-                                    </small>
-                                    <span class="badge bg-primary">{{ categoria.get_tipo_display }}</span>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <a href="{% url 'documentacion:categoria' categoria.slug %}" 
-                                   class="btn btn-primary btn-sm w-100">
-                                    <i class="bi bi-arrow-right"></i> Veure Documents
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <div class="alert alert-info">
-                    <i class="bi bi-info-circle"></i>
-                    No hi ha categories de documentació disponibles per al teu perfil.
-                </div>
-            {% endif %}
-        </section>
-
-        <!-- Documents Destacats -->
-        {% if documentos_destacados %}
-        <section class="mb-5">
-            <h2 class="mb-4">
-                <i class="bi bi-star-fill text-warning"></i> Documents Destacats
-            </h2>
-            
-            <div class="row">
-                {% for documento in documentos_destacados %}
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card documento-destacado h-100">
-                        <div class="card-body">
-                            <h6 class="card-title">
-                                <a href="{% url 'documentacion:documento' documento.categoria.slug documento.slug %}" 
-                                   class="text-decoration-none">
-                                    {{ documento.titulo }}
-                                </a>
-                            </h6>
-                            <p class="card-text small">{{ documento.resumen|truncatewords:15 }}</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <small class="text-muted">
-                                    <i class="bi bi-folder"></i> {{ documento.categoria.nombre }}
-                                </small>
-                                <small class="text-muted">
-                                    <i class="bi bi-calendar"></i> {{ documento.fecha_actualizacion|date:"d/m/Y" }}
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </section>
-        {% endif %}
-
-        <!-- Enllaços Ràpids -->
-        <section class="mb-5">
-            <h2 class="mb-4">
-                <i class="bi bi-lightning-fill"></i> Accés Ràpid
-            </h2>
-            
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <a href="{% url 'documentacion:busqueda' %}" class="card text-decoration-none">
-                        <div class="card-body text-center">
-                            <i class="bi bi-search fs-1 text-primary"></i>
-                            <h5 class="mt-2">Cerca Avançada</h5>
-                            <p class="text-muted">Cercar a tota la documentació</p>
-                        </div>
-                    </a>
-                </div>
-                {% if user.is_staff %}
-                <div class="col-md-6 mb-3">
-                    <a href="{% url 'documentacion:analytics' %}" class="card text-decoration-none">
-                        <div class="card-body text-center">
-                            <i class="bi bi-graph-up fs-1 text-success"></i>
-                            <h5 class="mt-2">Analytics</h5>
-                            <p class="text-muted">Estadístiques d'ús</p>
-                        </div>
-                    </a>
-                </div>
-                {% endif %}
-            </div>
-        </section>
+      </article>
+      {% endfor %}
     </div>
-</div>
+  {% else %}
+    <div class="alert bg-blue-50 border-blue-200 text-blue-800 rounded-xl">
+      <i class="bi bi-info-circle"></i>
+      <span>No hi ha categories de documentació disponibles per al teu perfil.</span>
+    </div>
+  {% endif %}
+</section>
+
+{% if documentos_destacats %}
+<section class="mb-10">
+  <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+    <i class="bi bi-star-fill text-amber-500"></i>Documents destacats
+  </h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+    {% for documento in documentos_destacats %}
+      <article class="rounded-2xl border border-gray-200 bg-white shadow-sm p-5">
+        <h3 class="font-semibold mb-2">
+          <a href="{% url 'documentacion:documento' documento.categoria.slug documento.slug %}" class="text-gray-800 hover:text-[#3d7a5e]">
+            {{ documento.titulo }}
+          </a>
+        </h3>
+        <p class="text-sm text-gray-600 mb-3">{{ documento.resumen|truncatewords:16 }}</p>
+        <div class="flex items-center justify-between text-xs text-gray-500">
+          <span><i class="bi bi-folder mr-1"></i>{{ documento.categoria.nombre }}</span>
+          <span><i class="bi bi-calendar mr-1"></i>{{ documento.fecha_actualizacion|date:"d/m/Y" }}</span>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<section class="mb-6">
+  <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+    <i class="bi bi-lightning-charge-fill text-[#4e9b77]"></i>Accés ràpid
+  </h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <a href="{% url 'documentacion:busqueda' %}" class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+      <p class="text-2xl text-[#343a40] mb-2"><i class="bi bi-search"></i></p>
+      <h3 class="font-semibold text-gray-800">Cerca avançada</h3>
+      <p class="text-sm text-gray-600">Cerca a tota la documentació</p>
+    </a>
+    {% if user.is_staff %}
+    <a href="{% url 'documentacion:analytics' %}" class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+      <p class="text-2xl text-[#4e9b77] mb-2"><i class="bi bi-graph-up"></i></p>
+      <h3 class="font-semibold text-gray-800">Analytics</h3>
+      <p class="text-sm text-gray-600">Estadístiques d'ús</p>
+    </a>
+    {% endif %}
+  </div>
+</section>
 {% endblock %}

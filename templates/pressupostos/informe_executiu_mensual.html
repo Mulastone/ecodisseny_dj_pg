@@ -5,91 +5,119 @@
 {% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="mb-0">Informe Executiu Mensual</h2>
+<section class="rounded-2xl bg-gradient-to-r from-[#343a40] via-[#3e454c] to-[#4c545c] text-white p-6 md:p-8 mb-6 shadow-md">
+  <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
     <div>
-      <a href="{% url 'pressupostos:informe_executiu_mensual_csv' %}{% if query_string %}?{{ query_string }}{% endif %}" class="btn btn-outline-dark">
-        <i class="bi bi-download"></i> CSV
-      </a>
+      <p class="text-sm uppercase tracking-[0.2em] text-white/60 mb-2">Informes</p>
+      <h1 class="text-2xl md:text-3xl font-semibold flex items-center gap-3"><i class="bi bi-bar-chart-line text-[#4e9b77]"></i>Informe Executiu Mensual</h1>
+      <p class="text-white/75 mt-2">Resum mensual d'hores, estat de pressupostos i projectes amb més desviació.</p>
     </div>
+    <a href="{% url 'pressupostos:informe_executiu_mensual_csv' %}{% if query_string %}?{{ query_string }}{% endif %}" class="btn bg-white text-[#343a40] border-none hover:bg-gray-100"><i class="bi bi-download mr-1"></i>Exportar CSV</a>
   </div>
+</section>
 
-  <form method="get" class="card card-body mb-3">
-    <div class="row g-2">
-      <div class="col-md-3">
-        <label for="id_mes" class="form-label">Mes (YYYY-MM)</label>
-        <input id="id_mes" type="text" name="mes" value="{{ mes }}" class="form-control form-control-sm monthpicker-report">
+<section class="rounded-2xl border border-gray-200 bg-white shadow-sm mb-4" x-data="{ open: {% if mes or filters.client_id or filters.projecte_id %}true{% else %}false{% endif %} }">
+  <button type="button" @click="open = !open" class="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-gray-50 rounded-2xl transition-colors">
+    <div>
+      <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-500"><i class="bi bi-funnel mr-2 text-[#4e9b77]"></i>Filtres</h2>
+      <p class="mt-1 text-sm text-gray-400">Canvia el mes analitzat i acota la lectura executiva per client o projecte.</p>
+    </div>
+    <i class="bi transition-transform duration-200" :class="open ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+  </button>
+  <div x-show="open" x-cloak x-collapse class="border-t border-gray-100 px-5 py-5">
+    <form method="get" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3">
+      <div>
+        <label for="id_mes" class="block text-xs font-semibold text-gray-500 mb-1">Mes</label>
+        <input id="id_mes" type="text" name="mes" value="{{ mes }}" class="input input-bordered input-sm w-full monthpicker-report">
       </div>
-      <div class="col-md-3">
-        <label for="id_client_id" class="form-label">Client</label>
-        <select id="id_client_id" name="client_id" class="form-select form-select-sm">
-          <option value="">Tots</option>
-          {% for id, nom in clients %}
-            <option value="{{ id }}" {% if filters.client_id == id|stringformat:"s" %}selected{% endif %}>{{ nom }}</option>
-          {% endfor %}
-        </select>
+      <div>
+        <label for="id_client_id" class="block text-xs font-semibold text-gray-500 mb-1">Client</label>
+        <select id="id_client_id" name="client_id" class="select select-bordered w-full select-sm"><option value="">Tots</option>{% for id, nom in clients %}<option value="{{ id }}" {% if filters.client_id == id|stringformat:"s" %}selected{% endif %}>{{ nom }}</option>{% endfor %}</select>
       </div>
-      <div class="col-md-3">
-        <label for="id_projecte_id" class="form-label">Projecte</label>
-        <select id="id_projecte_id" name="projecte_id" class="form-select form-select-sm">
-          <option value="">Tots</option>
-          {% for id, nom in projectes %}
-            <option value="{{ id }}" {% if filters.projecte_id == id|stringformat:"s" %}selected{% endif %}>{{ nom }}</option>
-          {% endfor %}
-        </select>
+      <div>
+        <label for="id_projecte_id" class="block text-xs font-semibold text-gray-500 mb-1">Projecte</label>
+        <select id="id_projecte_id" name="projecte_id" class="select select-bordered w-full select-sm"><option value="">Tots</option>{% for id, nom in projectes %}<option value="{{ id }}" {% if filters.projecte_id == id|stringformat:"s" %}selected{% endif %}>{{ nom }}</option>{% endfor %}</select>
+      </div>
+      <div class="flex flex-wrap gap-2 items-end">
+        <button class="btn btn-sm bg-[#343a40] text-white border-none hover:bg-[#495057]" type="submit"><i class="bi bi-search mr-1"></i>Aplicar filtres</button>
+        <a href="{% url 'pressupostos:informe_executiu_mensual' %}" class="btn btn-sm btn-outline"><i class="bi bi-x-circle mr-1"></i>Netejar</a>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section class="rounded-2xl bg-[#f7faf8] border border-[#dbe9e2] px-4 py-3 mb-6 text-sm text-gray-700">
+  Mes analitzat: <strong>{{ month_label }}</strong>
+</section>
+
+<section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 mb-6">
+  <article class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"><p class="text-sm text-gray-500">Hores planificades</p><p class="text-2xl font-semibold text-[#343a40]">{{ totals.hores_planificades|floatformat:2 }}</p></article>
+  <article class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"><p class="text-sm text-gray-500">Hores reals</p><p class="text-2xl font-semibold text-[#343a40]">{{ totals.hores_reals|floatformat:2 }}</p></article>
+  <article class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"><p class="text-sm text-gray-500">Desviació hores</p><p class="text-2xl font-semibold {% if totals.desviacio_hores > 0 %}text-amber-700{% elif totals.desviacio_hores < 0 %}text-sky-700{% else %}text-[#343a40]{% endif %}">{{ totals.desviacio_hores|floatformat:2 }}</p></article>
+  <article class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"><p class="text-sm text-gray-500">% progrés hores</p><p class="text-2xl font-semibold text-[#343a40]">{% if totals.percent_progres_hores is not None %}{{ totals.percent_progres_hores|floatformat:2 }}%{% else %}-{% endif %}</p></article>
+</section>
+
+<section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 mb-6">
+  <article class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"><p class="text-sm text-gray-500">Pressupostos totals</p><p class="text-xl font-semibold text-[#343a40]">{{ estat.total_pressupostos }}</p></article>
+  <article class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"><p class="text-sm text-gray-500">Tancats</p><p class="text-xl font-semibold text-emerald-700">{{ estat.total_tancats }}</p></article>
+  <article class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"><p class="text-sm text-gray-500">Oberts</p><p class="text-xl font-semibold text-amber-700">{{ estat.total_oberts }}</p></article>
+  <article class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"><p class="text-sm text-gray-500">% tancats</p><p class="text-xl font-semibold text-[#343a40]">{% if estat.percent_tancats is not None %}{{ estat.percent_tancats|floatformat:2 }}%{% else %}-{% endif %}</p></article>
+</section>
+
+<section class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm mb-6">
+  <div class="flex items-center justify-between gap-3 mb-3 flex-wrap">
+    <h2 class="font-semibold text-gray-800">Lectura ràpida del mes</h2>
+    <span class="text-sm text-gray-500">progressos clau</span>
+  </div>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+    <div>
+      <div class="flex justify-between text-sm text-gray-600 mb-1"><span>Execució d'hores</span><span>{% if totals.percent_progres_hores is not None %}{{ totals.percent_progres_hores|floatformat:2 }}%{% else %}-{% endif %}</span></div>
+      <div class="bg-gray-200 rounded-full h-3 overflow-hidden">
+        <div class="h-3 {% if totals.percent_progres_hores is not None and totals.percent_progres_hores >= 120 %}bg-red-500{% elif totals.percent_progres_hores is not None and totals.percent_progres_hores >= 100 %}bg-amber-500{% else %}bg-emerald-500{% endif %}" style="width: {% if totals.percent_progres_hores is None %}0{% elif totals.percent_progres_hores > 160 %}100{% else %}{{ totals.percent_progres_hores|floatformat:0 }}{% endif %}%;"></div>
       </div>
     </div>
-    <div class="d-flex gap-2 mt-3">
-      <button class="btn btn-dark btn-sm" type="submit"><i class="bi bi-search"></i> Aplicar</button>
-      <a href="{% url 'pressupostos:informe_executiu_mensual' %}" class="btn btn-outline-dark btn-sm"><i class="bi bi-x-circle"></i> Netejar</a>
-    </div>
-  </form>
-
-  <div class="alert alert-dark">Mes analitzat: <strong>{{ month_label }}</strong></div>
-
-  <div class="row g-3 mb-3">
-    <div class="col-md-3"><div class="card card-body"><small class="text-muted">Hores Planificades</small><h4 class="mb-0">{{ totals.hores_planificades|floatformat:2 }}</h4></div></div>
-    <div class="col-md-3"><div class="card card-body"><small class="text-muted">Hores Reals</small><h4 class="mb-0">{{ totals.hores_reals|floatformat:2 }}</h4></div></div>
-    <div class="col-md-3"><div class="card card-body"><small class="text-muted">Desviació Hores</small><h4 class="mb-0">{{ totals.desviacio_hores|floatformat:2 }}</h4></div></div>
-    <div class="col-md-3"><div class="card card-body"><small class="text-muted">% Progrés Hores</small><h4 class="mb-0">{% if totals.percent_progres_hores is not None %}{{ totals.percent_progres_hores|floatformat:2 }}%{% else %}-{% endif %}</h4></div></div>
-  </div>
-
-  <div class="row g-3 mb-4">
-    <div class="col-md-3"><div class="card card-body"><small class="text-muted">Pressupostos Totals</small><h5 class="mb-0">{{ estat.total_pressupostos }}</h5></div></div>
-    <div class="col-md-3"><div class="card card-body"><small class="text-muted">Tancats</small><h5 class="mb-0">{{ estat.total_tancats }}</h5></div></div>
-    <div class="col-md-3"><div class="card card-body"><small class="text-muted">Oberts</small><h5 class="mb-0">{{ estat.total_oberts }}</h5></div></div>
-    <div class="col-md-3"><div class="card card-body"><small class="text-muted">% Tancats</small><h5 class="mb-0">{% if estat.percent_tancats is not None %}{{ estat.percent_tancats|floatformat:2 }}%{% else %}-{% endif %}</h5></div></div>
-  </div>
-
-  <div class="card">
-    <div class="card-header fw-bold">Top 10 Projectes amb més desviació</div>
-    <div class="table-responsive">
-      <table class="table table-sm mb-0">
-        <thead>
-          <tr>
-            <th>Projecte</th>
-            <th class="text-end">Hores Planificades</th>
-            <th class="text-end">Hores Reals</th>
-            <th class="text-end">Desviació</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for row in top_projects %}
-            <tr>
-              <td>{{ row.projecte_nom }}</td>
-              <td class="text-end">{{ row.hores_planificades|floatformat:2 }}</td>
-              <td class="text-end">{{ row.hores_reals|floatformat:2 }}</td>
-              <td class="text-end">{{ row.desviacio|floatformat:2 }}</td>
-            </tr>
-          {% empty %}
-            <tr><td colspan="4" class="text-center">Sense dades per aquest mes/filtres.</td></tr>
-          {% endfor %}
-        </tbody>
-      </table>
+    <div>
+      <div class="flex justify-between text-sm text-gray-600 mb-1"><span>Percentatge de tancament</span><span>{% if estat.percent_tancats is not None %}{{ estat.percent_tancats|floatformat:2 }}%{% else %}-{% endif %}</span></div>
+      <div class="bg-gray-200 rounded-full h-3 overflow-hidden">
+        <div class="h-3 bg-[#4e9b77]" style="width: {% if estat.percent_tancats is None %}0{% else %}{{ estat.percent_tancats|floatformat:0 }}{% endif %}%;"></div>
+      </div>
     </div>
   </div>
-</div>
+</section>
+
+<section class="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+  <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between gap-3">
+    <h2 class="font-semibold text-gray-800">Top 10 projectes amb més desviació</h2>
+    <span class="text-sm text-gray-500">focus executiu</span>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="table table-zebra w-full">
+      <thead class="bg-[#343a40] text-white"><tr><th>Projecte</th><th class="text-right">Planificades</th><th class="text-right">Reals</th><th class="text-right">Desviació</th></tr></thead>
+      <tbody>
+        {% for row in top_projects %}
+        <tr>
+          <td>{{ row.projecte_nom }}</td>
+          <td class="text-right">{{ row.hores_planificades|floatformat:2 }}</td>
+          <td class="text-right">
+            <div>{{ row.hores_reals|floatformat:2 }}</div>
+            {% if row.hores_planificades > 0 %}
+            <div class="w-24 ml-auto mt-1 bg-gray-200 rounded-full h-1.5 overflow-hidden">
+              <div class="h-1.5 {% if row.hores_reals > row.hores_planificades %}bg-amber-500{% else %}bg-emerald-500{% endif %}" style="width: {% widthratio row.hores_reals row.hores_planificades 100 %}%;"></div>
+            </div>
+            {% endif %}
+          </td>
+          <td class="text-right {% if row.desviacio > 0 %}text-amber-700{% elif row.desviacio < 0 %}text-sky-700{% endif %}">
+            {{ row.desviacio|floatformat:2 }}
+            {% if row.desviacio > 0 %}<div class="text-[11px] text-amber-600">sobre execució</div>{% elif row.desviacio < 0 %}<div class="text-[11px] text-sky-600">per sota</div>{% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" class="text-center text-gray-500 py-8">Sense dades per aquest mes o filtres.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
 {% endblock %}
 
 {% block extra_scripts %}

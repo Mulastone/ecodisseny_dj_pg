@@ -1,283 +1,148 @@
 {% extends "base.html" %}
-{% load static %}
 
 {% block title %}{{ titulo_pagina }} - Ecodisseny{% endblock %}
 
-{% block extra_head %}
-<style>
-    .analytics-header {
-        background: #343a40;
-        color: white;
-        padding: 40px 0;
-        margin-bottom: 30px;
-    }
-    .stats-card {
-        background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-        border: none;
-        transition: transform 0.2s;
-    }
-    .stats-card:hover {
-        transform: translateY(-5px);
-    }
-    .popular-doc {
-        border-left: 4px solid #28a745;
-        background: #f8f9fa;
-    }
-    .feedback-item {
-        border-left: 4px solid #ffc107;
-        background: #fff9e6;
-    }
-    .feedback-util { border-left-color: #28a745; background: #f1f8e9; }
-    .feedback-mejoras { border-left-color: #ffc107; background: #fff9e6; }
-    .feedback-incorrecto { border-left-color: #dc3545; background: #f8d7da; }
-    .feedback-sugerencia { border-left-color: #17a2b8; background: #d1ecf1; }
-    
-    .chart-container {
-        background: white;
-        border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="container-fluid">
-    <!-- Header de Analytics -->
-    <div class="analytics-header">
-        <div class="container">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb text-white-50">
-                    <li class="breadcrumb-item">
-                        <a href="{% url 'documentacion:index' %}" class="text-white">
-                            <i class="bi bi-house"></i> Documentación
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item active text-white">Analytics</li>
-                </ol>
-            </nav>
-            
-            <div class="row align-items-center">
-                <div class="col-md-8">
-                    <h1 class="display-5 mb-2">
-                        <i class="bi bi-graph-up"></i> Analytics de Documentació
-                    </h1>
-                    <p class="lead mb-0">Estadístiques d'ús i feedback de la documentació</p>
-                </div>
-                <div class="col-md-4 text-end">
-                    <div class="d-inline-block bg-white bg-opacity-25 rounded p-3">
-                        <i class="bi bi-shield-check fs-1"></i>
-                        <div class="fw-bold">Panell Admin</div>
-                        <small>Només Administradors</small>
-                    </div>
-                </div>
-            </div>
-        </div>
+<section class="rounded-2xl bg-[#343a40] text-white p-6 md:p-8 mb-6 shadow-md">
+  <nav class="text-sm text-white/80 mb-2">
+    <a href="{% url 'documentacion:index' %}" class="hover:text-white"><i class="bi bi-house mr-1"></i>Documentació</a>
+    <span class="mx-2">/</span>
+    <span>Analytics</span>
+  </nav>
+  <div class="flex items-center justify-between flex-wrap gap-4">
+    <div>
+      <h1 class="text-2xl md:text-3xl font-semibold"><i class="bi bi-graph-up mr-2 text-[#4e9b77]"></i>Analytics de documentació</h1>
+      <p class="text-white/80 mt-1">Estadístiques d'ús i feedback.</p>
     </div>
-
-    <div class="container">
-    <!-- Estadístiques Generals -->
-        <div class="row mb-5">
-            <div class="col-md-3 mb-3">
-                <div class="card stats-card text-center p-4">
-                    <i class="bi bi-file-earmark-text fs-1 text-primary"></i>
-                    <h3 class="mt-2 mb-0">{{ stats_categorias|length }}</h3>
-                    <p class="mb-0">Categories Actives</p>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card stats-card text-center p-4">
-                    <i class="bi bi-eye fs-1 text-success"></i>
-                    <h3 class="mt-2 mb-0">
-                        {% with total_visitas=0 %}
-                            {% for cat in stats_categorias %}
-                                {% with total_visitas=total_visitas|add:cat.total_visitas %}{% endwith %}
-                            {% endfor %}
-                            {{ total_visitas }}
-                        {% endwith %}
-                    </h3>
-                    <p class="mb-0">Total Visites</p>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card stats-card text-center p-4">
-                    <i class="bi bi-chat-dots fs-1 text-warning"></i>
-                    <h3 class="mt-2 mb-0">{{ feedback_reciente.count }}</h3>
-                    <p class="mb-0">Feedback pendent</p>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
-                <div class="card stats-card text-center p-4">
-                    <i class="bi bi-star fs-1 text-info"></i>
-                    <h3 class="mt-2 mb-0">{{ documentos_populares.count }}</h3>
-                    <p class="mb-0">Docs Populars</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <!-- Documentos Más Visitados -->
-            <div class="col-md-6 mb-4">
-                <div class="chart-container">
-                    <h4 class="mb-4">
-                        <i class="bi bi-trophy"></i> Documents més visitats
-                    </h4>
-                    
-                    {% if documentos_populares %}
-                        {% for documento in documentos_populares %}
-                        <div class="popular-doc p-3 mb-2 rounded">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">
-                                        <a href="{% url 'documentacion:documento' documento.categoria.slug documento.slug %}" 
-                                           class="text-decoration-none">
-                                            {{ documento.titulo|truncatechars:40 }}
-                                        </a>
-                                    </h6>
-                                    <small class="text-muted">
-                                        <i class="bi bi-folder"></i> {{ documento.categoria.nombre }}
-                                    </small>
-                                </div>
-                                <div class="text-end">
-                                    <span class="badge bg-success fs-6">{{ documento.visitas }} visita{{ documento.visitas|pluralize }}</span>
-                                </div>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    {% else %}
-                        <div class="alert alert-info">
-                            <i class="bi bi-info-circle"></i>
-                            Encara no hi ha documents amb visites registrades.
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-
-            <!-- Estadísticas por Categoría -->
-            <div class="col-md-6 mb-4">
-                <div class="chart-container">
-                    <h4 class="mb-4">
-                        <i class="bi bi-pie-chart"></i> Estadístiques per Categoria
-                    </h4>
-                    
-                    {% if stats_categorias %}
-                        {% for categoria in stats_categorias %}
-                        <div class="mb-3 p-3 border rounded">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h6 class="mb-0">{{ categoria.nombre }}</h6>
-                                <span class="badge bg-primary">{{ categoria.get_tipo_display }}</span>
-                            </div>
-                            <div class="row text-center">
-                                <div class="col-6">
-                                    <small class="text-muted">Documents</small>
-                                    <div class="fw-bold text-primary">{{ categoria.total_docs }}</div>
-                                </div>
-                                <div class="col-6">
-                                    <small class="text-muted">Visites</small>
-                                    <div class="fw-bold text-success">{{ categoria.total_visitas }}</div>
-                                </div>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    {% else %}
-                        <div class="alert alert-info">
-                            <i class="bi bi-info-circle"></i>
-                            No hi ha categories disponibles.
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-
-        <!-- Feedback Reciente -->
-        <div class="row mt-4">
-            <div class="col-12">
-                <div class="chart-container">
-                    <h4 class="mb-4">
-                        <i class="bi bi-chat-square-dots"></i> Feedback Recent
-                        <span class="badge bg-warning">{{ feedback_reciente.count }} pendent{{ feedback_reciente.count|pluralize }}</span>
-                    </h4>
-                    
-                    {% if feedback_reciente %}
-                        <div class="row">
-                            {% for feedback in feedback_reciente %}
-                            <div class="col-md-6 mb-3">
-                                <div class="feedback-item feedback-{{ feedback.tipo }} p-3 rounded">
-                                    <div class="d-flex justify-content-between align-items-start mb-2">
-                                        <h6 class="mb-1">
-                                            <a href="{% url 'documentacion:documento' feedback.documento.categoria.slug feedback.documento.slug %}" 
-                                               class="text-decoration-none">
-                                                {{ feedback.documento.titulo|truncatechars:35 }}
-                                            </a>
-                                        </h6>
-                                        <span class="badge bg-secondary">{{ feedback.get_tipo_display }}</span>
-                                    </div>
-                                    
-                                    {% if feedback.comentario %}
-                                        <p class="mb-2 small">{{ feedback.comentario|truncatechars:100 }}</p>
-                                    {% endif %}
-                                    
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <small class="text-muted">
-                                            <i class="bi bi-person"></i> {{ feedback.usuario.get_full_name|default:feedback.usuario.username }}
-                                        </small>
-                                        <small class="text-muted">
-                                            <i class="bi bi-calendar"></i> {{ feedback.fecha|date:"d/m/Y H:i" }}
-                                        </small>
-                                    </div>
-                                    
-                                    <div class="mt-2">
-                                        <a href="/admin/documentacion/feedbackdocumentacion/{{ feedback.id }}/change/" 
-                                           class="btn btn-sm btn-outline-primary" target="_blank">
-                                            <i class="bi bi-gear"></i> Gestionar
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        
-                        <div class="text-center mt-3">
-                            <a href="/admin/documentacion/feedbackdocumentacion/" 
-                               class="btn btn-primary" target="_blank">
-                                <i class="bi bi-list"></i> Veure tot el Feedback a Admin
-                            </a>
-                        </div>
-                    {% else %}
-                        <div class="alert alert-success">
-                            <i class="bi bi-check-circle"></i>
-                            Excel·lent! No hi ha feedback pendent de revisar.
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-
-        <!-- Enlaces de Acción -->
-        <div class="row mt-5">
-            <div class="col-12">
-                <div class="d-flex justify-content-center gap-3">
-                    <a href="/admin/documentacion/documentomarkdown/" 
-                       class="btn btn-primary" target="_blank">
-                        <i class="bi bi-gear"></i> Gestionar Documents
-                    </a>
-                    <a href="/admin/documentacion/categoriadocumentacion/" 
-                       class="btn btn-secondary" target="_blank">
-                        <i class="bi bi-folder-gear"></i> Gestionar Categories
-                    </a>
-                    <a href="{% url 'documentacion:index' %}" class="btn btn-outline-primary">
-                        <i class="bi bi-arrow-left"></i> Tornar a Documentació
-                    </a>
-                </div>
-            </div>
-        </div>
+    <div class="rounded-xl bg-white/15 px-4 py-3 text-sm">
+      <p class="font-semibold">Panell administrador</p>
+      <p class="text-white/80">Només staff</p>
     </div>
-</div>
+  </div>
+</section>
+
+<section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+  <article class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+    <p class="text-sm text-gray-500">Categories actives</p>
+    <p class="text-3xl font-semibold text-[#343a40]">{{ stats_categorias|length }}</p>
+  </article>
+  <article class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+    <p class="text-sm text-gray-500">Documents populars</p>
+    <p class="text-3xl font-semibold text-[#343a40]">{{ documentos_populares.count }}</p>
+  </article>
+  <article class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+    <p class="text-sm text-gray-500">Feedback pendent</p>
+    <p class="text-3xl font-semibold text-[#343a40]">{{ feedback_reciente.count }}</p>
+  </article>
+  <article class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+    <p class="text-sm text-gray-500">Tipus de categories</p>
+    <p class="text-3xl font-semibold text-[#343a40]">{{ stats_categorias|length }}</p>
+  </article>
+</section>
+
+<section class="grid grid-cols-1 xl:grid-cols-2 gap-6 mb-8">
+  <article class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4"><i class="bi bi-trophy mr-1 text-[#4e9b77]"></i>Documents més visitats</h2>
+    {% if documentos_populares %}
+      <div class="space-y-2">
+      {% for documento in documentos_populares %}
+        <div class="rounded-xl border border-gray-100 bg-gray-50 px-4 py-3 flex items-center justify-between gap-2">
+          <div>
+            <a href="{% url 'documentacion:documento' documento.categoria.slug documento.slug %}" class="font-medium text-gray-800 hover:text-[#3d7a5e]">
+              {{ documento.titulo|truncatechars:40 }}
+            </a>
+            <p class="text-xs text-gray-500"><i class="bi bi-folder mr-1"></i>{{ documento.categoria.nombre }}</p>
+          </div>
+          <span class="badge bg-[#e8f3ed] text-[#2d6a4f] border-none">{{ documento.visitas }} visita{{ documento.visitas|pluralize }}</span>
+        </div>
+      {% endfor %}
+      </div>
+    {% else %}
+      <div class="alert bg-blue-50 border-blue-200 text-blue-800 rounded-xl">
+        <i class="bi bi-info-circle"></i><span>Encara no hi ha visites registrades.</span>
+      </div>
+    {% endif %}
+  </article>
+
+  <article class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4"><i class="bi bi-pie-chart mr-1 text-[#4e9b77]"></i>Estadístiques per categoria</h2>
+    {% if stats_categorias %}
+      <div class="space-y-2">
+      {% for categoria in stats_categorias %}
+        <div class="rounded-xl border border-gray-100 px-4 py-3">
+          <div class="flex items-center justify-between mb-2">
+            <p class="font-medium text-gray-800">{{ categoria.nombre }}</p>
+            <span class="badge bg-gray-100 text-gray-700 border-none">{{ categoria.get_tipo_display }}</span>
+          </div>
+          <div class="grid grid-cols-2 text-sm">
+            <div>
+              <p class="text-gray-500">Documents</p>
+              <p class="font-semibold text-[#343a40]">{{ categoria.total_docs }}</p>
+            </div>
+            <div>
+              <p class="text-gray-500">Visites</p>
+              <p class="font-semibold text-[#343a40]">{{ categoria.total_visitas }}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      </div>
+    {% else %}
+      <div class="alert bg-blue-50 border-blue-200 text-blue-800 rounded-xl">
+        <i class="bi bi-info-circle"></i><span>No hi ha categories disponibles.</span>
+      </div>
+    {% endif %}
+  </article>
+</section>
+
+<section class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm mb-8">
+  <h2 class="text-lg font-semibold text-gray-800 mb-4">
+    <i class="bi bi-chat-square-dots mr-1 text-[#4e9b77]"></i>Feedback recent
+    <span class="badge bg-amber-100 text-amber-800 border-none ml-1">{{ feedback_reciente.count }} pendent{{ feedback_reciente.count|pluralize }}</span>
+  </h2>
+
+  {% if feedback_reciente %}
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-3">
+      {% for feedback in feedback_reciente %}
+      <article class="rounded-xl border border-gray-200 p-4 {% if feedback.tipo == 'util' %}bg-green-50 border-green-200{% elif feedback.tipo == 'mejoras' %}bg-amber-50 border-amber-200{% elif feedback.tipo == 'incorrecto' %}bg-red-50 border-red-200{% else %}bg-sky-50 border-sky-200{% endif %}">
+        <div class="flex items-center justify-between gap-2 mb-2">
+          <a href="{% url 'documentacion:documento' feedback.documento.categoria.slug feedback.documento.slug %}" class="font-medium text-gray-800 hover:text-[#3d7a5e]">
+            {{ feedback.documento.titulo|truncatechars:38 }}
+          </a>
+          <span class="badge bg-gray-100 text-gray-700 border-none">{{ feedback.get_tipo_display }}</span>
+        </div>
+        {% if feedback.comentario %}<p class="text-sm text-gray-700 mb-2">{{ feedback.comentario|truncatechars:120 }}</p>{% endif %}
+        <p class="text-xs text-gray-500 mb-3">
+          <i class="bi bi-person mr-1"></i>{{ feedback.usuario.get_full_name|default:feedback.usuario.username }}
+          <i class="bi bi-calendar ml-3 mr-1"></i>{{ feedback.fecha|date:"d/m/Y H:i" }}
+        </p>
+        <a href="/admin/documentacion/feedbackdocumentacion/{{ feedback.id }}/change/" target="_blank" class="btn btn-xs btn-outline">
+          <i class="bi bi-gear mr-1"></i>Gestionar
+        </a>
+      </article>
+      {% endfor %}
+    </div>
+    <div class="mt-4 text-center">
+      <a href="/admin/documentacion/feedbackdocumentacion/" target="_blank" class="btn bg-[#343a40] text-white border-none hover:bg-[#495057]">
+        <i class="bi bi-list mr-1"></i>Veure tot el feedback
+      </a>
+    </div>
+  {% else %}
+    <div class="alert rounded-xl bg-green-50 border-green-200 text-green-800">
+      <i class="bi bi-check-circle"></i><span>Excel·lent. No hi ha feedback pendent.</span>
+    </div>
+  {% endif %}
+</section>
+
+<section class="flex flex-col sm:flex-row justify-center gap-2 mb-4">
+  <a href="/admin/documentacion/documentomarkdown/" target="_blank" class="btn bg-[#343a40] text-white border-none hover:bg-[#495057]"><i class="bi bi-gear mr-1"></i>Gestionar documents</a>
+  <a href="/admin/documentacion/categoriadocumentacion/" target="_blank" class="btn btn-outline"><i class="bi bi-folder-gear mr-1"></i>Gestionar categories</a>
+  <a href="{% url 'documentacion:index' %}" class="btn btn-outline"><i class="bi bi-arrow-left mr-1"></i>Tornar a documentació</a>
+</section>
 
 <script>
-// Auto-refresh cada 5 minuts per mantenir dades actualitzades
 setTimeout(function() {
-    location.reload();
-}, 300000); // 5 minutos
+  location.reload();
+}, 300000);
 </script>
 {% endblock %}

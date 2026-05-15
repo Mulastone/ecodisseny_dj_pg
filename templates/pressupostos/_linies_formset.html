@@ -1,7 +1,7 @@
 {% load widget_tweaks %}
 {{ formset.management_form }}
 
-<div class="table-responsive">
+<div class="w-full">
   <table class="table table-bordered table-sm w-100 align-middle table-linia table-dark-header">
     <thead>
       <tr>
@@ -50,7 +50,7 @@
           <td class="col-total-linia">{{ form.total|add_class:"form-control form-control-sm text-end" }}</td>
            <td class="col-eliminar">
             {{ form.DELETE|add_class:"d-none" }}
-            <button type="button" class="btn btn-outline-danger btn-sm eliminar-linea">
+            <button type="button" class="btn btn-xs border border-red-400 text-red-600 hover:bg-red-50 bg-transparent eliminar-linea">
               <i class="bi bi-trash"></i>
             </button>
           </td>
@@ -81,7 +81,7 @@
         <td class="col-total-linia">{{ formset.empty_form.total|add_class:"form-control form-control-sm text-end" }}</td>
         <td class="col-eliminar">
           {{ formset.empty_form.DELETE|add_class:"d-none" }}
-          <button type="button" class="btn btn-outline-danger btn-sm eliminar-linea">
+          <button type="button" class="btn btn-xs border border-red-400 text-red-600 hover:bg-red-50 bg-transparent eliminar-linea">
             <i class="bi bi-trash"></i>
           </button>
         </td>
@@ -91,7 +91,7 @@
 </div>
 
 <div class="my-3">
-  <button type="button" id="add-linea" class="btn btn-outline-primary">
+  <button type="button" id="add-linea" class="btn btn-sm border border-[#4e9b77] text-[#4e9b77] hover:bg-green-50 bg-transparent">
     <i class="bi bi-plus-circle"></i> Afegir línia
   </button>
 </div>

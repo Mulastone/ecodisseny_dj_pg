@@ -4,6 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
+from django.utils import timezone
 
 def custom_login(request):
     if request.method == "POST":
@@ -73,3 +74,34 @@ def change_password_view(request):
         'title': 'Canviar Contrasenya'
     }
     return render(request, 'accounts/change_password.html', context)
+
+
+def home_view(request):
+    context = {}
+    if request.user.is_authenticated:
+        from carregahores.models import CarregaHores
+        from pressupostos.models import Pressupost
+        from django.contrib.auth import get_user_model
+
+        today = timezone.now().date()
+        week_start = today - timezone.timedelta(days=today.weekday())
+
+        if request.user.is_superuser:
+            User = get_user_model()
+            from django.db.models import Sum
+            hores_setmana = CarregaHores.objects.filter(data__gte=week_start).aggregate(total=Sum('hores'))['total']
+            context['stat_hores_avui'] = CarregaHores.objects.filter(data=today).count()
+            context['stat_hores_setmana'] = hores_setmana or 0
+            context['stat_pressupostos'] = Pressupost.objects.count()
+            context['stat_usuaris'] = User.objects.filter(is_active=True).count()
+        else:
+            from django.db.models import Sum
+            context['stat_hores_setmana'] = CarregaHores.objects.filter(
+                usuari=request.user, data__gte=week_start
+            ).aggregate(total=Sum('hores'))['total'] or 0
+            context['stat_hores_mes'] = CarregaHores.objects.filter(
+                usuari=request.user, data__year=today.year, data__month=today.month
+            ).aggregate(total=Sum('hores'))['total'] or 0
+            context['stat_carregues_total'] = CarregaHores.objects.filter(usuari=request.user).count()
+
+    return render(request, 'index.html', context)

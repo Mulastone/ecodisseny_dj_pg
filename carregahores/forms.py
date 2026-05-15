@@ -137,7 +137,7 @@ class CarregaHoresForm(forms.ModelForm):
                 ).distinct()
                 
                 presupuestos_queryset = presupuestos_asignados
-                self.fields["pressupost"].help_text = f"🎯 Recurs: {perfil.recurso.nom} - Només pressupostos assignats"
+                self.fields["pressupost"].help_text = f"Recurs: {perfil.recurso.nom} - Només pressupostos assignats"
                 
                 # Solo líneas del usuario en presupuestos abiertos
                 lineas = pressupost_models.PressupostLinia.objects.filter(

@@ -1,379 +1,272 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="ca">
+<html lang="ca" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}" />
     <title>{% block title %}Ecodisseny{% endblock %}</title>
 
-    <!-- Bootstrap + Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- DaisyUI + Tailwind CSS -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/daisyui@4/dist/full.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/daisyui@4/dist/full.min.css"></noscript>
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- ✅ Flatpickr: calendari català -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- Bootstrap Icons (mantenim) -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"></noscript>
+
+    <!-- Flatpickr: calendari català -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"></noscript>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/cat.js"></script>
+
+    <!-- Alpine.js per al menú mòbil -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js"></script>
 
     <meta name="description" content="Aplicació de gestió de clients per Ecodisseny" />
     <meta name="keywords" content="Ecodisseny, gestió, clients, arquitectura" />
     <meta name="author" content="Axel Rasmussen" />
 
     <style>
-      html, body { height: 100%; margin: 0; display: flex; flex-direction: column; overflow-x: hidden; }
-      .navbar { height: 70px; padding: 0 15px; display: flex; align-items: center; background-color: #343a40 !important;}
-      .logo { width: 100px; height: auto; }
-      .navbar-nav .nav-link { font-size: 1rem; }
-      .container { flex: 1; margin-top: 30px; }
-      .alert-container {
-        position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
-        z-index: 1050; width: 90%; max-width: 600px;
+      [x-cloak] { display: none !important; }
+      .flatpickr-calendar { z-index: 9999 !important; }
+      @keyframes slideInRight {
+        from { opacity: 0; transform: translateX(100%); }
+        to   { opacity: 1; transform: translateX(0); }
       }
-      .btn { padding: 0.375rem 0.75rem; }
-      footer {
-        background-color: #343a40; color: white; text-align: center;
-        padding: 5px 0; max-height: 50px; width: 100%; margin-top: auto;
-        position: relative; font-size: 0.9rem; overflow: hidden;
-        display: flex; align-items: center; justify-content: center;
-      }
-      footer .container { padding: 0 !important; }
-      footer a { color: white; text-decoration: none; padding: 0 10px; }
-      footer a:hover { text-decoration: underline; }
-      .button-back { margin-bottom: 20px; text-align: right; }
-      
-      /* Estilos para el dropdown de usuario */
-      .dropdown-menu {
-        min-width: 220px;
-        border-radius: 8px;
-        border: 1px solid #ddd;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        background-color: #fff;
-      }
-      
-      .dropdown-item {
-        padding: 8px 16px;
-        transition: background-color 0.2s ease;
-      }
-      
-      .dropdown-item:hover {
-        background-color: #f8f9fa;
-      }
-      
-      .dropdown-item.text-danger:hover {
-        background-color: #f8d7da;
-        color: #721c24 !important;
-      }
-      
-      .dropdown-header {
-        font-weight: 600;
-        color: #495057 !important;
-        padding: 8px 16px 4px 16px;
-      }
-      
-      .btn-outline-light {
-        border-color: rgba(255, 255, 255, 0.5);
-      }
-      
-      .btn-outline-light:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-        border-color: white;
-      }
-      @media (max-width: 576px) {
-        .navbar .dropdown-menu,
-        .navbar .dropdown-menu.dropdown-menu-end,
-        .navbar .dropdown-menu.show {
-          background-color: #343a40 !important;
-          color: #fff !important;
-          border: 1px solid #222 !important;
-        }
-        .navbar .dropdown-menu .dropdown-item,
-        .navbar .dropdown-menu .dropdown-header {
-          color: #fff !important;
-        }
-        .navbar .dropdown-menu .dropdown-item:hover {
-          background-color: #495057 !important;
-          color: #fff !important;
-        }
-        .navbar .dropdown-menu .dropdown-item.text-danger:hover {
-          background-color: #dc3545 !important;
-          color: #fff !important;
-        }
-        .navbar .dropdown-menu .dropdown-divider {
-          border-top: 1px solid #555 !important;
-        }
-        footer {
-          font-size: 1rem;
-          padding: 12px 0 8px 0;
-          max-height: none;
-        }
-        footer .container {
-          padding: 0 8px !important;
-        }
-      }
+      .toast-slide { animation: slideInRight 0.4s ease-out; }
     </style>
 
     {% block extra_head %}{% endblock %}
   </head>
-  <body>
+  <body class="min-h-screen flex flex-col bg-base-100 overflow-x-hidden">
+
     {% with request.path as path %}
       {% if path != '/accounts/login/' and '/accounts/password' not in path and '/accounts/reset' not in path %}
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          <div class="container-fluid">
-            <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
-              <img src="{% static 'logo_ecodisseny_negatiu.png' %}" alt="Logo" class="logo" />
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'home' %}">Inici</a>
-                </li>
+
+        <!-- ===== NAVBAR ===== -->
+        <div class="relative z-30" x-data="{ open: false }">
+          <div class="navbar bg-[#343a40] text-white min-h-[70px] px-4">
+
+            <!-- Logo -->
+            <div class="navbar-start">
+              <a href="{% url 'home' %}">
+                <img src="{% static 'logo_ecodisseny_negatiu.png' %}" alt="Logo" class="h-12 lg:h-14 w-auto" />
+              </a>
+            </div>
+
+            <!-- Desktop nav (centre) -->
+            <div class="navbar-center hidden lg:flex">
+              <ul class="menu menu-horizontal px-1 gap-0.5 text-sm font-medium">
+                <li><a href="{% url 'home' %}" class="text-white hover:bg-[#495057] rounded">Inici</a></li>
                 {% if request.user.is_authenticated %}
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url 'carregahores:nova' %}">Carregar Hores</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url 'carregahores:meves' %}">Les Meves Hores</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url 'documentacion:index' %}">Documentació</a>
-                  </li>
+                  <li><a href="{% url 'carregahores:nova' %}" class="text-white hover:bg-[#495057] rounded">Carregar Hores</a></li>
+                  <li><a href="{% url 'carregahores:meves' %}" class="text-white hover:bg-[#495057] rounded">Les Meves Hores</a></li>
+                  <li><a href="{% url 'documentacion:index' %}" class="text-white hover:bg-[#495057] rounded">Documentació</a></li>
+
                   {% if request.user.is_superuser or perms.pressupostos.view_hores_report or perms.pressupostos.view_rentabilitat_report or perms.pressupostos.view_productivitat_report or perms.pressupostos.view_executiu_report %}
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Informes
-                      </a>
-                      <ul class="dropdown-menu">
-                        <li>
-                          <a class="dropdown-item" href="{% url 'pressupostos:informe_hores' %}">
-                            <i class="bi bi-clock-history me-2"></i>Hores Previstes vs Reals
-                          </a>
-                        </li>
-                        <li><hr class="dropdown-divider"></li>
-                        {% if request.user.is_superuser or perms.pressupostos.view_rentabilitat_report %}
-                          <li>
-                            <a class="dropdown-item" href="{% url 'pressupostos:informe_rentabilitat' %}">
-                              <i class="bi bi-cash-coin me-2"></i>Rentabilitat per Pressupost
-                            </a>
-                          </li>
-                        {% else %}
-                          <li>
-                            <span class="dropdown-item-text text-muted">
-                              <i class="bi bi-cash-coin me-2"></i>Rentabilitat per Pressupost
-                            </span>
-                          </li>
-                        {% endif %}
-                        {% if request.user.is_superuser or perms.pressupostos.view_productivitat_report %}
-                          <li>
-                            <a class="dropdown-item" href="{% url 'pressupostos:informe_productivitat' %}">
-                              <i class="bi bi-people me-2"></i>Productivitat per Recurs
-                            </a>
-                          </li>
-                        {% else %}
-                          <li>
-                            <span class="dropdown-item-text text-muted">
-                              <i class="bi bi-people me-2"></i>Productivitat per Recurs
-                            </span>
-                          </li>
-                        {% endif %}
-                        {% if request.user.is_superuser or perms.pressupostos.view_executiu_report %}
-                          <li>
-                            <a class="dropdown-item" href="{% url 'pressupostos:informe_executiu_mensual' %}">
-                              <i class="bi bi-bar-chart-line me-2"></i>Informe Executiu Mensual
-                            </a>
-                          </li>
-                        {% else %}
-                          <li>
-                            <span class="dropdown-item-text text-muted">
-                              <i class="bi bi-bar-chart-line me-2"></i>Informe Executiu Mensual
-                            </span>
-                          </li>
-                        {% endif %}
-                      </ul>
-                    </li>
+                    <li><a href="{% url 'pressupostos:informes_index' %}" class="text-white hover:bg-[#495057] rounded">Informes</a></li>
                   {% endif %}
+
                   {% if request.user.is_superuser %}
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Admin Hores
-                      </a>
-                      <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{% url 'carregahores:admin_totes' %}">Totes les Càrregues</a></li>
-                        <li><a class="dropdown-item" href="{% url 'carregahores:admin_stats' %}">Estadístiques</a></li>
-                      </ul>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="{% url 'pressupostos:list' %}">Pressupostos</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
-                    </li>
+                    <li><a href="{% url 'pressupostos:list' %}" class="text-white hover:bg-[#495057] rounded">Pressupostos</a></li>
+                    <li><a href="{% url 'admin:index' %}" class="text-white hover:bg-[#495057] rounded">Admin</a></li>
                   {% endif %}
                 {% endif %}
               </ul>
+            </div>
+
+            <!-- Dreta: user dropdown + hamburger -->
+            <div class="navbar-end gap-2">
               {% if request.user.is_authenticated %}
-                <div class="dropdown">
-                  <button class="btn btn-outline-light dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-person-circle me-2"></i>
-                    <span class="d-none d-md-inline">{{ request.user.get_full_name|default:request.user.username }}</span>
-                    <span class="d-md-none">Compte</span>
-                  </button>
-                  <ul class="dropdown-menu dropdown-menu-end">
-                    <li>
-                      <h6 class="dropdown-header">
-                        <i class="bi bi-person-fill me-2"></i>{{ request.user.get_full_name|default:request.user.username }}
-                      </h6>
-                    </li>
-                    <li>
-                      <span class="dropdown-item-text small text-muted">
-                        {% if request.user.is_superuser %}
-                          <i class="bi bi-shield-check me-1"></i>Administrador
-                        {% else %}
-                          <i class="bi bi-person me-1"></i>Usuari
-                        {% endif %}
-                      </span>
-                    </li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li>
-                      <a class="dropdown-item" href="{% url 'profile' %}">
-                        <i class="bi bi-person-lines-fill me-2"></i>Veure Perfil
-                      </a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="{% url 'change_password' %}">
-                        <i class="bi bi-key me-2"></i>Canviar Contrasenya
-                      </a>
-                    </li>
-                    {% if request.user.is_superuser %}
-                      <li><hr class="dropdown-divider"></li>
-                      <li>
-                        <a class="dropdown-item" href="{% url 'admin:index' %}">
-                          <i class="bi bi-gear me-2"></i>Administració
-                        </a>
+                <!-- Usuari (desktop) -->
+                <div class="hidden lg:block">
+                  <div x-data="{ openUser: false }" class="relative">
+                    <button type="button"
+                            @click="openUser = !openUser"
+                            @click.outside="openUser = false"
+                            @keydown.escape.window="openUser = false"
+                            :aria-expanded="openUser.toString()"
+                            class="btn btn-sm bg-transparent border border-white/50 text-white hover:bg-white/10 hover:border-white flex items-center gap-2 cursor-pointer">
+                      <i class="bi bi-person-circle text-base"></i>
+                      <span>{{ request.user.get_full_name|default:request.user.username }}</span>
+                      <i class="bi text-xs transition-transform" :class="openUser ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                    </button>
+                    <ul x-show="openUser"
+                        x-transition
+                        x-cloak
+                        class="absolute right-0 menu bg-white text-gray-800 rounded-lg shadow-xl min-w-[220px] p-2 z-50 mt-1 border border-gray-100">
+                      <li class="menu-title px-3 pt-1 pb-0">
+                        <span class="font-semibold text-gray-700 text-sm">
+                          <i class="bi bi-person-fill mr-1"></i>{{ request.user.get_full_name|default:request.user.username }}
+                        </span>
                       </li>
-                    {% endif %}
-                    <li><hr class="dropdown-divider"></li>
-                    <li>
-                      <form method="post" action="{% url 'logout' %}" class="d-inline">
-                        {% csrf_token %}
-                        <button type="submit" class="dropdown-item text-danger">
-                          <i class="bi bi-box-arrow-right me-2"></i>Finalitzar Sessió
-                        </button>
-                      </form>
-                    </li>
-                  </ul>
+                      <li>
+                        <span class="text-xs text-gray-400 px-3 pb-1 pointer-events-none">
+                          {% if request.user.is_superuser %}
+                            <i class="bi bi-shield-check mr-1"></i>Administrador
+                          {% else %}
+                            <i class="bi bi-person mr-1"></i>Usuari
+                          {% endif %}
+                        </span>
+                      </li>
+                      <li><hr class="my-1 border-gray-200"></li>
+                      <li><a href="{% url 'profile' %}" class="flex items-center gap-2 text-sm"><i class="bi bi-person-lines-fill"></i>Veure Perfil</a></li>
+                      <li><a href="{% url 'change_password' %}" class="flex items-center gap-2 text-sm"><i class="bi bi-key"></i>Canviar Contrasenya</a></li>
+                      {% if request.user.is_superuser %}
+                        <li><hr class="my-1 border-gray-200"></li>
+                        <li><a href="{% url 'admin:index' %}" class="flex items-center gap-2 text-sm"><i class="bi bi-gear"></i>Administració</a></li>
+                      {% endif %}
+                      <li><hr class="my-1 border-gray-200"></li>
+                      <li>
+                        <form method="post" action="{% url 'logout' %}">
+                          {% csrf_token %}
+                          <button type="submit" class="w-full text-left flex items-center gap-2 text-sm text-red-600 hover:bg-red-50 px-4 py-2 rounded">
+                            <i class="bi bi-box-arrow-right"></i>Finalitzar Sessió
+                          </button>
+                        </form>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               {% endif %}
+
+              <!-- Hamburger (mòbil) -->
+              <div class="lg:hidden">
+                <button @click="open = !open" class="btn btn-ghost btn-sm text-white px-2" aria-label="Menú">
+                  <i class="bi text-xl" :class="open ? 'bi-x-lg' : 'bi-list'"></i>
+                </button>
+              </div>
             </div>
           </div>
-        </nav>
+
+          <!-- Menú mòbil desplegable -->
+          <div class="absolute top-full left-0 w-full bg-[#343a40] shadow-lg lg:hidden"
+               x-show="open"
+               x-transition:enter="transition ease-out duration-200"
+               x-transition:enter-start="opacity-0 -translate-y-2"
+               x-transition:enter-end="opacity-100 translate-y-0"
+               x-transition:leave="transition ease-in duration-150"
+               x-transition:leave-start="opacity-100 translate-y-0"
+               x-transition:leave-end="opacity-0 -translate-y-2"
+               @click.outside="open = false">
+            <ul class="menu w-full p-2 text-white text-sm">
+              <li><a href="{% url 'home' %}" class="text-white hover:bg-[#495057]" @click="open=false">Inici</a></li>
+              {% if request.user.is_authenticated %}
+                <li><a href="{% url 'carregahores:nova' %}" class="text-white hover:bg-[#495057]" @click="open=false">Carregar Hores</a></li>
+                <li><a href="{% url 'carregahores:meves' %}" class="text-white hover:bg-[#495057]" @click="open=false">Les Meves Hores</a></li>
+                <li><a href="{% url 'documentacion:index' %}" class="text-white hover:bg-[#495057]" @click="open=false">Documentació</a></li>
+
+                {% if request.user.is_superuser or perms.pressupostos.view_hores_report or perms.pressupostos.view_rentabilitat_report or perms.pressupostos.view_productivitat_report or perms.pressupostos.view_executiu_report %}
+                  <li><a href="{% url 'pressupostos:informes_index' %}" class="text-white hover:bg-[#495057]" @click="open=false">Informes</a></li>
+                {% endif %}
+
+                {% if request.user.is_superuser %}
+                  <li><a href="{% url 'pressupostos:list' %}" class="text-white hover:bg-[#495057]" @click="open=false">Pressupostos</a></li>
+                  <li><a href="{% url 'admin:index' %}" class="text-white hover:bg-[#495057]" @click="open=false">Admin</a></li>
+                {% endif %}
+
+                <li><hr class="my-1 border-white/20"></li>
+                <li><a href="{% url 'profile' %}" class="text-white hover:bg-[#495057]" @click="open=false"><i class="bi bi-person-lines-fill mr-1"></i>Veure Perfil</a></li>
+                <li><a href="{% url 'change_password' %}" class="text-white hover:bg-[#495057]" @click="open=false"><i class="bi bi-key mr-1"></i>Canviar Contrasenya</a></li>
+                {% if request.user.is_superuser %}
+                  <li><a href="{% url 'admin:index' %}" class="text-white hover:bg-[#495057]" @click="open=false"><i class="bi bi-gear mr-1"></i>Administració</a></li>
+                {% endif %}
+                <li>
+                  <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="w-full text-left flex items-center gap-2 text-red-400 hover:bg-[#495057] px-4 py-2 rounded">
+                      <i class="bi bi-box-arrow-right"></i>Finalitzar Sessió
+                    </button>
+                  </form>
+                </li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+        <!-- ===== FI NAVBAR ===== -->
+
       {% endif %}
     {% endwith %}
 
+    <!-- ===== MISSATGES DEL SISTEMA ===== -->
     {% if messages %}
-      <div class="alert-container" style="position: fixed; top: 80px; right: 20px; z-index: 1050; max-width: 400px;">
+      <div class="fixed top-20 right-4 z-[1050] flex flex-col gap-2 max-w-sm w-full pointer-events-none">
         {% for message in messages %}
-          <div class="alert {% if message.tags == 'success' %}alert-dark{% elif message.tags == 'error' %}alert-light{% else %}alert-secondary{% endif %} alert-dismissible fade show shadow-sm" role="alert" style="border-radius: 10px; border: 1px solid {% if message.tags == 'success' %}#2c3e50{% elif message.tags == 'error' %}#dc3545{% else %}#6c757d{% endif %}; animation: slideInRight 0.5s ease-out;">
-            <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %} me-2"></i>
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          <div class="toast-slide alert shadow-md rounded-xl border pointer-events-auto
+            {% if message.tags == 'success' %}bg-[#2c3e50] text-white border-[#2c3e50]
+            {% elif message.tags == 'error' %}bg-white text-gray-800 border-red-400
+            {% else %}bg-gray-100 text-gray-700 border-gray-400{% endif %}"
+            x-data="{ show: true }"
+            x-show="show"
+            x-init="setTimeout(() => show = false, 3000)"
+            x-transition:leave="transition ease-in duration-300"
+            x-transition:leave-start="opacity-100 translate-x-0"
+            x-transition:leave-end="opacity-0 translate-x-full">
+            <i class="bi {% if message.tags == 'success' %}bi-check-circle{% elif message.tags == 'error' %}bi-exclamation-circle{% else %}bi-info-circle{% endif %} text-lg"></i>
+            <span>{{ message }}</span>
           </div>
         {% endfor %}
       </div>
-      <style>
-        @keyframes slideInRight {
-          from { opacity: 0; transform: translateX(100%); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-        .alert-container .alert {
-          margin-bottom: 0.5rem;
-        }
-        .alert-dark {
-          background-color: #2c3e50;
-          color: white;
-        }
-        .alert-light {
-          background-color: #f8f9fa;
-          color: #2c3e50;
-          border-color: #dc3545 !important;
-        }
-      </style>
     {% endif %}
 
-    <div class="container-fluid px-4 mt-4">
+    <!-- ===== CONTINGUT PRINCIPAL ===== -->
+    <div class="{% block content_container_class %}flex-1 px-4 mt-6 w-full max-w-[1400px] mx-auto{% endblock %}">
       {% block content %}{% endblock %}
     </div>
 
+    <!-- ===== FOOTER ===== -->
     {% with request.path as path %}
       {% if path != '/accounts/login/' and '/accounts/password' not in path and '/accounts/reset' not in path %}
-        <footer>
-          <div class="container">
-            <p>&copy; {% now "Y" %} Axel Rasmussen. Tots els drets reservats.</p>
-          </div>
+        <footer class="bg-[#343a40] text-white text-center text-sm py-3 mt-auto">
+          <p>&copy; {% now "Y" %} Axel Rasmussen. Tots els drets reservats.</p>
         </footer>
       {% endif %}
     {% endwith %}
 
-    {% block scripts %}
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Toast d'eliminació -->
+    <div id="toast-eliminat"
+         class="fixed bottom-4 right-4 z-[1055] hidden alert bg-green-600 text-white shadow-lg rounded-xl max-w-xs"
+         role="alert">
+      <i class="bi bi-check-circle-fill text-lg"></i>
+      <span>Pressupost eliminat correctament</span>
+    </div>
 
+    {% block scripts %}
       <script>
         document.addEventListener("DOMContentLoaded", function () {
-          const alerts = document.querySelectorAll(".alert");
-          alerts.forEach((alert) => {
-            setTimeout(() => {
-              const bsAlert = new bootstrap.Alert(alert);
-              bsAlert.close();
-            }, 1500);
-          });
-
-          // ✅ Inicialitza Flatpickr en català
+          // Flatpickr en català
           flatpickr(".datepicker", {
             dateFormat: "d/m/Y",
             locale: "cat",
             allowInput: true
           });
 
-          // Refuerzo JS para fondo del menú en móvil
-          function isMobile() {
-            return window.innerWidth <= 576;
+          // Toast d'eliminació
+          const toastEl = document.getElementById("toast-eliminat");
+          if (toastEl && window.location.search.includes("deleted=1")) {
+            toastEl.classList.remove("hidden");
+            setTimeout(() => toastEl.classList.add("hidden"), 3000);
           }
-          document.querySelectorAll('.navbar .dropdown-toggle').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-              setTimeout(function() {
-                document.querySelectorAll('.navbar .dropdown-menu').forEach(function(menu) {
-                  if (isMobile()) {
-                    menu.classList.add('bg-dark');
-                    menu.style.backgroundColor = '#343a40';
-                    menu.style.color = '#fff';
-                  } else {
-                    menu.classList.remove('bg-dark');
-                    menu.style.backgroundColor = '';
-                    menu.style.color = '';
-                  }
-                });
-              }, 100);
-            });
-          });
         });
       </script>
-
-      <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1055">
-        <div id="toast-eliminat" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
-          <div class="d-flex">
-            <div class="toast-body">
-              Pressupost eliminat correctament ✅
-            </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-          </div>
-        </div>
-      </div>
     {% endblock %}
 
     {% block extra_scripts %}{% endblock %}
+
+    <script>
+      // Tanca els altres desplegables del navbar quan n'obres un
+      document.querySelectorAll('.navbar details').forEach(function(detail) {
+        detail.addEventListener('toggle', function() {
+          if (this.open) {
+            document.querySelectorAll('.navbar details').forEach(function(other) {
+              if (other !== detail) other.open = false;
+            });
+          }
+        });
+      });
+    </script>
   </body>
 </html>

@@ -161,7 +161,7 @@ def meves_carregues(request):
  
     # Vista personal: solo registros del usuario autenticado
     qs = CarregaHores.objects.filter(usuari=request.user)
-    title = "🎯 Les meves càrregues d'hores"
+    title = "Les meves càrregues d'hores"
     help_text = f"Mostrant només les teves càrregues d'hores, {request.user.get_full_name() or request.user.username}."
     
     # Verificar si es admin para mostrar enlace a vista completa

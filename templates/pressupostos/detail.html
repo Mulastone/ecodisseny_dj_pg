@@ -1,96 +1,103 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="container mt-4">
-  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
-    <h2 class="mb-0">Versions del Pressupost</h2>
-    <div class="d-flex gap-2">
-      <a href="{% url 'pressupostos:generar_pdf' pressupost.pk %}" class="btn btn-dark">
-        <i class="bi bi-file-earmark-plus"></i> Generar nova versió PDF
+<div>
+  <!-- Capçalera -->
+  <div class="flex items-center justify-between flex-wrap gap-2 mb-5">
+    <h2 class="text-xl font-semibold text-gray-800 flex items-center gap-2">
+      <i class="bi bi-files text-[#4e9b77]"></i> Versions del Pressupost
+    </h2>
+    <div class="flex gap-2 flex-wrap">
+      <a href="{% url 'pressupostos:generar_pdf' pressupost.pk %}" class="btn btn-sm bg-[#343a40] text-white border-none hover:bg-[#495057]">
+        <i class="bi bi-file-earmark-plus mr-1"></i>Generar nova versió PDF
       </a>
-      <a href="{% url 'pressupostos:list' %}" class="btn btn-outline-dark">
-        <i class="bi bi-arrow-left-circle"></i> Tornar a la llista
+      <a href="{% url 'pressupostos:list' %}" class="btn btn-sm bg-transparent border border-gray-300 text-gray-500 hover:bg-gray-100">
+        <i class="bi bi-arrow-left mr-1"></i>Tornar
       </a>
     </div>
   </div>
 
-  <div class="mb-3">
-    <p><strong>Nom:</strong> {{ pressupost.nom }}</p>
-    <p><strong>Client:</strong> {{ pressupost.client }}</p>
-    <p><strong>Projecte:</strong> {{ pressupost.projecte }}</p>
+  <!-- Info pressupost -->
+  <div class="bg-white border border-gray-200 rounded-xl shadow-sm px-5 py-4 mb-5 grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+    <div><span class="text-xs text-gray-400 block mb-0.5">Nom</span><span class="font-semibold text-gray-700">{{ pressupost.nom }}</span></div>
+    <div><span class="text-xs text-gray-400 block mb-0.5">Client</span><span class="text-gray-600">{{ pressupost.client }}</span></div>
+    <div><span class="text-xs text-gray-400 block mb-0.5">Projecte</span><span class="text-gray-600">{{ pressupost.projecte }}</span></div>
   </div>
 
   {% if versions %}
-    <div class="table-responsive">
-      <table class="table table-bordered table-hover align-middle bg-white table-dark-header">
-        <thead class="table-dark text-white">
-          <tr>
-            <th><i class="bi bi-clock-history"></i> Versió</th>
-            <th><i class="bi bi-calendar3"></i> Data generació</th>
-            <th><i class="bi bi-person"></i> Usuari</th>
-            <th class="text-center"><i class="bi bi-gear"></i> Accions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for version in versions %}
-            <tr id="row-version-{{ version.id }}">
-              <td>{{ version.version }}</td>
-              <td>{{ version.data_generat|date:"d/m/Y H:i" }}</td>
-              <td>{{ version.generat_per }}</td>
-              <td class="text-center">
-                <div class="d-flex justify-content-center gap-2 flex-wrap">
-                  <a href="{{ version.arxiu.url }}" target="_blank" class="btn btn-sm btn-outline-secondary" title="Veure PDF">
-                    <i class="bi bi-eye"></i> 
-                  </a>
-                  <button type="button"
-                          class="btn btn-sm btn-outline-danger btn-delete-version"
-                          data-id="{{ version.id }}"
-                          title="Eliminar versió">
-                    <i class="bi bi-trash"></i>
-                  </button>
-                </div>
-              </td>
+    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="table table-zebra table-sm w-full text-sm">
+          <thead>
+            <tr class="bg-[#343a40] text-white text-xs uppercase">
+              <th class="px-3 py-3"><i class="bi bi-clock-history mr-1"></i>Versió</th>
+              <th class="px-3 py-3"><i class="bi bi-calendar3 mr-1"></i>Data generació</th>
+              <th class="px-3 py-3"><i class="bi bi-person mr-1"></i>Usuari</th>
+              <th class="px-3 py-3 text-center"><i class="bi bi-gear mr-1"></i>Accions</th>
             </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {% for version in versions %}
+              <tr class="hover:bg-gray-50" id="row-version-{{ version.id }}">
+                <td class="px-3 py-2 font-medium text-gray-700">{{ version.version }}</td>
+                <td class="px-3 py-2 text-gray-500">{{ version.data_generat|date:"d/m/Y H:i" }}</td>
+                <td class="px-3 py-2 text-gray-600">{{ version.generat_per }}</td>
+                <td class="px-3 py-2 text-center">
+                  <div class="flex items-center justify-center gap-1">
+                    <a href="{{ version.arxiu.url }}" target="_blank" title="Veure PDF"
+                       class="btn btn-xs border border-gray-300 text-gray-500 hover:bg-gray-100 bg-transparent">
+                      <i class="bi bi-eye"></i>
+                    </a>
+                    <button type="button" class="btn btn-xs border border-red-400 text-red-600 hover:bg-red-50 bg-transparent btn-delete-version"
+                            data-id="{{ version.id }}" title="Eliminar versió">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
   {% else %}
-    <div class="alert alert-light border">
-      Encara no hi ha cap versió PDF registrada per aquest pressupost.
+    <div class="bg-white border border-gray-200 rounded-2xl shadow-sm text-center py-12 px-6">
+      <i class="bi bi-file-earmark-x text-5xl text-gray-300 block mb-3"></i>
+      <p class="text-gray-500">Encara no hi ha cap versió PDF registrada per aquest pressupost.</p>
     </div>
   {% endif %}
 </div>
 
-<!-- 🔒 Modal confirmació -->
-<div class="modal fade" id="confirmDeleteVersionModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Confirmar eliminació</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tancar"></button>
+<!-- Modal Alpine per eliminar versió -->
+<div x-data="deleteVersionModal()" @open-delete-version.window="open($event.detail)">
+  <div x-show="show" x-cloak x-transition.opacity class="fixed inset-0 bg-black/40 z-40" @click="show=false"></div>
+  <div x-show="show" x-cloak x-transition class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm">
+      <div class="bg-red-600 text-white rounded-t-2xl px-5 py-4 flex items-center justify-between">
+        <span class="font-semibold flex items-center gap-2"><i class="bi bi-exclamation-triangle"></i> Confirmar eliminació</span>
+        <button @click="show=false" class="text-white hover:text-red-200"><i class="bi bi-x-lg"></i></button>
       </div>
-      <div class="modal-body">
+      <div class="px-5 py-4 text-sm text-gray-700">
         Segur que vols eliminar aquesta versió PDF?
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancel·lar</button>
-        <button type="button" id="confirmDeleteVersionBtn" class="btn btn-dark">Eliminar</button>
+      <div class="px-5 py-3 flex justify-end gap-2 border-t border-gray-100">
+        <button @click="show=false" class="btn btn-sm bg-transparent border border-gray-300 text-gray-500 hover:bg-gray-100">
+          Cancel·lar
+        </button>
+        <button @click="confirm()" class="btn btn-sm bg-red-600 text-white border-none hover:bg-red-700">
+          <i class="bi bi-trash mr-1"></i>Eliminar
+        </button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ✅ Toast d'èxit -->
-<div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1080;">
-  <div id="successVersionToast" class="toast bg-light border-dark" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header bg-dark text-white">
-      ✅ Versió eliminada
-      <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="toast" aria-label="Tancar"></button>
-    </div>
-    <div class="toast-body">
-      Versió PDF eliminada correctament.
-    </div>
+<!-- Toast -->
+<div x-data="{ visible: false }" @show-version-toast.window="visible=true; setTimeout(()=>visible=false,3000)"
+     class="fixed top-4 right-4 z-[9999]">
+  <div x-show="visible" x-cloak x-transition
+       class="bg-[#343a40] text-white text-sm px-4 py-3 rounded-xl shadow-lg flex items-center gap-2">
+    <i class="bi bi-check-circle-fill text-[#4e9b77]"></i> Versió PDF eliminada correctament.
   </div>
 </div>
 
@@ -98,56 +105,48 @@
 
 {% block extra_scripts %}
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    let versionIdToDelete = null;
+  function deleteVersionModal() {
+    return {
+      show: false, idToDelete: null,
+      open(detail) { this.idToDelete = detail.id; this.show = true; },
+      confirm() {
+        const id = this.idToDelete;
+        this.show = false;
+        fetch(`/pressupostos/delete_version_ajax/${id}/`, {
+          method: "POST",
+          headers: { "X-CSRFToken": getCookie("csrftoken") }
+        })
+        .then(res => res.json())
+        .then(data => {
+          const row = document.getElementById(`row-version-${id}`);
+          if (data.success && row) {
+            row.style.transition = "opacity 0.4s";
+            row.style.opacity = "0";
+            setTimeout(() => row.remove(), 400);
+            window.dispatchEvent(new CustomEvent('show-version-toast'));
+          } else {
+            alert("Error: " + (data.error || "No s'ha pogut eliminar."));
+          }
+        });
+      }
+    }
+  }
 
+  function getCookie(name) {
+    let v = null;
+    if (document.cookie) document.cookie.split(';').forEach(c => {
+      c = c.trim();
+      if (c.startsWith(name + '=')) v = decodeURIComponent(c.substring(name.length + 1));
+    });
+    return v;
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".btn-delete-version").forEach(btn => {
       btn.addEventListener("click", () => {
-        versionIdToDelete = btn.dataset.id;
-        const modal = new bootstrap.Modal(document.getElementById('confirmDeleteVersionModal'));
-        modal.show();
+        window.dispatchEvent(new CustomEvent('open-delete-version', { detail: { id: btn.dataset.id } }));
       });
     });
-
-    document.getElementById("confirmDeleteVersionBtn").addEventListener("click", () => {
-      if (!versionIdToDelete) return;
-
-      fetch(`/pressupostos/delete_version_ajax/${versionIdToDelete}/`, {
-        method: "POST",
-        headers: {
-          "X-CSRFToken": getCookie("csrftoken"),
-        }
-      })
-      .then(res => res.json())
-      .then(data => {
-        const row = document.getElementById(`row-version-${versionIdToDelete}`);
-        if (data.success && row) {
-          row.classList.add("fade");
-          row.style.transition = "opacity 0.5s ease-out";
-          row.style.opacity = "0";
-          setTimeout(() => row.remove(), 500);
-          new bootstrap.Toast(document.getElementById('successVersionToast')).show();
-        } else {
-          alert("❌ Error: " + (data.error || "No s'ha pogut eliminar."));
-        }
-        bootstrap.Modal.getInstance(document.getElementById('confirmDeleteVersionModal')).hide();
-      });
-    });
-
-    function getCookie(name) {
-      let cookieValue = null;
-      if (document.cookie && document.cookie !== "") {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-          const cookie = cookies[i].trim();
-          if (cookie.substring(0, name.length + 1) === name + "=") {
-            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-            break;
-          }
-        }
-      }
-      return cookieValue;
-    }
   });
 </script>
 {% endblock %}

@@ -4,339 +4,118 @@
 
 {% block title %}Login - Ecodisseny{% endblock %}
 
-{% block extra_head %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-<style>
-    body {
-        background: white;
-        min-height: 100vh;
-    }
-            .login-container {
-                background: white;
-                padding: 2rem;
-                border-radius: 8px;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                max-width: 560px;
-                width: 56%;
-                margin: 2rem auto;
-            }
-            @media (max-width: 576px) {
-                .login-container {
-                    padding: 1rem 0.5rem;
-                    max-width: 98vw;
-                    width: 100vw;
-                    margin: 0.5rem auto;
-                    border-radius: 0;
-                    box-shadow: none;
-                }
-                .login-header {
-                    padding: 1rem 0.5rem;
-                }
-                .login-header h4 {
-                    font-size: 1.15rem;
-                }
-                .login-body {
-                    padding: 1.2rem 0.5rem;
-                }
-                .form-control {
-                    font-size: 1rem;
-                    padding: 0.7rem 0.8rem;
-                }
-                .btn-login {
-                    font-size: 1rem;
-                    padding: 0.7rem;
-                }
-                .user-info {
-                    padding: 0.7rem;
-                    font-size: 0.95rem;
-                }
-            }
-    @keyframes slideIn {
-        from { opacity: 0; transform: translateY(-20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    .login-header {
-        background: #343a40;
-        color: white;
-        text-align: center;
-        padding: 1rem 1.5rem;
-        border-bottom: none;
-        position: relative;
-    }
-    .login-header::before {
-        display: none;
-    }
-    .logo {
-        max-width: 100px;
-        margin-bottom: 1rem;
-        filter: none;
-    }
-    .login-header h4 {
-        color: white;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-        font-size: 1.5rem;
-    }
-    .login-header small {
-        color: rgba(255,255,255,0.85);
-        font-size: 0.95rem;
-    }
-    .login-body {
-        padding: 2.5rem 3rem;
-    }
-    .form-group {
-        margin-bottom: 2rem;
-    }
-    .form-group:last-of-type {
-        margin-bottom: 2.5rem;
-    }
-    .form-control {
-        border: 2px solid #e1e5e9;
-        border-radius: 10px;
-        padding: 0.6rem 1rem;
-        padding-right: 3.5rem;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-        width: 100%;
-        min-height: 42px;
-    }
-    .form-control:focus {
-        border-color: #343a40;
-        box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.25);
-    }
-    .btn-login {
-        background: #343a40;
-        border: none;
-        border-radius: 10px;
-        padding: 0.75rem 2rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        transition: all 0.3s ease;
-        width: 100%;
-        color: white;
-        margin-bottom: 1.5rem;
-    }
-    .btn-login:hover {
-        background: #495057;
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(52, 58, 64, 0.3);
-        color: white;
-    }
-    .btn-login:active,
-    .btn-login:focus {
-        color: white;
-        background: #495057;
-    }
-    .password-toggle {
-        position: absolute;
-        right: 12px;
-        top: calc(50% + 18px);
-        transform: translateY(-50%);
-        cursor: pointer;
-        color: #6c757d;
-        z-index: 10;
-        transition: color 0.3s ease;
-        font-size: 1.2rem;
-        padding: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        margin-top: 2px;
-    }
-    .password-toggle:hover {
-        color: #343a40;
-    }
-    .form-group {
-        position: relative;
-        margin-bottom: 1.5rem;
-    }
-        .form-label {
-        font-weight: 600;
-        color: #495057;
-        margin-bottom: 0.75rem;
-        font-size: 0.95rem;
-    }
-    .alert {
-        border-radius: 10px;
-        border: none;
-        margin-bottom: 1.5rem;
-    }
-    .user-info {
-        background: #f8f9fa;
-        border: 1px solid #e9ecef;
-        border-radius: 10px;
-        padding: 1rem;
-        margin-bottom: 1.5rem;
-        font-size: 0.9rem;
-        color: #495057;
-    }
-    .user-info strong {
-        color: #2c3e50;
-    }
-    .user-info code {
-        background: #e9ecef;
-        padding: 0.2rem 0.4rem;
-        border-radius: 4px;
-        font-size: 0.8rem;
-        color: #2c3e50;
-        border: 1px solid #dee2e6;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-    <div class="login-container">
-        <div class="login-header">
-            <img src="{% static 'logo_ecodisseny_negatiu.png' %}" alt="Ecodisseny" class="logo">
-            <h4 class="mb-0">Sistema de Gestió</h4>
-            <small>Inicia sessió per continuar</small>
-        </div>
-        
-        <div class="login-body">
-            {% if form.errors %}
-                <div class="alert alert-danger">
-                    <i class="fas fa-exclamation-circle me-2"></i>
-                    <strong>Error d'autenticació</strong><br>
-                    {% for field, errors in form.errors.items %}
-                        {% if field != '__all__' %}
-                            <small>{{ field|title }}: </small>
-                        {% endif %}
-                        {% for error in errors %}
-                            <small>{{ error }}</small>
-                        {% endfor %}
-                    {% endfor %}
-                </div>
-            {% endif %}
+<div class="flex justify-center items-center min-h-screen py-8 px-4">
+  <div class="w-full max-w-md bg-white rounded-2xl shadow-lg overflow-hidden">
 
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}">
-                        <i class="fas fa-info-circle me-2"></i>
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-
-            <!-- DESARROLLO: Información de usuarios disponibles (comentar en producción) -->
-            <!--
-            <div class="user-info">
-                <i class="fas fa-users me-2"></i>
-                <strong>Usuaris disponibles:</strong><br>
-                <small>👑 Admins: <code>mulastone</code>, <code>gonzalo</code></small><br>
-                <small>👤 Usuaris: <code>sarah</code>, <code>pilar</code>, <code>santiago</code>, <code>roger</code></small><br>
-                <small>🔑 Contrasenya: <code>ecodisseny2024</code></small>
-            </div>
-            -->
-
-            <form method="post" action="{% url 'login' %}" autocomplete="off">
-                {% csrf_token %}
-                
-                <div class="form-group">
-                    <label for="{{ form.username.id_for_label }}" class="form-label">
-                        <i class="fas fa-user me-2"></i>Nom d'usuari
-                    </label>
-                    <input type="text" 
-                           class="form-control" 
-                           name="{{ form.username.html_name }}" 
-                           id="{{ form.username.id_for_label }}"
-                           placeholder="Introdueix el teu nom d'usuari"
-                           required
-                           autofocus>
-                </div>
-
-                <div class="form-group">
-                    <label for="{{ form.password.id_for_label }}" class="form-label">
-                        <i class="fas fa-lock me-2"></i>Contrasenya
-                    </label>
-                    <input type="password" 
-                           class="form-control" 
-                           name="{{ form.password.html_name }}" 
-                           id="{{ form.password.id_for_label }}"
-                           placeholder="Introdueix la teva contrasenya"
-                           required>
-                    <i class="fas fa-eye password-toggle" onclick="togglePassword()"></i>
-                </div>
-
-                <button type="submit" class="btn btn-login" id="loginBtn">
-                    <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sessió
-                </button>
-
-                {% if redirect_field_value %}
-                    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
-                {% endif %}
-            </form>
-
-            <div class="text-center mt-3">
-                <a href="{% url 'password_reset' %}" class="text-muted text-decoration-none" style="font-size: 0.9rem;">
-                    <i class="fas fa-key me-1"></i>
-                    He oblidat la contrasenya
-                </a>
-            </div>
-
-            <div class="text-center mt-2">
-                <small class="text-muted">
-                    <i class="fas fa-shield-alt me-1"></i>
-                    Connexió segura
-                </small>
-            </div>
-        </div>
+    <div class="bg-[#343a40] text-white text-center px-6 py-5">
+      <img src="{% static 'logo_ecodisseny_negatiu.png' %}" alt="Ecodisseny" class="max-w-[90px] mx-auto mb-3">
+      <h4 class="text-xl font-semibold">Sistema de Gestió</h4>
+      <p class="text-sm text-white/80 mt-1">Inicia sessió per continuar</p>
     </div>
+
+    <div class="px-8 py-8">
+
+      {% if form.errors %}
+        <div class="rounded-xl border border-red-200 bg-red-50 text-red-800 px-4 py-3 text-sm mb-5">
+          <i class="bi bi-exclamation-circle mr-2"></i><strong>Error d'autenticació</strong><br>
+          {% for field, errors in form.errors.items %}
+            {% if field != '__all__' %}<small>{{ field|title }}: </small>{% endif %}
+            {% for error in errors %}<small>{{ error }}</small>{% endfor %}
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if messages %}
+        {% for message in messages %}
+          <div class="rounded-xl border border-blue-200 bg-blue-50 text-blue-800 px-4 py-3 text-sm mb-4">
+            <i class="bi bi-info-circle mr-2"></i>{{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="post" action="{% url 'login' %}" autocomplete="off">
+        {% csrf_token %}
+
+        <div class="mb-5">
+          <label for="{{ form.username.id_for_label }}" class="block text-sm font-semibold text-gray-600 mb-2">
+            <i class="bi bi-person mr-1"></i>Nom d'usuari
+          </label>
+          <input type="text"
+                 class="w-full px-4 py-2.5 text-sm border-2 border-gray-200 rounded-xl focus:outline-none focus:border-[#343a40] transition-colors"
+                 name="{{ form.username.html_name }}"
+                 id="{{ form.username.id_for_label }}"
+                 placeholder="Introdueix el teu nom d'usuari"
+                 required autofocus>
+        </div>
+
+        <div class="mb-6 relative">
+          <label for="{{ form.password.id_for_label }}" class="block text-sm font-semibold text-gray-600 mb-2">
+            <i class="bi bi-lock mr-1"></i>Contrasenya
+          </label>
+          <input type="password"
+                 class="w-full px-4 py-2.5 pr-12 text-sm border-2 border-gray-200 rounded-xl focus:outline-none focus:border-[#343a40] transition-colors"
+                 name="{{ form.password.html_name }}"
+                 id="{{ form.password.id_for_label }}"
+                 placeholder="Introdueix la teva contrasenya"
+                 required>
+          <button type="button" id="togglePwd"
+                  class="absolute right-3 bottom-2.5 text-gray-400 hover:text-gray-700 transition-colors"
+                  onclick="togglePassword()" tabindex="-1">
+            <i class="bi bi-eye text-lg" id="togglePwdIcon"></i>
+          </button>
+        </div>
+
+        <button type="submit" id="loginBtn"
+                class="w-full bg-[#343a40] hover:bg-[#495057] text-white font-semibold py-3 rounded-xl uppercase tracking-wide transition-colors mb-5">
+          <i class="bi bi-box-arrow-in-right mr-2"></i>Iniciar Sessió
+        </button>
+
+        {% if redirect_field_value %}
+          <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+        {% endif %}
+      </form>
+
+      <div class="text-center">
+        <a href="{% url 'password_reset' %}" class="text-sm text-gray-500 hover:text-gray-700">
+          <i class="bi bi-key mr-1"></i>He oblidat la contrasenya
+        </a>
+      </div>
+      <div class="text-center mt-2">
+        <span class="text-xs text-gray-400"><i class="bi bi-shield-check mr-1"></i>Connexió segura</span>
+      </div>
+
+    </div>
+  </div>
 </div>
 
 <script>
-    function togglePassword() {
-        const passwordField = document.getElementById('{{ form.password.id_for_label }}');
-        const toggleIcon = document.querySelector('.password-toggle');
-        
-        if (passwordField.type === 'password') {
-            passwordField.type = 'text';
-            toggleIcon.classList.remove('fa-eye');
-            toggleIcon.classList.add('fa-eye-slash');
-        } else {
-            passwordField.type = 'password';
-            toggleIcon.classList.remove('fa-eye-slash');
-            toggleIcon.classList.add('fa-eye');
-        }
+  function togglePassword() {
+    const field = document.getElementById('{{ form.password.id_for_label }}');
+    const icon = document.getElementById('togglePwdIcon');
+    if (field.type === 'password') {
+      field.type = 'text';
+      icon.classList.replace('bi-eye', 'bi-eye-slash');
+    } else {
+      field.type = 'password';
+      icon.classList.replace('bi-eye-slash', 'bi-eye');
     }
+  }
 
-    // Auto-focus en el primer campo
-    document.addEventListener('DOMContentLoaded', function() {
-        const usernameField = document.getElementById('{{ form.username.id_for_label }}');
-        if (usernameField) {
-            usernameField.focus();
-        }
-        
-        // Re-enable button if page loads with errors
-        const loginBtn = document.getElementById('loginBtn');
-        const hasErrors = document.querySelector('.alert-danger');
-        if (hasErrors && loginBtn) {
-            loginBtn.innerHTML = '<i class="fas fa-sign-in-alt me-2"></i>Iniciar Sessió';
-            loginBtn.disabled = false;
-        }
-    });
+  document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('form');
+    const loginBtn = document.getElementById('loginBtn');
 
-    // Animación del botón de login
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('form');
-        const loginBtn = document.getElementById('loginBtn');
-        
-        form.addEventListener('submit', function(e) {
-            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Iniciant sessió...';
-            loginBtn.disabled = true;
-            
-            // Re-enable button after 10 seconds in case of network issues
-            setTimeout(function() {
-                if (loginBtn.disabled) {
-                    loginBtn.innerHTML = '<i class="fas fa-sign-in-alt me-2"></i>Iniciar Sessió';
-                    loginBtn.disabled = false;
-                }
-            }, 10000);
-        });
+    form.addEventListener('submit', function () {
+      loginBtn.innerHTML = '<i class="bi bi-arrow-repeat mr-2"></i>Iniciant sessió...';
+      loginBtn.disabled = true;
+      setTimeout(function () {
+        if (loginBtn.disabled) {
+          loginBtn.innerHTML = '<i class="bi bi-box-arrow-in-right mr-2"></i>Iniciar Sessió';
+          loginBtn.disabled = false;
+        }
+      }, 10000);
     });
+  });
 </script>
 {% endblock %}

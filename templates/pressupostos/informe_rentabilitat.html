@@ -1,109 +1,110 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mt-4">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="mb-0">Informe Rentabilitat per Pressupost</h2>
+<section class="rounded-2xl bg-gradient-to-r from-[#343a40] via-[#3e454c] to-[#4c545c] text-white p-6 md:p-8 mb-6 shadow-md">
+  <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
     <div>
-      <a href="{% url 'pressupostos:informe_rentabilitat_csv' %}{% if query_string %}?{{ query_string }}{% endif %}" class="btn btn-outline-dark">
-        <i class="bi bi-download"></i> CSV
-      </a>
+      <p class="text-sm uppercase tracking-[0.2em] text-white/60 mb-2">Informes</p>
+      <h1 class="text-2xl md:text-3xl font-semibold flex items-center gap-3"><i class="bi bi-cash-coin text-[#4e9b77]"></i>Informe Rentabilitat per Pressupost</h1>
+      <p class="text-white/75 mt-2">Seguiment de marge previst, marge real i desviació de cost.</p>
     </div>
+    <a href="{% url 'pressupostos:informe_rentabilitat_csv' %}{% if query_string %}?{{ query_string }}{% endif %}" class="btn bg-white text-[#343a40] border-none hover:bg-gray-100"><i class="bi bi-download mr-1"></i>Exportar CSV</a>
   </div>
+</section>
 
-  <form method="get" class="card card-body mb-3">
-    <div class="row g-2">
-      <div class="col-md-3">
-        <label for="id_client_id" class="form-label">Client</label>
-        <select id="id_client_id" name="client_id" class="form-select form-select-sm">
-          <option value="">Tots</option>
-          {% for id, nom in clients %}
-            <option value="{{ id }}" {% if filters.client_id == id|stringformat:"s" %}selected{% endif %}>{{ nom }}</option>
-          {% endfor %}
-        </select>
-      </div>
-      <div class="col-md-3">
-        <label for="id_projecte_id" class="form-label">Projecte</label>
-        <select id="id_projecte_id" name="projecte_id" class="form-select form-select-sm">
-          <option value="">Tots</option>
-          {% for id, nom in projectes %}
-            <option value="{{ id }}" {% if filters.projecte_id == id|stringformat:"s" %}selected{% endif %}>{{ nom }}</option>
-          {% endfor %}
-        </select>
-      </div>
-      <div class="col-md-2">
-        <label for="id_data_inici" class="form-label">Data inici</label>
-        <input id="id_data_inici" type="text" name="data_inici" value="{{ filters.data_inici }}" class="form-control form-control-sm datepicker-report">
-      </div>
-      <div class="col-md-2">
-        <label for="id_data_fi" class="form-label">Data fi</label>
-        <input id="id_data_fi" type="text" name="data_fi" value="{{ filters.data_fi }}" class="form-control form-control-sm datepicker-report">
-      </div>
-      <div class="col-md-1">
-        <label for="id_umbral_amber" class="form-label">Ambre %</label>
-        <input id="id_umbral_amber" type="number" step="0.1" name="umbral_amber" value="{{ filters.umbral_amber }}" class="form-control form-control-sm">
-      </div>
-      <div class="col-md-1">
-        <label for="id_umbral_red" class="form-label">Roig %</label>
-        <input id="id_umbral_red" type="number" step="0.1" name="umbral_red" value="{{ filters.umbral_red }}" class="form-control form-control-sm">
-      </div>
+<section class="rounded-2xl border border-gray-200 bg-white shadow-sm mb-6" x-data="{ open: {% if filters.client_id or filters.projecte_id or filters.data_inici or filters.data_fi or filters.umbral_amber or filters.umbral_red %}true{% else %}false{% endif %} }">
+  <button type="button" @click="open = !open" class="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-gray-50 rounded-2xl transition-colors">
+    <div>
+      <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-500"><i class="bi bi-funnel mr-2 text-[#4e9b77]"></i>Filtres</h2>
+      <p class="mt-1 text-sm text-gray-400">Acota el seguiment econòmic per client, projecte, dates i llindars de risc.</p>
     </div>
-    <div class="d-flex gap-2 mt-3">
-      <button class="btn btn-dark btn-sm" type="submit"><i class="bi bi-search"></i> Aplicar</button>
-      <a href="{% url 'pressupostos:informe_rentabilitat' %}" class="btn btn-outline-dark btn-sm"><i class="bi bi-x-circle"></i> Netejar</a>
-    </div>
-  </form>
-
-  <div class="row g-3 mb-3">
-    <div class="col-md-2"><div class="card card-body"><small class="text-muted">Ingressos Prevists</small><h5 class="mb-0">{{ totals.ingres_previst|floatformat:2 }}</h5></div></div>
-    <div class="col-md-2"><div class="card card-body"><small class="text-muted">Cost Previst</small><h5 class="mb-0">{{ totals.cost_previst|floatformat:2 }}</h5></div></div>
-    <div class="col-md-2"><div class="card card-body"><small class="text-muted">Cost Real</small><h5 class="mb-0">{{ totals.cost_real|floatformat:2 }}</h5></div></div>
-    <div class="col-md-2"><div class="card card-body"><small class="text-muted">Marge Previst</small><h5 class="mb-0">{{ totals.marge_previst|floatformat:2 }}</h5></div></div>
-    <div class="col-md-2"><div class="card card-body"><small class="text-muted">Marge Real</small><h5 class="mb-0">{{ totals.marge_real|floatformat:2 }}</h5></div></div>
-    <div class="col-md-2"><div class="card card-body"><small class="text-muted">Desviació Cost %</small><h5 class="mb-0">{% if totals.desviacio_percent is not None %}{{ totals.desviacio_percent|floatformat:2 }}%{% else %}-{% endif %}</h5></div></div>
+    <i class="bi transition-transform duration-200" :class="open ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+  </button>
+  <div x-show="open" x-cloak x-collapse class="border-t border-gray-100 px-5 py-5">
+    <form method="get" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-3">
+      <div>
+        <label for="id_client_id" class="block text-xs font-semibold text-gray-500 mb-1">Client</label>
+        <select id="id_client_id" name="client_id" class="select select-bordered w-full select-sm"><option value="">Tots</option>{% for id, nom in clients %}<option value="{{ id }}" {% if filters.client_id == id|stringformat:"s" %}selected{% endif %}>{{ nom }}</option>{% endfor %}</select>
+      </div>
+      <div>
+        <label for="id_projecte_id" class="block text-xs font-semibold text-gray-500 mb-1">Projecte</label>
+        <select id="id_projecte_id" name="projecte_id" class="select select-bordered w-full select-sm"><option value="">Tots</option>{% for id, nom in projectes %}<option value="{{ id }}" {% if filters.projecte_id == id|stringformat:"s" %}selected{% endif %}>{{ nom }}</option>{% endfor %}</select>
+      </div>
+      <div>
+        <label for="id_data_inici" class="block text-xs font-semibold text-gray-500 mb-1">Data inici</label>
+        <input id="id_data_inici" type="text" name="data_inici" value="{{ filters.data_inici }}" class="input input-bordered input-sm w-full datepicker-report">
+      </div>
+      <div>
+        <label for="id_data_fi" class="block text-xs font-semibold text-gray-500 mb-1">Data fi</label>
+        <input id="id_data_fi" type="text" name="data_fi" value="{{ filters.data_fi }}" class="input input-bordered input-sm w-full datepicker-report">
+      </div>
+      <div>
+        <label for="id_umbral_amber" class="block text-xs font-semibold text-gray-500 mb-1">Ambre %</label>
+        <input id="id_umbral_amber" type="number" step="0.1" name="umbral_amber" value="{{ filters.umbral_amber }}" class="input input-bordered input-sm w-full">
+      </div>
+      <div>
+        <label for="id_umbral_red" class="block text-xs font-semibold text-gray-500 mb-1">Roig %</label>
+        <input id="id_umbral_red" type="number" step="0.1" name="umbral_red" value="{{ filters.umbral_red }}" class="input input-bordered input-sm w-full">
+      </div>
+      <div class="xl:col-span-6 flex flex-wrap gap-2 pt-1">
+        <button class="btn btn-sm bg-[#343a40] text-white border-none hover:bg-[#495057]" type="submit"><i class="bi bi-search mr-1"></i>Aplicar filtres</button>
+        <a href="{% url 'pressupostos:informe_rentabilitat' %}" class="btn btn-sm btn-outline"><i class="bi bi-x-circle mr-1"></i>Netejar</a>
+      </div>
+    </form>
   </div>
+</section>
 
-  <div class="table-responsive">
-    <table class="table table-bordered table-hover align-middle bg-white table-dark-header">
-      <thead class="table-dark text-white">
+<section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6 gap-3 mb-6">
+  <article class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"><p class="text-sm text-gray-500">Ingressos prevists</p><p class="text-xl font-semibold text-[#343a40]">{{ totals.ingres_previst|floatformat:2 }}</p></article>
+  <article class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"><p class="text-sm text-gray-500">Cost previst</p><p class="text-xl font-semibold text-[#343a40]">{{ totals.cost_previst|floatformat:2 }}</p></article>
+  <article class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"><p class="text-sm text-gray-500">Cost real</p><p class="text-xl font-semibold text-[#343a40]">{{ totals.cost_real|floatformat:2 }}</p></article>
+  <article class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"><p class="text-sm text-gray-500">Marge previst</p><p class="text-xl font-semibold text-emerald-700">{{ totals.marge_previst|floatformat:2 }}</p></article>
+  <article class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"><p class="text-sm text-gray-500">Marge real</p><p class="text-xl font-semibold {% if totals.marge_real < 0 %}text-red-700{% else %}text-emerald-700{% endif %}">{{ totals.marge_real|floatformat:2 }}</p></article>
+  <article class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"><p class="text-sm text-gray-500">Desviació cost %</p><p class="text-xl font-semibold {% if totals.desviacio_percent is not None and totals.desviacio_percent >= 20 %}text-red-700{% elif totals.desviacio_percent is not None and totals.desviacio_percent >= 10 %}text-amber-700{% else %}text-[#343a40]{% endif %}">{% if totals.desviacio_percent is not None %}{{ totals.desviacio_percent|floatformat:2 }}%{% else %}-{% endif %}</p></article>
+</section>
+
+<section class="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+  <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between gap-3">
+    <h2 class="font-semibold text-gray-800">Quadre de rentabilitat</h2>
+    <span class="text-sm text-gray-500">{{ rows|length }} pressupostos</span>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="table table-zebra w-full">
+      <thead class="bg-[#343a40] text-white">
         <tr>
-          <th>Data</th>
-          <th>Pressupost</th>
-          <th>Client</th>
-          <th>Projecte</th>
-          <th class="text-end">Ingres Previst</th>
-          <th class="text-end">Cost Previst</th>
-          <th class="text-end">Cost Real</th>
-          <th class="text-end">Marge Previst</th>
-          <th class="text-end">Marge Real</th>
-          <th class="text-end">Desviació Cost</th>
-          <th class="text-end">% Desviació</th>
-          <th class="text-center">Semàfor</th>
+          <th>Data</th><th>Pressupost</th><th>Client</th><th>Projecte</th>
+          <th class="text-right">Ingres</th><th class="text-right">Cost Prev.</th><th class="text-right">Cost Real</th>
+          <th class="text-right">Marge Prev.</th><th class="text-right">Marge Real</th><th class="text-right">Desviació</th><th class="text-right">% Desv.</th><th class="text-center">Semàfor</th>
         </tr>
       </thead>
       <tbody>
         {% for row in rows %}
-          <tr>
-            <td>{{ row.data|date:"d/m/Y" }}</td>
-            <td>{{ row.pressupost_nom }}</td>
-            <td>{{ row.client_nom }}</td>
-            <td>{{ row.projecte_nom }}</td>
-            <td class="text-end">{{ row.ingres_previst|floatformat:2 }}</td>
-            <td class="text-end">{{ row.cost_previst|floatformat:2 }}</td>
-            <td class="text-end">{{ row.cost_real|floatformat:2 }}</td>
-            <td class="text-end">{{ row.marge_previst|floatformat:2 }}</td>
-            <td class="text-end">{{ row.marge_real|floatformat:2 }}</td>
-            <td class="text-end">{{ row.desviacio_cost|floatformat:2 }}</td>
-            <td class="text-end">{% if row.desviacio_percent is not None %}{{ row.desviacio_percent|floatformat:2 }}%{% else %}-{% endif %}</td>
-            <td class="text-center"><span class="badge bg-{{ row.semafor }}">{{ row.semafor_label }}</span></td>
-          </tr>
+        <tr>
+          <td>{{ row.data|date:"d/m/Y" }}</td>
+          <td>{{ row.pressupost_nom }}</td>
+          <td>{{ row.client_nom }}</td>
+          <td>{{ row.projecte_nom }}</td>
+          <td class="text-right">{{ row.ingres_previst|floatformat:2 }}</td>
+          <td class="text-right">{{ row.cost_previst|floatformat:2 }}</td>
+          <td class="text-right">{{ row.cost_real|floatformat:2 }}</td>
+          <td class="text-right text-emerald-700">{{ row.marge_previst|floatformat:2 }}</td>
+          <td class="text-right {% if row.marge_real < 0 %}text-red-700{% else %}text-emerald-700{% endif %}">{{ row.marge_real|floatformat:2 }}</td>
+          <td class="text-right">{{ row.desviacio_cost|floatformat:2 }}</td>
+          <td class="text-right">{% if row.desviacio_percent is not None %}{{ row.desviacio_percent|floatformat:2 }}%{% else %}-{% endif %}</td>
+          <td class="text-center">
+            {% if row.semafor == 'danger' %}<span class="badge bg-red-100 text-red-700 border-none">{{ row.semafor_label }}</span>
+            {% elif row.semafor == 'warning' %}<span class="badge bg-amber-100 text-amber-700 border-none">{{ row.semafor_label }}</span>
+            {% elif row.semafor == 'success' %}<span class="badge bg-emerald-100 text-emerald-700 border-none">{{ row.semafor_label }}</span>
+            {% else %}<span class="badge bg-gray-100 text-gray-700 border-none">{{ row.semafor_label }}</span>{% endif %}
+          </td>
+        </tr>
         {% empty %}
-          <tr><td colspan="12" class="text-center">Sense dades per als filtres seleccionats.</td></tr>
+        <tr><td colspan="12" class="text-center text-gray-500 py-8">Sense dades per als filtres seleccionats.</td></tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
-</div>
+</section>
 {% endblock %}
 
 {% block extra_scripts %}

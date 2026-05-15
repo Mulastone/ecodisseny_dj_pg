@@ -1,277 +1,270 @@
 {% extends "base.html" %}
-{% load static %}
 {% load widget_tweaks %}
 
 {% block content %}
-<div class="container mt-4">
-  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4">
-    <h2 class="mb-0">
-      <i class="bi bi-shield-check"></i> {{ title|default:"Totes les Càrregues d'Hores - Admin" }}
-    </h2>
-    <div class="d-flex gap-2">
-      <a href="{% url 'carregahores:admin_stats' %}" class="btn btn-outline-dark">
-        <i class="bi bi-graph-up"></i> Estadístiques
+<div class="space-y-6" x-data="adminDeleteModal()">
+  <section class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-gray-400">Admin Hores</p>
+      <h1 class="mt-1 flex items-center gap-3 text-2xl font-semibold text-[#343a40]">
+        <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#343a40] text-white shadow-sm">
+          <i class="bi bi-shield-check text-xl"></i>
+        </span>
+        {{ title|default:"Totes les Càrregues d'Hores - Admin"|cut:"🛡️ " }}
+      </h1>
+      <p class="mt-2 max-w-3xl text-sm text-gray-500">
+        Consola operativa per revisar, editar i depurar totes les càrregues d'hores des d'una sola vista.
+      </p>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <a href="{% url 'pressupostos:informes_index' %}" class="btn btn-sm border border-gray-300 bg-white text-gray-600 hover:bg-gray-100">
+        <i class="bi bi-arrow-left mr-1"></i>Informes
       </a>
-      <a href="{% url 'carregahores:nova' %}" class="btn btn-dark text-white">
-        <i class="bi bi-plus-circle"></i> Nova Càrrega
+      <a href="{% url 'carregahores:admin_stats' %}" class="btn btn-sm border border-[#343a40] bg-white text-[#343a40] hover:bg-gray-100">
+        <i class="bi bi-graph-up mr-1"></i>Estadístiques
+      </a>
+      <a href="{% url 'carregahores:nova' %}" class="btn btn-sm border-none bg-[#343a40] text-white hover:bg-[#495057]">
+        <i class="bi bi-plus-circle mr-1"></i>Nova Càrrega
       </a>
     </div>
-  </div>
+  </section>
 
   {% if help_text %}
-  <div class="alert alert-info">
-    <i class="bi bi-info-circle"></i> {{ help_text }}
+  <div class="rounded-2xl border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-900">
+    <i class="bi bi-info-circle mr-2"></i>{{ help_text }}
   </div>
   {% endif %}
 
-  <!-- Filtros -->
-  <div class="card mb-4">
-    <div class="card-header bg-light">
-      <h5 class="mb-0">
-        <i class="bi bi-funnel"></i> Filtres
-        <button class="btn btn-outline-secondary btn-sm ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#filtros" aria-expanded="false">
-          <i class="bi bi-chevron-down"></i>
-        </button>
-      </h5>
-    </div>
-    <div class="collapse" id="filtros">
-      <div class="card-body">
-        <form method="get" class="row g-3">
-          <div class="col-md-3">
-            <label class="form-label">{{ filter_form.usuari.label }}</label>
-            {{ filter_form.usuari|add_class:"form-control" }}
-          </div>
-          <div class="col-md-3">
-            <label class="form-label">{{ filter_form.recurs.label }}</label>
-            {{ filter_form.recurs|add_class:"form-control" }}
-          </div>
-          <div class="col-md-3">
-            <label class="form-label">{{ filter_form.projecte.label }}</label>
-            {{ filter_form.projecte|add_class:"form-control" }}
-          </div>
-          <div class="col-md-3">
-            <label class="form-label">{{ filter_form.pressupost.label }}</label>
-            {{ filter_form.pressupost|add_class:"form-control" }}
-          </div>
-          <div class="col-md-3">
-            <label class="form-label">{{ filter_form.data_desde.label }}</label>
-            {{ filter_form.data_desde }}
-          </div>
-          <div class="col-md-3">
-            <label class="form-label">{{ filter_form.data_fins.label }}</label>
-            {{ filter_form.data_fins }}
-          </div>
-          <div class="col-md-6">
-            <label class="form-label">&nbsp;</label>
-            <div>
-              <button type="submit" class="btn btn-primary">
-                <i class="bi bi-search"></i> Filtrar
-              </button>
-              <a href="{% url 'carregahores:admin_totes' %}" class="btn btn-outline-secondary">
-                <i class="bi bi-x-circle"></i> Netejar
-              </a>
-            </div>
-          </div>
-        </form>
+  <section class="grid grid-cols-1 gap-4 md:grid-cols-3">
+    <article class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+      <p class="text-sm text-gray-500">Total registres</p>
+      <p class="mt-1 text-2xl font-semibold text-[#343a40]">{{ total_registres }}</p>
+    </article>
+    <article class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+      <p class="text-sm text-gray-500">Total hores</p>
+      <p class="mt-1 text-2xl font-semibold text-[#343a40]">{{ total_hores }} h</p>
+    </article>
+    <article class="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+      <p class="text-sm text-gray-500">Mitjana per registre</p>
+      <p class="mt-1 text-2xl font-semibold text-[#343a40]">
+        {% if total_registres > 0 %}
+          {% widthratio total_hores total_registres 1 %} h
+        {% else %}
+          0 h
+        {% endif %}
+      </p>
+    </article>
+  </section>
+
+  <section class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm" x-data="{ open: false }">
+    <button type="button" @click="open = !open" class="flex w-full items-center justify-between px-5 py-4 text-left hover:bg-gray-50 transition-colors">
+      <div>
+        <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-500"><i class="bi bi-funnel mr-2 text-[#4e9b77]"></i>Filtres</h2>
+        <p class="mt-1 text-sm text-gray-400">Acota la vista per usuari, recurs, projecte, pressupost o rang de dates.</p>
       </div>
+      <i class="bi text-gray-400 transition-transform duration-200" :class="open ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+    </button>
+    <div x-show="open" x-cloak class="border-t border-gray-100 px-5 py-5">
+      <form method="get" class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div>
+          <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500">{{ filter_form.usuari.label }}</label>
+          {{ filter_form.usuari|add_class:"select select-bordered w-full" }}
+        </div>
+        <div>
+          <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500">{{ filter_form.recurs.label }}</label>
+          {{ filter_form.recurs|add_class:"select select-bordered w-full" }}
+        </div>
+        <div>
+          <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500">{{ filter_form.projecte.label }}</label>
+          {{ filter_form.projecte|add_class:"select select-bordered w-full" }}
+        </div>
+        <div>
+          <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500">{{ filter_form.pressupost.label }}</label>
+          {{ filter_form.pressupost|add_class:"select select-bordered w-full" }}
+        </div>
+        <div>
+          <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500">{{ filter_form.data_desde.label }}</label>
+          {{ filter_form.data_desde|add_class:"input input-bordered w-full" }}
+        </div>
+        <div>
+          <label class="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-500">{{ filter_form.data_fins.label }}</label>
+          {{ filter_form.data_fins|add_class:"input input-bordered w-full" }}
+        </div>
+        <div class="flex items-end gap-2 md:col-span-2 xl:col-span-2">
+          <button type="submit" class="btn btn-sm border-none bg-[#4e9b77] text-white hover:bg-[#3d7a5e]">
+            <i class="bi bi-search mr-1"></i>Aplicar filtres
+          </button>
+          <a href="{% url 'carregahores:admin_totes' %}" class="btn btn-sm border border-gray-300 bg-white text-gray-600 hover:bg-gray-100">
+            <i class="bi bi-x-circle mr-1"></i>Netejar
+          </a>
+        </div>
+      </form>
     </div>
-  </div>
+  </section>
 
   {% if carregues %}
-    <div class="alert alert-light border">
-      <i class="bi bi-info-circle"></i> 
-      <strong>Vista d'administrador:</strong> Pots veure totes les càrregues de tots els usuaris.
+  <section class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+    <div class="border-b border-gray-100 px-5 py-4">
+      <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-500">Registres</h2>
+      <p class="mt-1 text-sm text-gray-400">Vista global de totes les càrregues registrades pels usuaris.</p>
     </div>
-
-    <div class="table-responsive">
-      <table class="table table-bordered table-hover align-middle bg-white table-dark-header">
-        <thead class="table-dark text-white">
-          <tr>
-            <th><i class="bi bi-person"></i> Usuari</th>
-            <th><i class="bi bi-calendar3"></i> Data</th>
-            <th><i class="bi bi-briefcase"></i> Pressupost</th>
-            <th><i class="bi bi-tools"></i> Treball / Tasca</th>
-            <th><i class="bi bi-person-gear"></i> Recurs</th>
-            <th class="text-center"><i class="bi bi-clock"></i> Hores</th>
-            <th><i class="bi bi-chat-text"></i> Observacions</th>
-            <th class="text-center"><i class="bi bi-gear"></i> Accions</th>
+    <div class="overflow-x-auto">
+      <table class="table w-full text-sm">
+        <thead>
+          <tr class="bg-[#343a40] text-xs uppercase tracking-wide text-white">
+            <th>Usuari</th>
+            <th>Data</th>
+            <th>Pressupost</th>
+            <th>Treball / Tasca</th>
+            <th>Recurs</th>
+            <th class="text-center">Hores</th>
+            <th>Observacions</th>
+            <th class="text-center">Accions</th>
           </tr>
         </thead>
         <tbody>
           {% for item in carregues %}
-            <tr>
-              <td>
-                <div>
-                  <strong>{{ item.usuari.get_full_name|default:item.usuari.username }}</strong>
-                  <br><small class="text-muted">{{ item.usuari.username }}</small>
-                </div>
-              </td>
-              <td>
-                <span class="badge bg-dark">{{ item.data|date:"d/m/Y" }}</span>
-              </td>
-              <td>
-                <strong>{{ item.pressupost.nom|default:"—" }}</strong>
+          <tr class="hover:bg-gray-50">
+            <td>
+              <div class="min-w-[12rem]">
+                <p class="font-semibold text-gray-800">{{ item.usuari.get_full_name|default:item.usuari.username }}</p>
+                <p class="text-xs text-gray-400">{{ item.usuari.username }}</p>
+              </div>
+            </td>
+            <td>
+              <span class="inline-flex rounded-full bg-[#343a40] px-2.5 py-1 text-xs font-medium text-white">{{ item.data|date:"d/m/Y" }}</span>
+            </td>
+            <td>
+              <div class="min-w-[16rem]">
+                <p class="font-semibold text-gray-800">{{ item.pressupost.nom|default:"—" }}</p>
                 {% if item.pressupost.projecte %}
-                  <br><small class="text-muted"><i class="bi bi-folder"></i> {{ item.pressupost.projecte.nom }}</small>
+                <p class="text-xs text-gray-400"><i class="bi bi-folder mr-1"></i>{{ item.pressupost.projecte.nom }}</p>
                 {% endif %}
                 {% if item.pressupost.client %}
-                  <br><small class="text-muted"><i class="bi bi-person-circle"></i> {{ item.pressupost.client }}</small>
+                <p class="text-xs text-gray-400"><i class="bi bi-building mr-1"></i>{{ item.pressupost.client }}</p>
                 {% endif %}
-              </td>
-              <td>
-                <div>
-                  <strong>{{ item.treball.descripcio }}</strong>
-                  <br><small class="text-muted">{{ item.tasca.tasca }}</small>
-                </div>
-              </td>
-              <td>
-                <span class="badge bg-secondary">{{ item.recurso.nom }}</span>
-              </td>
-              <td class="text-center">
-                <span class="badge bg-dark fs-6">{{ item.hores }} h</span>
-              </td>
-              <td>
-                <small>{{ item.observacions|default:"—"|truncatechars:40 }}</small>
-              </td>
-              <td class="text-center">
-                <div class="btn-group" role="group">
-                  <a href="{% url 'carregahores:editar' item.pk %}" class="btn btn-sm btn-outline-primary" title="Editar">
-                    <i class="bi bi-pencil"></i>
-                  </a>
-                  <button type="button" class="btn btn-sm btn-outline-danger delete-btn" title="Eliminar" 
-                          data-id="{{ item.pk }}" 
-                          data-data="{{ item.data|date:'d/m/Y' }}" 
-                          data-hores="{{ item.hores }}"
-                          data-usuari="{{ item.usuari.get_full_name|default:item.usuari.username }}">
-                    <i class="bi bi-trash"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
+              </div>
+            </td>
+            <td>
+              <div class="min-w-[14rem]">
+                <p class="font-semibold text-gray-800">{{ item.treball.descripcio }}</p>
+                <p class="text-xs text-gray-400">{{ item.tasca.tasca }}</p>
+              </div>
+            </td>
+            <td>
+              <span class="inline-flex rounded-full bg-gray-200 px-2.5 py-1 text-xs font-medium text-gray-700">{{ item.recurso.nom }}</span>
+            </td>
+            <td class="text-center">
+              <span class="inline-flex rounded-full bg-[#4e9b77] px-2.5 py-1 text-xs font-semibold text-white">{{ item.hores }} h</span>
+            </td>
+            <td>
+              <p class="max-w-[16rem] text-xs text-gray-500">{{ item.observacions|default:"—"|truncatechars:60 }}</p>
+            </td>
+            <td>
+              <div class="flex items-center justify-center gap-2">
+                <a href="{% url 'carregahores:editar' item.pk %}" class="btn btn-xs border border-blue-300 bg-white text-blue-600 hover:bg-blue-50" title="Editar">
+                  <i class="bi bi-pencil"></i>
+                </a>
+                <button
+                  type="button"
+                  class="delete-btn btn btn-xs border border-red-300 bg-white text-red-600 hover:bg-red-50"
+                  title="Eliminar"
+                  data-id="{{ item.pk }}"
+                  data-data="{{ item.data|date:'d/m/Y' }}"
+                  data-hores="{{ item.hores }}"
+                  data-usuari="{{ item.usuari.get_full_name|default:item.usuari.username }}"
+                >
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
-
-    <!-- Resumen total -->
-    <div class="row mt-4">
-      <div class="col-md-4">
-        <div class="card bg-light">
-          <div class="card-body text-center">
-            <h5 class="card-title"><i class="bi bi-list-ol"></i> Total Registres</h5>
-            <h3 class="text-dark">{{ total_registres }}</h3>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card bg-light">
-          <div class="card-body text-center">
-            <h5 class="card-title"><i class="bi bi-clock"></i> Total Hores</h5>
-            <h3 class="text-dark">{{ total_hores }} h</h3>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card bg-light">
-          <div class="card-body text-center">
-            <h5 class="card-title"><i class="bi bi-calculator"></i> Mitjana per Registre</h5>
-            <h3 class="text-dark">
-              {% if total_registres > 0 %}
-                {% widthratio total_hores total_registres 1 %} h
-              {% else %}
-                0 h
-              {% endif %}
-            </h3>
-          </div>
-        </div>
-      </div>
-    </div>
-
+  </section>
   {% else %}
-    <div class="text-center py-5">
-      <div class="mb-4">
-        <i class="bi bi-clock-history" style="font-size: 4rem; color: #6c757d;"></i>
-      </div>
-      <h4 class="text-muted">No hi ha registres</h4>
-      <p class="text-muted">Encara no s'han creat càrregues d'hores.</p>
-    </div>
+  <section class="rounded-2xl border border-gray-200 bg-white px-6 py-16 text-center shadow-sm">
+    <i class="bi bi-clock-history mb-4 block text-6xl text-gray-300"></i>
+    <h2 class="text-lg font-semibold text-gray-500">No hi ha registres</h2>
+    <p class="mt-2 text-sm text-gray-400">Encara no s'han creat càrregues d'hores amb els filtres actuals.</p>
+  </section>
   {% endif %}
-</div>
 
-<!-- Modal de confirmación para eliminar -->
-<div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="modalEliminarLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title" id="modalEliminarLabel">
-          <i class="bi bi-exclamation-triangle"></i> Confirmar Eliminació
-        </h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+  <div x-show="show" x-cloak class="fixed inset-0 z-40 bg-black/40" @click="close()"></div>
+  <div x-show="show" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl">
+      <div class="flex items-center justify-between bg-red-600 px-5 py-4 text-white">
+        <h3 class="flex items-center gap-2 text-base font-semibold"><i class="bi bi-exclamation-triangle"></i>Confirmar eliminació</h3>
+        <button type="button" class="text-white hover:text-red-200" @click="close()"><i class="bi bi-x-lg"></i></button>
       </div>
-      <div class="modal-body">
+      <div class="space-y-4 px-5 py-4 text-sm text-gray-700">
         <p>Estàs segur que vols eliminar aquesta càrrega d'hores?</p>
-        <div class="bg-light p-3 rounded">
-          <strong>Usuari:</strong> <span id="eliminar-usuari"></span><br>
-          <strong>Data:</strong> <span id="eliminar-data"></span><br>
-          <strong>Hores:</strong> <span id="eliminar-hores"></span> h
+        <div class="rounded-xl border border-gray-200 bg-gray-50 px-4 py-3">
+          <p><strong>Usuari:</strong> <span x-text="usuari"></span></p>
+          <p><strong>Data:</strong> <span x-text="data"></span></p>
+          <p><strong>Hores:</strong> <span x-text="hores"></span> h</p>
         </div>
-        <div class="mt-3">
-          <small class="text-muted">
-            <i class="bi bi-info-circle"></i> 
-            Aquesta acció no es pot desfer.
-          </small>
-        </div>
+        <p class="text-xs text-gray-400"><i class="bi bi-info-circle mr-1"></i>Aquesta acció no es pot desfer.</p>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          <i class="bi bi-x-circle"></i> Cancel·lar
+      <div class="flex justify-end gap-2 border-t border-gray-100 px-5 py-4">
+        <button type="button" class="btn btn-sm border border-gray-300 bg-white text-gray-600 hover:bg-gray-100" @click="close()">
+          <i class="bi bi-x-circle mr-1"></i>Cancel·lar
         </button>
-        <form id="form-eliminar" method="post" class="d-inline">
+        <form :action="formAction" method="post" class="inline">
           {% csrf_token %}
-          <button type="submit" class="btn btn-danger">
-            <i class="bi bi-trash"></i> Eliminar
+          <button type="submit" class="btn btn-sm border-none bg-red-600 text-white hover:bg-red-700">
+            <i class="bi bi-trash mr-1"></i>Eliminar
           </button>
         </form>
       </div>
     </div>
   </div>
 </div>
+{% endblock %}
 
+{% block extra_scripts %}
 <script>
-// Manejar eliminación con data attributes
-document.addEventListener('DOMContentLoaded', function() {
-    const deleteButtons = document.querySelectorAll('.delete-btn');
-    
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const id = this.dataset.id;
-            const data = this.dataset.data;
-            const hores = this.dataset.hores;
-            const usuari = this.dataset.usuari || '';
-            
-            confirmarEliminacion(id, data, hores, usuari);
-        });
-    });
-});
+  function adminDeleteModal() {
+    return {
+      show: false,
+      data: '',
+      hores: '',
+      usuari: '',
+      formAction: '',
+      open(detail) {
+        this.data = detail.data;
+        this.hores = detail.hores;
+        this.usuari = detail.usuari;
+        this.formAction = `/carrega-hores/eliminar/${detail.id}/`;
+        this.show = true;
+      },
+      close() {
+        this.show = false;
+      }
+    };
+  }
 
-function confirmarEliminacion(id, data, hores, usuari = '') {
-    // Actualizar contenido del modal
-    document.getElementById('eliminar-data').textContent = data;
-    document.getElementById('eliminar-hores').textContent = hores;
-    
-    // Para la vista admin, mostrar también el usuario
-    const usuariElement = document.getElementById('eliminar-usuari');
-    if (usuariElement && usuari) {
-        usuariElement.textContent = usuari;
-    }
-    
-    // Actualizar action del formulario
-    const form = document.getElementById('form-eliminar');
-    form.action = `/carrega-hores/eliminar/${id}/`;
-    
-    // Mostrar modal
-    const modal = new bootstrap.Modal(document.getElementById('modalEliminar'));
-    modal.show();
-}
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.delete-btn').forEach((button) => {
+      button.addEventListener('click', function() {
+        const detail = {
+          id: this.dataset.id,
+          data: this.dataset.data,
+          hores: this.dataset.hores,
+          usuari: this.dataset.usuari || ''
+        };
+        window.dispatchEvent(new CustomEvent('open-delete-modal', { detail }));
+      });
+    });
+
+    window.addEventListener('open-delete-modal', function(event) {
+      const root = document.querySelector('[x-data="adminDeleteModal()"]');
+      if (root && root.__x) {
+        root.__x.$data.open(event.detail);
+      }
+    });
+  });
 </script>
 {% endblock %}

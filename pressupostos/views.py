@@ -56,6 +56,15 @@ def can_view_executiu_report(user):
     )
 
 
+def can_view_any_report(user):
+    return any([
+        can_view_hores_report(user),
+        can_view_rentabilitat_report(user),
+        can_view_productivitat_report(user),
+        can_view_executiu_report(user),
+    ])
+
+
 def _parse_iso_date(value):
     if not value:
         return None
@@ -349,6 +358,70 @@ def list_pressuposts(request):
         messages.error(request, f'Error al cargar els pressupostos: {str(e)}')
     
     return render(request, 'pressupostos/list.html', context)
+
+
+@user_passes_test(can_view_any_report, login_url='/admin/login/')
+def informes_index(request):
+    report_cards = [
+        {
+            "title": "Hores Previstes vs Reals",
+            "description": "Compara l'estimació inicial amb les hores realment imputades.",
+            "icon": "bi-clock-history",
+            "url_name": "pressupostos:informe_hores",
+            "accent": "#4e9b77",
+            "available": can_view_hores_report(request.user),
+        },
+        {
+            "title": "Rentabilitat per Pressupost",
+            "description": "Analitza ingressos, costos i marge real amb semàfor de desviació.",
+            "icon": "bi-cash-coin",
+            "url_name": "pressupostos:informe_rentabilitat",
+            "accent": "#c48a2e",
+            "available": can_view_rentabilitat_report(request.user),
+        },
+        {
+            "title": "Productivitat per Recurs",
+            "description": "Mostra hores per recurs, projecte i tasca amb focus en càrrega útil.",
+            "icon": "bi-people",
+            "url_name": "pressupostos:informe_productivitat",
+            "accent": "#356d96",
+            "available": can_view_productivitat_report(request.user),
+        },
+        {
+            "title": "Informe Executiu Mensual",
+            "description": "Quadre de comandament mensual amb estat de pressupostos i desviacions.",
+            "icon": "bi-bar-chart-line",
+            "url_name": "pressupostos:informe_executiu_mensual",
+            "accent": "#7b5ea7",
+            "available": can_view_executiu_report(request.user),
+        },
+    ]
+
+    admin_cards = []
+    if request.user.is_superuser or request.user.is_staff:
+        admin_cards = [
+            {
+                "title": "Estadístiques Admin Hores",
+                "description": "Panell operatiu per analitzar càrregues per usuari, client, recurs i mes.",
+                "icon": "bi-graph-up",
+                "url_name": "carregahores:admin_stats",
+                "accent": "#495057",
+            },
+            {
+                "title": "Totes les Càrregues",
+                "description": "Vista completa de registres per revisar, editar o eliminar càrregues d'hores.",
+                "icon": "bi-people-fill",
+                "url_name": "carregahores:admin_totes",
+                "accent": "#6c757d",
+            },
+        ]
+
+    context = {
+        "report_cards": [card for card in report_cards if card["available"]],
+        "total_reports": sum(1 for card in report_cards if card["available"]),
+        "admin_cards": admin_cards,
+    }
+    return render(request, "pressupostos/informes_index.html", context)
 
 
 @user_passes_test(can_view_hores_report, login_url='/admin/login/')
