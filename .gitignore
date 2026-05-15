@@ -11,6 +11,7 @@ db.sqlite3
 
 # Archivos de configuración local
 *.env
+.env.prod
 *.local
 *.DS_Store
 

@@ -6,15 +6,15 @@ services:
     image: postgres:15
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ecodisseny_db
-      POSTGRES_USER: ecodisseny
+      POSTGRES_DB: ${DB_NAME:-ecodisseny_db}
+      POSTGRES_USER: ${DB_USER:-ecodisseny}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - ecodisseny_network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ecodisseny -d ecodisseny_db"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-ecodisseny} -d ${DB_NAME:-ecodisseny_db}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -23,19 +23,18 @@ services:
   web:
     build: .
     restart: unless-stopped
+    ports:
+      - "127.0.0.1:8000:8000"
     command: >
       sh -c "
         echo '🔄 Esperando PostgreSQL...' &&
-        while ! pg_isready -h db -p 5432 -U ecodisseny; do
+        while ! pg_isready -h db -p 5432 -U ${DB_USER:-ecodisseny}; do
           echo 'PostgreSQL no está listo - esperando...'
           sleep 2
         done &&
         echo '✅ PostgreSQL está listo!' &&
         echo '🔄 Ejecutando migraciones...' &&
-        python manage.py makemigrations &&
-        python manage.py migrate &&
-        echo '📥 Cargando fixtures...' &&
-        ./docker-load-fixtures.sh &&
+        python manage.py migrate --noinput &&
         echo '🔄 Recolectando archivos estáticos...' &&
         python manage.py collectstatic --noinput &&
         echo '🚀 Iniciando servidor Gunicorn...' &&
@@ -48,9 +47,9 @@ services:
       - DEBUG=False
       - ALLOWED_HOSTS=${DOMAIN_NAME},${SERVER_IP}
       - DB_HOST=db
-      - DB_PORT=5432
-      - DB_NAME=ecodisseny_db
-      - DB_USER=ecodisseny
+      - DB_PORT=${DB_PORT:-5432}
+      - DB_NAME=${DB_NAME:-ecodisseny_db}
+      - DB_USER=${DB_USER:-ecodisseny}
       - DB_PASSWORD=${DB_PASSWORD}
       - SECRET_KEY=${SECRET_KEY}
     depends_on:

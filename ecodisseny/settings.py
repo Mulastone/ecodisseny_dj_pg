@@ -5,14 +5,25 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
+def _csv_env(var_name, default_csv):
+    """Return a CSV env var parsed as list, with fallback when empty."""
+    raw_value = config(var_name, default=default_csv)
+    if not raw_value or not str(raw_value).strip():
+        raw_value = default_csv
+    return [item.strip() for item in str(raw_value).split(",") if item.strip()]
+
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-docker-dev-key-change-in-production')
 DEBUG = config('DEBUG', default=True, cast=bool)
 
 # Configuración para Docker
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost,127.0.0.1").split(",")
+ALLOWED_HOSTS = _csv_env(
+    "ALLOWED_HOSTS",
+    "localhost,127.0.0.1,0.0.0.0,web,app.arasmu.net",
+)
 # ALLOWED_HOSTS = [
-#     'localhost', 
-#     '127.0.0.1', 
+#     'localhost',
+#     '127.0.0.1',
 #     '0.0.0.0',
 #     'web',  # nombre del servicio en docker-compose
 #     'app.arasmu.net',  # Dominio de producción
@@ -21,10 +32,10 @@ ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost,127.0.0.1").split(","
 
 
 # Configuración CSRF para dominios confiables
-CSRF_TRUSTED_ORIGINS = config(
+CSRF_TRUSTED_ORIGINS = _csv_env(
     "CSRF_TRUSTED_ORIGINS",
-    default="http://localhost:8000,http://127.0.0.1:8000"
-).split(",")
+    "http://localhost:8000,http://127.0.0.1:8000,https://app.arasmu.net",
+)
 
 # CSRF_TRUSTED_ORIGINS = [
 #     'https://app.arasmu.net',
@@ -218,7 +229,7 @@ JAZZMIN_SETTINGS = {
 
     # ✅ CSS personalizado para limitar tamaño del logo en login/logout
     "custom_css": "css/admin_custom.css",
-    
+
 }
 
 
@@ -293,7 +304,7 @@ if DEBUG:
     # Desactivar algunas restricciones en desarrollo
     SECURE_CROSS_ORIGIN_OPENER_POLICY = None
     SECURE_REFERRER_POLICY = None
-    
+
     # Headers de seguridad menos restrictivos para desarrollo
     SECURE_CONTENT_TYPE_NOSNIFF = False
     X_FRAME_OPTIONS = 'SAMEORIGIN'
